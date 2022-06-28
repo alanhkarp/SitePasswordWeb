@@ -1,7 +1,6 @@
 var hpSPG;
 var masterpw;
 var domainname;
-var legacy = false;
 var debugssp = false;
 var settings = {};
 window.onload = function () {
@@ -147,15 +146,6 @@ window.onload = function () {
         } else {
             get("questions").style.display = "none";
         }
-    }
-    get("legacycheckbox").onclick = function () {
-        if (get("legacycheckbox").checked) {
-            legacy = true;
-        } else {
-            legacy = false;
-        }
-        settings.characters = characters(settings);
-        ask2generate();
     }
     init();
 }

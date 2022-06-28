@@ -15,243 +15,307 @@ Please contact the Hewlett-Packard Company <www.hp.com> for
 information regarding how to obtain the source code for this library.
 -->
 <html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <script src="ssp.js"></script>
     <script src="bg.js"></script>
     <script src="sha256.js"></script>
     <link type="text/css" href="ssp.css" rel="Stylesheet" />
-        <title>Site Password</title>
-</head>
-<body>
-  <div id="ssp">
-    <div class="sspform">
-      <div id="sspform">
-        <h1>
-            Site Password 
-            <input id="persona" type="text" size=20 value="Everyone" style="display:none"/>
-        </h1>
-            <label>Domain name</label>
-            <input id="domainname" type="text" size=20 value=""
-		   placeholder="Paste the domain name"/><br>
-	    <label>Your password:</label> 
-	    <input value="" id="masterpw" size=20 type="password"
-		   placeholder="Use a strong password"/><br>
-	    <label>Site name:</label>
-	    <input value="" id="sitename" size=20
-		   placeholder="Your nickname for this site" disabled/><br>
-	    <label>User name:</label>
-	    <input value="" id="username" size=20 list="usernames"
-		   placeholder="Your userid for this site" disabled/>
-            <datalist id="usernames">
-            </datalist><br>
-	    <label>Site password:</label>
-	    <input value="" id="sitepass" READONLY size=20
-		   placeholder="Your password for this site"/><br>
-	    <div class="warning" id="nopw" style="display:none">
-	      <span id="nopwtext">
-		Site Password can't compute a password with these settings.
-		You either need to enable some characters, increase the
-                pasword length or reduce the number of special characters 
-                you're asking for.
-	      </span>
-            </div>
-	    <div class="warning" id="phishing" style="display:none">
-	        <span id="phishingtext">
-		  Warning: The URL in the address bar is different from what you saved for this site name.  You may be at a fake site that is trying to steal your password.
-	        </span><br>
-	        <button id="warningbutton" type="button" style="background-color:#FF0000">
-	            I'm willing to risk it.
-	        </button>
-                <button id="cancelwarning" type="button" style="background-color:#00FF00">
-                    I don't want to risk it.
-                </button>
-		<br>
-	    </div>
-      </div>
+    <title>Site Password</title>
+  </head>
+  <body>
+    <div id="ssp">
+      <div class="sspform">
+        <div id="sspform">
+          <h1>
+            Site Password
+            <input
+              id="persona"
+              type="text"
+              size="20"
+              value="Everyone"
+              style="display: none"
+            />
+          </h1>
+          <label>Domain name</label>
+          <input
+            id="domainname"
+            type="text"
+            size="20"
+            value=""
+            placeholder="Paste the domain name"
+          /><br />
+          <label>Your password:</label>
+          <input
+            value=""
+            id="masterpw"
+            size="20"
+            type="password"
+            placeholder="Use a strong password"
+          /><br />
+          <label>Site name:</label>
+          <input
+            value=""
+            id="sitename"
+            size="20"
+            placeholder="Your nickname for this site"
+            disabled
+          /><br />
+          <label>User name:</label>
+          <input
+            value=""
+            id="username"
+            size="20"
+            list="usernames"
+            placeholder="Your userid for this site"
+            disabled
+          />
+          <datalist id="usernames"> </datalist><br />
+          <label>Site password:</label>
+          <input
+            value=""
+            id="sitepass"
+            readonly
+            size="20"
+            placeholder="Your password for this site"
+          /><br />
+          <div class="warning" id="nopw" style="display: none">
+            <span id="nopwtext">
+              Site Password can't compute a password with these settings. You
+              either need to enable some characters, increase the pasword length
+              or reduce the number of special characters you're asking for.
+            </span>
+          </div>
+          <div class="warning" id="phishing" style="display: none">
+            <span id="phishingtext">
+              Warning: The URL in the address bar is different from what you
+              saved for this site name. You may be at a fake site that is trying
+              to steal your password. </span
+            ><br />
+            <button
+              id="warningbutton"
+              type="button"
+              style="background-color: #ff0000"
+            >
+              I'm willing to risk it.
+            </button>
+            <button
+              id="cancelwarning"
+              type="button"
+              style="background-color: #00ff00"
+            >
+              I don't want to risk it.
+            </button>
+            <br />
+          </div>
+        </div>
         <div id="buttons">
-	    <button id="remember" type="button">Remember</button>
-            <button id="settingsshow" type="button">More</button>
-	    <button id="settingssave" type="button" style="visibility:hidden">Less</button>
-	</div>
-	<div id="settings" style="display:none">
-            <hr>
-            <div style="display:none">
-	      <input id="clearmasterpw" type="checkbox">
-	      <span>
-	        Clear master password on use.<br>
-	      </span>
-              <hr>
-            </div>
-	    Password Length
-	    <input id="pwlength" type="text" value="12" size="3"><br>
-	    <input id="startwithletter" type="checkbox" checked>
-	    <label>Start with letter</label><br>
-	    <input id="allowlowercheckbox" type="checkbox" checked>
-            <span id="allowlower" style="display:none">
-	        Allow lowercase letters<br>
-            </span>
-            <span id="requirelower">
-	        Require at least
-	        <input id="minlower" type="text" value="1" size="3">
-	        lowercase letters<br>
-            </span>
-	    <input id="allowuppercheckbox" type="checkbox" checked>
-            <span id="allowupper" style="display:none">
-	        Allow upper case letters<br>
-            </span>
-            <span id="requireupper">
-                Require at least
-	        <input id="minupper" type="text" value="1" size="3">
-                upper case letters<br>
-            </span>
-	    <input id="allownumbercheckbox" type="checkbox" checked>
-            <span id="allownumber" style="display:none">
-	        Allow numbers<br>
-            </span>
-            <span id="requirenumber">
-                Require at least
-	        <input id="minnumber" type="text" value="1" size="3">
-	        <label>numbers</label><br>
-            </span>
-	    <input id="allowspecialcheckbox" type="checkbox">
-            <span id="allowspecial">
-	        Allow special characters
-            </span>
-            <span id="requirespecial" style="display:none">
-                Require at least
-	        <input id="minspecial" type="text" size="3">
-	        of
-	        <input id="specials" type="text" value="!@#$%^*" size="8"><br>
-            </span>
-	    <hr>
-            <button id="sitedatagetbutton" type="button" style="display:inline" target="_blank">Download Site Data</button>
-            <a id="data" href="data:application/octet-stream," target='_blank' style="display:none" download="SiteData.html">SiteData.html</a>
-            <button id="bookmarkbutton" type=""button>Syncronize</button>
-            <input id="bookmark" type="text" placeholder="Copy your bookmark named SitePasswordData and paste it here"
-                style="display:none"/>
-	</div>
-    </div>
-  </div>
-  <div style="width:600px">
-    <div>
-      <br>
-      <input type="checkbox" id="faqcheckbox"/><strong> Show Frequently Asked Questions</strong><br>
-      <input type="checkbox" id="legacycheckbox"/> I am a legacy user. (If you don't know what this means, don't check the box.)
-    </div>
-    <div>
-      <div id="questions" class="accordion vertical" style="display:none">
-        <section id="safer">
-          <h2><a href="#safer">How does SitePassword make me safer?</a></h2>
-          <p>
-
-It's hard for people to remember a really strong password.  It's
-impossible for them to remember a lot of them.  SitePassword asks you
-to remember one strong password, but calculates a different, hard to
-guess password for each site.  Plus, SitePassword never stores your
-passwords, which means you don't have to worry about your password
-file being stolen.
-
-	  </p>
-        </section>
-        <section id="needed">
-          <h2><a href="#needed">Why do I need to pick a strong master password?</a></h2>
-          <p>
-
-Let's say you use SitePassword to log into a web site with a couple of
-less than honorable employees.  They have your userid and password for
-that site, and they can probably guess your sitename.  With that
-information they can start guessing master passwords until they find
-one that gives your password for the site.  Once the bad guys have a
-match, it's relatively easy for them to guess userids and sitenames at
-different sites until they get into your bank account and steal all
-your money.  Using a strong master password will make it really hard
-for them to do that.
-
-          </p>
-          <p>
-
-Another thing you can do to protect yourself from this guessing attack
-is to use different master passwords for general surfing and sites you
-want to protect, like your bank's.  That way your money is safe even
-if bad guys get the master password you use for your favorite fly
-fishing site.
-
-          </p>
-        </section>
-        <section id="everyone">
-          <h2><a href="#everyone">What's this Everyone thingy?</a></h2>
-            <p>
-
-That's a 'persona.'  It lets SitePassword remember different sitenames
-and usernames for different people who share a machine.  Say that you
-have a machine you leave logged in for your family to use.  Each
-person probably has a different userid and password for the same site,
-such as Facebook.  Without personas, SitePassword would only be able
-to remember one of them.  Family members can replace 'Everyone' with
-their names, and SitePassword will remember all their site
-information.
-
-          </p>
-        </section>
-        <section id="pwmissing">
-          <h2><a href="#pwmissing">Why isn't my master password always there?</a></h2>
-	  <p>
-
-SitePassword doesn't store your master password the way it stores your
-site information.  That means the Chrome extension only remembers your
-master password until you logout or reboot.  SitePassword also forgets
-your master password if it or your browser is updated.  You should
-also click More and make sure you didn't tell SitePassword to forget
-your master password every time you use it.  On the SitePassword web
-page, your master password is remembered until you leave the page or
-reload it.
-      
-	  </p>
-        </section>
-        <section id="forget">
-          <h2><a href="#forget">Why does SitePassword sometimes forget site info the first time I enter it?</a></h2>
-	  <p>
-
-To save you a click SitePassword guesses when you're done entering
-your site information.  Sometimes it guesses wrong because you left
-the page or closed the SitePassword popup without first clicking on
-the web site's password field.  On the SitePassword web page, you have
-to click Remember.
-
-	  </p>
-        </section>
-        <section id="find">
-          <h2><a href="#find">Why does SitePassword tell me it can't find any password fields when I can see one?</a></h2>
-	  <p>
-
-There are a lot of ways to put a password field on the page.  Some of
-them do a really good job of confusing SitePassword.  Over time, that
-should happen less frequently.
-
-	  </p>
-        </section>
-        <section id="multiple">
-          <h2><a href="#multiple">Why does SitePassword tell me it found multiple password fields when I only see one on the page?</a></h2>
-	  <p>
-
-See the answer to previous question.
-
-	  </p>
-        </section>
-        <section id="facebook">
-          <h2><a href="#facebook">How do I login with my Facebook account when that's one of my login options?</a></h2>
-	  <p>
-
-First go to Facebook.com and log in there.  Then you won't have to
-enter your userid or password to log into other sites that support
-this kind of 'social login.'  You can do the same for other 'identity
-providers,' such as Google or Twitter.
-
-	  </p>
-        </section>
+          <button id="remember" type="button">Remember</button>
+          <button id="settingsshow" type="button">More</button>
+          <button id="settingssave" type="button" style="visibility: hidden">
+            Less
+          </button>
+        </div>
+        <div id="settings" style="display: none">
+          <hr />
+          <div style="display: none">
+            <input id="clearmasterpw" type="checkbox" />
+            <span> Clear master password on use.<br /> </span>
+            <hr />
+          </div>
+          Password Length
+          <input id="pwlength" type="text" value="12" size="3" /><br />
+          <input id="startwithletter" type="checkbox" checked />
+          <label>Start with letter</label><br />
+          <input id="allowlowercheckbox" type="checkbox" checked />
+          <span id="allowlower" style="display: none">
+            Allow lowercase letters<br />
+          </span>
+          <span id="requirelower">
+            Require at least
+            <input id="minlower" type="text" value="1" size="3" />
+            lowercase letters<br />
+          </span>
+          <input id="allowuppercheckbox" type="checkbox" checked />
+          <span id="allowupper" style="display: none">
+            Allow upper case letters<br />
+          </span>
+          <span id="requireupper">
+            Require at least
+            <input id="minupper" type="text" value="1" size="3" />
+            upper case letters<br />
+          </span>
+          <input id="allownumbercheckbox" type="checkbox" checked />
+          <span id="allownumber" style="display: none">
+            Allow numbers<br />
+          </span>
+          <span id="requirenumber">
+            Require at least
+            <input id="minnumber" type="text" value="1" size="3" />
+            <label>numbers</label><br />
+          </span>
+          <input id="allowspecialcheckbox" type="checkbox" />
+          <span id="allowspecial"> Allow special characters </span>
+          <span id="requirespecial" style="display: none">
+            Require at least
+            <input id="minspecial" type="text" size="3" />
+            of
+            <input id="specials" type="text" value="!@#$%^*" size="8" /><br />
+          </span>
+          <hr />
+          <button
+            id="sitedatagetbutton"
+            type="button"
+            style="display: inline"
+            target="_blank"
+          >
+            Download Site Data
+          </button>
+          <a
+            id="data"
+            href="data:application/octet-stream,"
+            target="_blank"
+            style="display: none"
+            download="SiteData.html"
+            >SiteData.html</a
+          >
+          <button id="bookmarkbutton" type="" button>Get Site Data</button>
+          <input
+            id="bookmark"
+            type="text"
+            placeholder="Copy the bookmark for this domainname from the SitePasswordData bookmark folder"
+            style="display: none"
+          />
+        </div>
       </div>
     </div>
-   </div>
-</body>
+    <div style="width: 600px">
+      <div>
+        <br />
+        <input type="checkbox" id="faqcheckbox" /><strong>
+          Show Frequently Asked Questions</strong
+      </div>
+      <div>
+        <div id="questions" class="accordion vertical" style="display: none">
+          <section id="safer">
+            <h2><a href="#safer">How does SitePassword make me safer?</a></h2>
+            <p>
+              It's hard for people to remember a really strong password. It's
+              impossible for them to remember a lot of them. SitePassword asks
+              you to remember one strong password, but calculates a different,
+              hard to guess password for each site. Plus, SitePassword never
+              stores your passwords, which means you don't have to worry about
+              your password file being stolen.
+            </p>
+          </section>
+          <section id="needed">
+            <h2>
+              <a href="#needed"
+                >Why do I need to pick a strong master password?</a
+              >
+            </h2>
+            <p>
+              Let's say you use SitePassword to log into a web site with a
+              couple of less than honorable employees. They have your userid and
+              password for that site, and they can probably guess your sitename.
+              With that information they can start guessing master passwords
+              until they find one that gives your password for the site. Once
+              the bad guys have a match, it's relatively easy for them to guess
+              userids and sitenames at different sites until they get into your
+              bank account and steal all your money. Using a strong master
+              password will make it really hard for them to do that.
+            </p>
+            <p>
+              Another thing you can do to protect yourself from this guessing
+              attack is to use different master passwords for general surfing
+              and sites you want to protect, like your bank's. That way your
+              money is safe even if bad guys get the master password you use for
+              your favorite fly fishing site.
+            </p>
+          </section>
+          <section id="everyone">
+            <h2><a href="#everyone">What's this Everyone thingy?</a></h2>
+            <p>
+              That's a 'persona.' It lets SitePassword remember different
+              sitenames and usernames for different people who share a machine.
+              Say that you have a machine you leave logged in for your family to
+              use. Each person probably has a different userid and password for
+              the same site, such as Facebook. Without personas, SitePassword
+              would only be able to remember one of them. Family members can
+              replace 'Everyone' with their names, and SitePassword will
+              remember all their site information.
+            </p>
+          </section>
+          <section id="pwmissing">
+            <h2>
+              <a href="#pwmissing"
+                >Why isn't my master password always there?</a
+              >
+            </h2>
+            <p>
+              SitePassword doesn't store your master password the way it stores
+              your site information. That means the Chrome extension only
+              remembers your master password until you logout or reboot.
+              SitePassword also forgets your master password if it or your
+              browser is updated. You should also click More and make sure you
+              didn't tell SitePassword to forget your master password every time
+              you use it. On the SitePassword web page, your master password is
+              remembered until you leave the page or reload it.
+            </p>
+          </section>
+          <section id="forget">
+            <h2>
+              <a href="#forget"
+                >Why does SitePassword sometimes forget site info the first time
+                I enter it?</a
+              >
+            </h2>
+            <p>
+              To save you a click SitePassword guesses when you're done entering
+              your site information. Sometimes it guesses wrong because you left
+              the page or closed the SitePassword popup without first clicking
+              on the web site's password field. On the SitePassword web page,
+              you have to click Remember.
+            </p>
+          </section>
+          <section id="find">
+            <h2>
+              <a href="#find"
+                >Why does SitePassword tell me it can't find any password fields
+                when I can see one?</a
+              >
+            </h2>
+            <p>
+              There are a lot of ways to put a password field on the page. Some
+              of them do a really good job of confusing SitePassword. Over time,
+              that should happen less frequently.
+            </p>
+          </section>
+          <section id="multiple">
+            <h2>
+              <a href="#multiple"
+                >Why does SitePassword tell me it found multiple password fields
+                when I only see one on the page?</a
+              >
+            </h2>
+            <p>See the answer to previous question.</p>
+          </section>
+          <section id="facebook">
+            <h2>
+              <a href="#facebook"
+                >How do I login with my Facebook account when that's one of my
+                login options?</a
+              >
+            </h2>
+            <p>
+              First go to Facebook.com and log in there. Then you won't have to
+              enter your userid or password to log into other sites that support
+              this kind of 'social login.' You can do the same for other
+              'identity providers,' such as Google or Twitter.
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
