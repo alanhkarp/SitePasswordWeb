@@ -11,7 +11,7 @@ window.onload = function () {
         get("sitepass").value = "";
         masterpw = "";
     }
-    get("persona").onblur = function () {
+    get("persona").onmouseleave = function () {
         getsettings();
         fill();
         hpSPG.lastpersona = get("persona").value;
@@ -19,7 +19,7 @@ window.onload = function () {
         get("masterpw").value = "";
         get("masterpw").focus();
     }
-    get("domainname").onblur = function () {
+    get("domainname").onmouseleave = function () {
         if (get("domainname").value) {
             get("masterpw").disabled = false;
             get("sitename").disabled = false;
