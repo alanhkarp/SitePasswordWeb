@@ -19,6 +19,56 @@ window.onload = function () {
         get("masterpw").value = "";
         get("masterpw").focus();
     }
+    get("bookmark").onpaste = function() {
+        let element = this;
+        setTimeout(() => {
+            let settings = JSON.parse(element.value.substring(6).replace(/%22/g, "\""));
+            element.value = ""; 
+            console.log("Bookmark settings", settings);
+            get("domainname").value = settings.domainname;
+            get("sitename").value = settings.sitename;
+            get("username").value = settings.username;
+            get("pwlength").value = settings.length;
+            get("minlower").value = settings.minlower;
+            get("minnumber").value = settings.minnumber;
+            get("minspecial").value = settings.minspecial;
+            get("minupper").value = settings.minupper;
+            get("startwithletter").value = settings.startwithletter; 
+            get("allowlowercheckbox").checked = settings.allowlower;
+            if (settings.allowlower) {
+                get("allowlower").style.display = "none";
+                get("requirelower").style.display = "inline";
+            } else {
+                get("allowlower").style.display = "inline";
+                get("requirelower").style.display = "none";
+            }
+            get("allowuppercheckbox").checked = settings.allowupper;
+            if (settings.allowupper) {
+                get("allowupper").style.display = "none";
+                get("requireupper").style.display = "inline";
+            } else {
+                get("allowupper").style.display = "inline";
+                get("requireupper").style.display = "none";
+            }
+            get("allownumbercheckbox").checked = settings.allownumber;
+            if (settings.allownumber) {
+                get("allownumber").style.display = "none";
+                get("requirenumber").style.display = "inline";
+            } else {
+                get("allownumber").style.display = "inline";
+                get("requirenumber").style.display = "none";
+            }
+            if (settings.allowspecial) {
+                get("allownspecial").style.display = "none";
+                get("requirespecial").style.display = "inline";
+            } else {
+                get("allowspecial").style.display = "inline";
+                get("requirespecial").style.display = "none";
+            }
+            ask2generate();
+            setfocus();
+        }, 4);
+    }
     get("domainname").onmouseleave = function () {
         if (get("domainname").value) {
             get("masterpw").disabled = false;
@@ -28,8 +78,8 @@ window.onload = function () {
             get("masterpw").disabled = true;
             get("sitename").disabled = true;
             get("username").disabled = true;
+            get("sitename").value = "";
         }
-        get("sitename").value = "";
         getsettings();
         ask2generate();
         setfocus();
@@ -96,7 +146,6 @@ window.onload = function () {
     get("settingsshow").onclick = show;
     get("settingssave").onclick = save;
     get("sitedatagetbutton").onclick = sitedataHTML;
-    get("bookmarkbutton").onclick = getbookmark;
     get("warningbutton").onclick = function () {
         get("masterpw").disabled = false;
         get("username").disabled = false;
