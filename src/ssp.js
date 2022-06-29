@@ -58,8 +58,9 @@ window.onload = function () {
                 get("allownumber").style.display = "inline";
                 get("requirenumber").style.display = "none";
             }
+            get("allowspecialcheckbox").checked = settings.allowspecial;
             if (settings.allowspecial) {
-                get("allownspecial").style.display = "none";
+                get("allowspecial").style.display = "none";
                 get("requirespecial").style.display = "inline";
             } else {
                 get("allowspecial").style.display = "inline";
@@ -69,7 +70,7 @@ window.onload = function () {
             setfocus();
         }, 4);
     }
-    get("domainname").onmouseleave = function () {
+    get("domainname").onblur = function () {
         if (get("domainname").value) {
             get("masterpw").disabled = false;
             get("sitename").disabled = false;
@@ -186,7 +187,7 @@ window.onload = function () {
             delete persona.sites[settings.domainname];
             get("username").value = "";
         }
-        hpSPG.lastpersona = get("persona").value;
+        hpSPG.lastpersona = getlowertrim("persona");
         persistObject("hpSPG", hpSPG);
     }
     get("faqcheckbox").onclick = function () {
@@ -241,7 +242,7 @@ function init() {
     }
     settings.domainname = hostname;
     if (persona.sites[domainname]) {
-        settings.username = persona.sites[domainame].username;
+        settings.username = persona.sites[domainname].username;
     } else {
         settings.username = "";
     }
@@ -258,7 +259,6 @@ function setfocus() {
 function getsettings() {
     var personaname = getlowertrim("persona");
     var domainname = getlowertrim("domainname");
-    var sitename = getlowertrim("sitename");
     persona = hpSPG.personas[personaname];
     if (!persona) {
         hpSPG.personas[personaname] = clone(hpSPG.personas.default);
@@ -266,6 +266,7 @@ function getsettings() {
         settings = clone(persona.sitenames.default);
         persona.personaname = get("persona").value;
         settings.domainname = domainname;
+        settings.sitename = getlowertrim("sitename");
         settings.characters = characters(settings);
     }
     if (persona.sites[domainname]) {

@@ -69,14 +69,8 @@ function bginit() {
     settings.domainname = domainname;
 }
 function generate(settings) {
-    var d = settings.domainname;
-    if ( legacy ) {
-	var n = settings.sitename;
-	var u = settings.username;
-    } else {
 	var n = settings.sitename.toLowerCase().trim();
 	var u = settings.username.toLowerCase().trim();
-    }
     var m = masterpw;
     if ( !m ) {
 	return {p:"",r:pwcount};
@@ -92,14 +86,13 @@ function compute(s,settings) {
     for ( var iter = 1; iter < hpSPG.miniter; iter++ ) {
         h = core_sha256(h, 16*chrsz);
     }
-    var ok = false;
     while ( iter < hpSPG.maxiter ) {
         h = core_sha256(h, 16*chrsz);
 	var hswap = Array(h.length);
         for ( var i=0; i< h.length; i++ ) {
 	    hswap[i] = swap32(h[i]);
 	}
-        var sitePassword = binl2b64(hswap,settings.characters).substr(0,settings.length);
+        var sitePassword = binl2b64(hswap,settings.characters).substring(0,settings.length);
 	if ( verify(sitePassword,settings) ) break;
 	iter++;	    
 	if ( iter >= hpSPG.maxiter ) {
