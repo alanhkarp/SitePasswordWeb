@@ -211,7 +211,7 @@ function handleclick(which) {
         get("allow" + which).style.display = "none";
         get("require" + which).style.display = "inline";
         minwhich.disabled = false;
-        minwhich.value = 1;
+        minwhich.value = settings["min" + which];
         if (which == "special") get("specials").disabled = false;
     } else {
         if (!(settings.allowupper || settings.allowlower)) {
@@ -221,7 +221,7 @@ function handleclick(which) {
         get("allow" + which).style.display = "inline";
         get("require" + which).style.display = "none";
         minwhich.disabled = true;
-        minwhich.value = "";
+        minwhich.value = settings["min" + which];
         if (which == "special") get("specials").disabled = true;
     }
     settings.characters = characters(settings)
@@ -339,7 +339,6 @@ function getbookmark() {
     
 }
 function sitedataHTML() {
-    var stored = retrieveObject("hpSPG");
     var sites = persona.sites
     var sitenames = persona.sitenames;
     var sorted = Object.keys(sites).sort(function (x, y) {
@@ -409,14 +408,12 @@ function specialclick() {
     var specials = get("specials");
     if (get("allowspecial").checked) {
         minspecial.disabled = false;
-        minspecial.value = 0;
+        minspecial.value = settings.minspecial;
         specials.disabled = false;
         specials.value = "/!=@?._-";
     } else {
         minspecial.disabled = true;
-        minspecial.value = "";
         specials.disabled = true;
-        specials.value = "";
     }
     settings.characters = characters(settings);
 }
