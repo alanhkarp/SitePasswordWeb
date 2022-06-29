@@ -22,7 +22,7 @@ window.onload = function () {
     get("bookmark").onpaste = function() {
         let element = this;
         setTimeout(() => {
-            let settings = JSON.parse(element.value.substring(6).replace(/%22/g, "\""));
+            settings = JSON.parse(element.value.substring(6).replace(/%22/g, "\""));
             element.value = ""; 
             console.log("Bookmark settings", settings);
             get("domainname").value = settings.domainname;
@@ -279,8 +279,6 @@ function getsettings() {
 }
 function ask2generate() {
 
-    var u = get("username").value;
-    var n = get("sitename").value;
     var p = "";
     if (!(settings.allowupper || settings.allowlower || settings.allownumber)) {
         message("nopw", true);
