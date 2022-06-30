@@ -19,10 +19,20 @@ window.onload = function () {
         get("masterpw").value = "";
         get("masterpw").focus();
     }
+    get("bookmark").onclick = function() {
+        setTimeout(() => {
+            this.focus();
+        }, 0);
+    }
     get("bookmark").onpaste = function() {
         let element = this;
         setTimeout(() => {
-            settings = JSON.parse(element.value.substring(6).replace(/%22/g, "\""));
+            try {
+                settings = JSON.parse(element.value.substring(6).replace(/%22/g, "\""));
+            } catch {
+                alert("Invalid bookmark.  Copy it again.");
+            }
+            persona.sitenames[settings.sitename] = settings;
             element.value = ""; 
             console.log("Bookmark settings", settings);
             get("domainname").value = settings.domainname;
@@ -66,21 +76,13 @@ window.onload = function () {
                 get("allowspecial").style.display = "inline";
                 get("requirespecial").style.display = "none";
             }
+            enable();
             ask2generate();
             setfocus();
-        }, 4);
+        }, 0);
     }
     get("domainname").onblur = function () {
-        if (get("domainname").value) {
-            get("masterpw").disabled = false;
-            get("sitename").disabled = false;
-            get("username").disabled = false;
-        } else {
-            get("masterpw").disabled = true;
-            get("sitename").disabled = true;
-            get("username").disabled = true;
-            get("sitename").value = "";
-        }
+        enable();
         getsettings();
         ask2generate();
         setfocus();
@@ -248,13 +250,25 @@ function init() {
     }
     fill();
     ask2generate();
-    setfocus();
+    get("bookmark").focus();
+}
+function enable() {
+    if (get("domainname").value) {
+        get("masterpw").disabled = false;
+        get("sitename").disabled = false;
+        get("username").disabled = false;
+    } else {
+        get("masterpw").disabled = true;
+        get("sitename").disabled = true;
+        get("username").disabled = true;
+        get("sitename").value = "";
+    }
 }
 function setfocus() {
     if (!get("username").value) get("username").focus();
     if (!get("sitename").value) get("sitename").focus();
     if (!get("masterpw").value) get("masterpw").focus();
-    if (!get("domainname").value) get("domainname").focus();
+    //if (!get("domainname").value) get("domainname").focus();
 }
 function getsettings() {
     var personaname = getlowertrim("persona");
