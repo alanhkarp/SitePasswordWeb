@@ -24,11 +24,16 @@ window.onload = function () {
             this.focus();
         }, 0);
     }
-    get("bookmark").onpaste = function() {
-        let element = this;
+    get("bookmark").onpaste = processBookmark;
+    function processBookmark() {
+         let element = this;
         setTimeout(() => {
+            if (!this.value) return;
             try {
-                settings = JSON.parse(element.value.substring(6).replace(/%22/g, "\""));
+                let no22 = element.value.substring(6).replace(/%22/g, "\"");
+                let no7B = no22.replace(/%7B/,"{");
+                let no7D = no7B.replace(/%7D/, "}");
+                settings = JSON.parse(no7D);
             } catch {
                 alert("Invalid bookmark.  Copy it again.");
             }
@@ -348,9 +353,6 @@ function save() {
     get("settingsshow").style.display = "inline";
     get("settingssave").style.visibility = "hidden";
     get("settings").style.display = "none";
-}
-function getbookmark() {
-    
 }
 function sitedataHTML() {
     var sites = persona.sites
