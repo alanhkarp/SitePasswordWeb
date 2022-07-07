@@ -125,7 +125,7 @@ information regarding how to obtain the source code for this library.
           <button id="settingssave" type="button" style="visibility: hidden">
             Less
           </button>
-        </div>
+         </div>
         <div id="settings" style="display: none">
           <hr />
           <div style="display: none">
@@ -195,50 +195,178 @@ information regarding how to obtain the source code for this library.
     <div style="width: 600px">
       <div>
         <br />
-        <input type="checkbox" id="faqcheckbox" /><strong>
-          Show Frequently Asked Questions</strong
+        <input type="checkbox" id="instructions" />
+        <strong>Instructions</strong>
       </div>
       <div>
-        <div id="questions" class="accordion vertical" style="display: none">
-          <section id="safer">
-            <h2><a href="#safer">How does SitePassword make me safer?</a></h2>
+        <div id="sections" class="accordion vertical" style="display: none">
+          <section id="overview">
+            <h2><a href="#overview">Overview</a></h2>
             <p>
-              It's hard for people to remember a really strong password. It's
-              impossible for them to remember a lot of them. SitePassword asks
-              you to remember one strong password, but calculates a different,
-              hard to guess password for each site. Plus, SitePassword never
-              stores your passwords, which means you don't have to worry about
-              your password file being stolen.
+              It's too hard for you to remember a strong password for every
+              site you use.  Password managers take care of this problem for 
+              you.  Most of them store your passwords in encrypted form, either 
+              on your machine or in the cloud.  You will have to enter your
+              password manager's password to log into a site, something you 
+              may not want to do on a machine you don't trust with all your 
+              passwords.
+            </p>
+            <p>
+              SitePassword is different.  It calculates your password for the
+              site from a single master password and your nickname and username 
+              (userid) for the site.  That means you can get your password if 
+              you remember those three things.  Just come to 
+              <a href="https://sitepassword.alanhkarp.com">SitePassword</a> and 
+              fill in the form.  There is also an extension for the Chrome 
+              browser that you can install.
+            </p>
+            <p>
+              SitePassword includes an antiphishing feature.  If you try to use 
+              the same nickname for another domain name, you will get a big, 
+              scary warning.  It's telling you that you may be at a site 
+              spoofing the one you think you are at.  Enter a domain name,
+              say <em>bankofthewest.com</em>, fill in the menu and click
+              the <em>Remember</em> button.  Next enter the domain name 
+              <em>bankofthevvest.com</em>.  (Notice the double v.)  This
+              trick was actually used by criminals trying to steal people's
+              credentials.  That's a good reason to paste the domain name 
+              from the address bar of the page rather than typing it into the 
+              form manuallly. 
+            <p>
+              Unfortunately, you will also see this warning when you are not
+              being tricked.  Many websites have several different login pages 
+              with different domain names.  So, when you see the warning, check 
+              the URL of the page to make sure it's a login page for the site 
+              you think it is.
+            </p>
+            <p>
+              Since SitePassword doesn't store your passwords, so there's no way
+              you can use your existing passwords with it.  You will have to use 
+              the web site's <em>Change Password</em> or <em>Forgot Password</em>
+              feature on sites where you already have accounts.
             </p>
           </section>
-          <section id="needed">
-            <h2>
-              <a href="#needed"
-                >Why do I need to pick a strong master password?</a
-              >
-            </h2>
+          <section id="common">
+            <h2><a href="#common">Common Features</a></h2>
             <p>
-              Let's say you use SitePassword to log into a web site with a
-              couple of less than honorable employees. They have your userid and
-              password for that site, and they can probably guess your sitename.
-              With that information they can start guessing master passwords
-              until they find one that gives your password for the site. Once
-              the bad guys have a match, it's relatively easy for them to guess
-              userids and sitenames at different sites until they get into your
-              bank account and steal all your money. Using a strong master
-              password will make it really hard for them to do that.
+              Using the <a href="https://sitepassword.alanhkarp.com">SitePassword</a> 
+              web page to compute a password is similar to the way you use 
+              the Chrome extension.  In both cases, you fill in your master 
+              password, nickname and user name for the site, and your  password 
+              for the site is calculated for you.  The differences are 
+              described in later sections.
             </p>
             <p>
-              Another thing you can do to protect yourself from this guessing
-              attack is to use different master passwords for general surfing
-              and sites you want to protect, like your bank's. That way your
-              money is safe even if bad guys get the master password you use for
-              your favorite fly fishing site.
+              Some web sites have strict password rules, how long it must be,
+              if it must contain upper case or lower case letters, numbers, or
+              special characters, including restrictions on which special
+              characters are allowed.  If you run into a site that doesn't 
+              accept the calculated password, click the <em>More</em>
+              button and change the appropriate menu entries.  SitePassword 
+              was tested on 100s of web sites to make sure it can always 
+              compute a valid password.
+            </p>
+            <p>
+              Some sites make you change your password periodically.  SitePassword
+              makes that easy.  Navigate to the site's login page, and change your 
+              nickname for the site.  For example, if your current nickname is
+              <em>MyBank</em>, and they make you change your password once a year, 
+              you could change the nickname to <em>MyBank2022</em>.
+            </p>
+            <p>
+              There is a <em>Download Site Data</em> button at the bottom of 
+              the page.  Clicking it lets you save your settings in a file you 
+              can reference if you're at a machine that doesn't have your 
+              SitePassword settings. This data doesn't contain anything that would 
+              seriously compromise your security if it got exposed, but you shouldn't 
+              publish it widely.  
+            </p>
+          </section>
+          <section id="extension">
+            <h2>
+              <a href="#extension"
+                >Using the Chrome Extension
+              </a>
+            </h2>
+            <p>
+              After you install the Chrome extension and visit a page with a 
+              password field, you'll see that it tells you to <em>Click SitePassword</em>.
+              When you click on the SitePassword icon, you'll see a form like the 
+              one at <a href="https://sitepassword.alanhkarp.com">SitePassword</a> with the 
+              Domain Name field filled in.  Enter your master password, an easy to 
+              remember nickname for the site and your user name for the site.  You 
+              will see your site password being calculated as you type.  Mouse over 
+              to the site's password field, which now should tell you to <em>Click 
+              here for password</em>.  Click, and your password gets filled in.  
+            </p>
+            <p>
+              When you reload the page, you'll see your user name filled in and 
+              instructions to <em>Click here for password</em>.  If it says, 
+              <em>Click SitePassword</em>, you will have to enter your master
+              password again.  That's because SitePassword never stores your 
+              master password; it only remembers it for the duration of your 
+              browser session.
+            </p>
+            <p>
+              If you go to the same web page on a different machine with which you
+              synchronize bookmarks, you'll see your nickname and user name for  
+              the site filled in for you.  That's because the extension stores your
+              settings in a bookmark folder called <em>SitePasswordData</em>.
+              The extension uses the bookmarks with numeric titles, <em>e.g.,
+              </em> "0", "1"<em>, etc</em>.  The bookmarks with domain names for 
+              titles are for use on <a href="https://sitepassword.alanhkarp.com">SitePassword</a>.
+            </p>
+            <p>
+              The <em>Forget</em> button allows you to delete the settings for a 
+              site you didn't mean to use.  For example, you may have created
+              settings for the wrong web site, which might lead to confusion a 
+              year in the future.
+            </p>
+            <p>
+              Some pages have more than one password field, such as those for 
+              creating an account or changing your password.  In those cases,
+              you may see instructions to <em>Paste your password here</em>.
+              SitePassword has already put your site password on the clipboard
+              and will remove it in a minute.
+            </p>
+            <p>
+              SitePassword is able to find the password field on all of the hundreds
+              of sites it's been tested on.  If the instructions don't show up in 
+              the site's password field, and holding the mouse over it for a few
+              seconds doesn't show a popup with the instructions, try clicking a blank 
+              spot on the page.  If that doesn't work you can always click the 
+              SitePassword icon and manually copy your site password to the clipboard. 
+            </p>
+            <p>
+              If you click the <em>More</em> button, you'll see and <em>Instructions</em>
+              button.  Clicking it will take you to this page.
+            </p>
+          </section>
+          <section id="webpage">
+            <h2>
+              <a href="#webpage"
+                >Using the SitePassword Web Page</a>
+              </a>
+            </h2>
+            <p>
+              The SitePassword <a href="sitepassword.alanhkarp.com">web page</a> 
+              can use bookmarks created by the extension to sutomate filling in 
+              the form.  Simply find the appropriate bookmark in the 
+              SitePasswordData bookmark folder, and paste it into the top field 
+              on the form.  You will see the domainname, site name, and user
+              name fields get filled in.  If you would like to skip this step 
+              in the future on this machine, click the <em>Remember</em>
+              button.  
+            </p>
+            <p>
+              You can paste the site's domain name into the form.  Your
+              site name and user name will be filled in if you had clicked the 
+              <em>Remember</em> button earlier for this domain name.
             </p>
           </section>
 <!--
-          <section id="everyone">
-            <h2><a href="#everyone">What's this Everyone thingy?</a></h2>
+          <section id="personas">
+            <h2><a href="#personas">What's this Everyone thingy?</a></h2>
             <p>
               That's a 'persona.' It lets SitePassword remember different
               sitenames and usernames for different people who share a machine.
@@ -251,73 +379,6 @@ information regarding how to obtain the source code for this library.
             </p>
           </section>
 -->
-          <section id="pwmissing">
-            <h2>
-              <a href="#pwmissing"
-                >Why isn't my master password always there?</a
-              >
-            </h2>
-            <p>
-              SitePassword doesn't store your master password the way it stores
-              your site information. That means SitePassword only
-              remembers your master password until you reload this page.
-              SitePassword also forgets your master password if it or your
-              browser is updated. You should also click More and make sure you
-              didn't tell SitePassword to forget your master password every time
-              you use it. 
-            </p>
-          </section>
-          <section id="forget">
-            <h2>
-              <a href="#forget"
-                >Why does SitePassword sometimes forget site info the first time
-                I enter it?</a
-              >
-            </h2>
-            <p>
-              To save you a click SitePassword guesses when you're done entering
-              your site information. Sometimes it guesses wrong because you left
-              the page or closed the SitePassword popup without first clicking
-              on the web site's password field. On the SitePassword web page,
-              you have to click Remember.
-            </p>
-          </section>
-          <section id="find">
-            <h2>
-              <a href="#find"
-                >Why does SitePassword tell me it can't find any password fields
-                when I can see one?</a
-              >
-            </h2>
-            <p>
-              There are a lot of ways to put a password field on the page. Some
-              of them do a really good job of confusing SitePassword. Over time,
-              that should happen less frequently.
-            </p>
-          </section>
-          <section id="multiple">
-            <h2>
-              <a href="#multiple"
-                >Why does SitePassword tell me it found multiple password fields
-                when I only see one on the page?</a
-              >
-            </h2>
-            <p>See the answer to previous question.</p>
-          </section>
-          <section id="facebook">
-            <h2>
-              <a href="#facebook"
-                >How do I login with my Facebook account when that's one of my
-                login options?</a
-              >
-            </h2>
-            <p>
-              First go to Facebook.com and log in there. Then you won't have to
-              enter your userid or password to log into other sites that support
-              this kind of 'social login.' You can do the same for other
-              'identity providers,' such as Google or Twitter.
-            </p>
-          </section>
         </div>
       </div>
     </div>

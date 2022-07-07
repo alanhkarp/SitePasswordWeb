@@ -197,11 +197,11 @@ window.onload = function () {
         hpSPG.lastpersona = getlowertrim("persona");
         persistObject("hpSPG", hpSPG);
     }
-    get("faqcheckbox").onclick = function () {
-        if (get("faqcheckbox").checked) {
-            get("questions").style.display = "block";
+    get("instructions").onclick = function () {
+        if (get("instructions").checked) {
+            get("sections").style.display = "block";
         } else {
-            get("questions").style.display = "none";
+            get("sections").style.display = "none";
         }
     }
     init();
