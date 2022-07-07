@@ -186,7 +186,7 @@ function getprotocol(url) {
 This code is a major modification of the code released with the
 following licence.  Neither Hewlett-Packard Company nor Hewlett-Packard
 Enterprise were involved in the modification.  This source code is
-available at https://github.com/alanhkarp/SitePassword.
+available at https://github.com/alanhkarp/SitePasswordWeb.
 
 Copyright 2011 Hewlett-Packard Company. This library is free software;
 you can redistribute it and/or modify it under the terms of the GNU
