@@ -319,15 +319,31 @@ function ask2generate() {
     //copyToClipboard();
 }
 function fill() {
-    if (persona.sites[settings.domainname]) {
+    if (persona.sites[get("domainname").value]) {
         if (!get("username").value) get("username").value = settings.username;
         if (!get("sitename").value) get("sitename").value = settings.sitename;
+        get("pwlength").value = settings.length;
+        get("startwithletter").checked !== settings.startwithletter;
+        if (get("allowlowercheckbox").checked !== settings.allowlower) updateCheckbox("lower");
+         get("minlower").value = settings.minlower;
+        if (get("allowuppercheckbox").checked !== settings.allowupper) updateCheckbox("upper");
+        get("minupper").value = settings.minupper;
+        if (get("allownumbercheckbox").checked = settings.allownumber) updateCheckbox("number");
+        get("minnumber").value = settings.minnumber;
+        if (get("allowspecialcheckbox").checked !== settings.allowspecial) updateCheckbox("special");
+        get("minspecial").value = settings.minspecial;
+        get("specials").value = settings.specials;
     } else {
         settings.domainname = get("domainname").value.toLowerCase().trim();
         settings.sitename = get("sitename").value.toLowerCase().trim();
         settings.username = get("username").value.toLowerCase().trim();
     }
     get("clearmasterpw").checked = persona.clearmasterpw;
+}
+function updateCheckbox(which) {
+    let checkbox = get("allow" + which + "checkbox");
+    checkbox.checked = settings["allow" + which];
+    handleclick(which);
 }
 function show() {
     get("settingsshow").style.display = "none";
