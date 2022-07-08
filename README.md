@@ -36,31 +36,6 @@ you remember those three things.  Just come to
 fill in the form.  There is also an extension for the Chrome 
 browser that you can install.
 
-
-SitePassword includes an antiphishing feature.  If you try to use 
-the same nickname for another domain name, you will get a big, 
-scary warning.  It's telling you that you may be at a site 
-spoofing the one you think you are at.  Enter a domain name,
-say *bankofthewest.com*, fill in the menu and click
-the *Remember* button.  Next enter the domain name 
-*bankofthevvest.com*.  (Notice the double v.)  This
-trick was actually used by criminals trying to steal people's
-credentials.  That's a good reason to paste the domain name 
-from the address bar of the page rather than typing it into the 
-form manuallly. Now fill in the menu with the nickname you used
-before to see the scary message.
-
-Unfortunately, you will also see this warning when you are not
-being tricked.  Many websites have several different login pages 
-with different domain names.  So, when you see the warning, check 
-the URL of the page to make sure it's a login page for the site 
-you think it is.
-
-
-Since SitePassword doesn't store your passwords, there's no way
-you can use your existing passwords with it.  You will have to use 
-the web site's *Change Password* or *Forgot Password*
-feature on sites where you already have accounts.
             
 ## Common Features
             
@@ -89,12 +64,30 @@ nickname for the site.  For example, if your current nickname is
 you could change the nickname to *MyBank2022*.
 
 
-There is a *Download Site Data* button at the bottom of 
-the page.  Clicking it lets you save your settings in a file you 
-can reference if you're at a machine that doesn't have your 
-SitePassword settings. This data doesn't contain anything that would 
-seriously compromise your security if it got exposed, but you shouldn't 
-publish it widely.  
+SitePassword includes an antiphishing feature.  If you try to use 
+the same nickname for another domain name, you will get a big, 
+scary warning.  It's telling you that you may be at a site 
+spoofing the one you think you are at.  Enter a domain name,
+say *bankofthewest.com*, fill in the menu and click
+the *Remember* button.  Next enter the domain name 
+*bankofthevvest.com*.  (Notice the double v.)  This
+trick was actually used by criminals trying to steal people's
+credentials.  That's a good reason to paste the domain name 
+from the address bar of the page rather than typing it into the 
+form manuallly. Now fill in the menu with the nickname you used
+before to see the scary message.
+
+Unfortunately, you will also see this warning when you are not
+being tricked.  Many websites have several different login pages 
+with different domain names.  So, when you see the warning, check 
+the URL of the page to make sure it's a login page for the site 
+you think it is.
+
+
+Since SitePassword doesn't store your passwords, there's no way
+you can use your existing passwords with it.  You will have to use 
+the web site's *Change Password* or *Forgot Password*
+feature on sites where you already have accounts.
             
 ## Using the Chrome Extension
             
@@ -150,6 +143,14 @@ SitePassword icon and manually copy your site password to the clipboard.
 If you click the *More* button, you'll see and *Instructions*
 button.  Clicking it will take you to [SitePassword](https://sitepassword.alanhkarp.com)
 where you can open the instructions.
+
+
+There is a *Download Site Data* button at the bottom of 
+the page.  Clicking it lets you save your settings in a file you 
+can reference if you're at a machine that doesn't have your 
+SitePassword settings. This data doesn't contain anything that would 
+seriously compromise your security if it got exposed, but you shouldn't 
+publish it widely.   
             
 ## Using the SitePassword Web Page
             
@@ -165,10 +166,15 @@ button.
 
 You can paste the site's domain name into the form.  Your
 site name and user name will be filled in if you had clicked the 
-*Remember* button earlier for this domain name.
+*Remember* button earlier for this domain name.  
+
+There is a *Download Site Data* button at the bottom of 
+the page.  Clicking it lets you save your settings in a file you 
+can reference if you're at a machine that doesn't have your 
+SitePassword settings.  **Only settings for sites you've chosen
+to remember will be included.**
 
 ## Voluntary Payment
 
 If you like SitePassword, please make a contribution to the 
-[Internet Archive](https://archive.org/donate?origin=iawww-TopNavDonateButton) or
-your favorite charity.
+[Internet Archive](https://archive.org/donate?origin=iawww-TopNavDonateButton) or your favorite charity.
