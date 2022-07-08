@@ -117,8 +117,11 @@ window.onload = function () {
             get("sitename").focus();
         }
     }
-    get("pwlength").onkeyup = function () {
+    get("pwlength").onmouseleave = function () {
         handlekeyup("pwlength", "length");
+    }
+   get("pwlength").onblur = function () {
+        handleblur("pwlength", "length");
     }
     get("startwithletter").onclick = function () {
         settings.startwithletter = get("startwithletter").checked;
@@ -136,20 +139,35 @@ window.onload = function () {
     get("allowspecialcheckbox").onclick = function () {
         handleclick("special");
     }
-    get("minlower").onkeyup = function () {
-        handlekeyup("minlower", "minlower");
+    get("minlower").onblur = function () {
+        handleblur("minlower", "minlower");
     }
-    get("minupper").onkeyup = function () {
-        handlekeyup("minupper", "minupper");
+    get("minlower").onmouseleave = function () {
+        handleblur("minlower", "minlower");
     }
-    get("minnumber").onkeyup = function () {
-        handlekeyup("minnumber", "minnumber");
+    get("minupper").onblur = function () {
+        handleblur("minupper", "minupper");
     }
-    get("minspecial").onkeyup = function () {
-        handlekeyup("minspecial", "minspecial");
+    get("minupper").onmouseleave = function () {
+        handleblur("minupper", "minupper");
     }
-    get("specials").onkeyup = function () {
-        handlekeyup("specials", "specials");
+    get("minnumber").onblur = function () {
+        handleblur("minnumber", "minnumber");
+    }
+    get("minnumber").onmouseleave = function () {
+        handleblur("minnumber", "minnumber");
+    }
+    get("minspecial").onblur = function () {
+        handleblur("minspecial", "minspecial");
+    }
+    get("minspecial").onmouseleave = function () {
+        handleblur("minspecial", "minspecial");
+    }
+    get("specials").onblur = function () {
+        handleblur("specials", "specials");
+    }
+    get("specials").onmouseleave = function () {
+        handleblur("specials", "specials");
     }
     get("settingsshow").onclick = show;
     get("settingssave").onclick = save;
@@ -210,6 +228,15 @@ function handlekeyup(element, field) {
     settings[field] = get(element).value;
     ask2generate();
     get(element).focus();
+}
+function handleblur(element, field) {
+    if (element === "masterpw") {
+        masterpw = get(element).value;
+    } else {
+        settings[field] = get(element).value;
+    }
+    settings.characters = characters(settings, hpSPG);
+    ask2generate();
 }
 function handleclick(which) {
     settings["allow" + which] = get("allow" + which + "checkbox").checked;
