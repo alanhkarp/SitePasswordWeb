@@ -86,6 +86,12 @@ window.onload = function () {
             setfocus();
         }, 0);
     }
+    get("domainname").onpaste = function () {
+        setTimeout(() => {
+            let url = get("domainname").value.toLowerCase().trim();
+            if ( url.indexOf("http") != -1) get("domainname").value = url.split("/")[2];               
+        }, 0);
+    }
     get("domainname").onblur = function () {
         enable();
         getsettings();
