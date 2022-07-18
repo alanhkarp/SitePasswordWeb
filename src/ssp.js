@@ -40,7 +40,7 @@ window.onload = function () {
             persona.sitenames[settings.sitename] = settings;
             element.value = ""; 
             console.log("Bookmark settings", settings);
-            get("domainname").value = settings.domainname;
+            get("domainname").value = settings.displayname;
             get("sitename").value = settings.sitename;
             get("username").value = settings.username;
             get("pwlength").value = settings.length;
