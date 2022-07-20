@@ -1,3 +1,4 @@
+var logging = false;
 var hpSPG;
 var masterpw;
 var domainname;
@@ -39,7 +40,7 @@ window.onload = function () {
             }
             persona.sitenames[settings.sitename] = settings;
             element.value = ""; 
-            console.log("Bookmark settings", settings);
+            if (logging) console.log("Bookmark settings", settings);
             get("domainname").value = settings.displayname;
             get("sitename").value = settings.sitename;
             get("username").value = settings.username;

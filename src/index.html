@@ -54,13 +54,13 @@ information regarding how to obtain the source code for this library.
             <p align="center">or fill in the form</p>
             <hr />
             </div>
-            <label>Domain name</label>
+            <label>Domain name:</label>
           <input
             id="domainname"
             type="text"
             size="20"
             value=""
-            placeholder="Paste the domain name"
+            placeholder="Paste the URL here"
           /><br />
           <label>Your password:</label>
           <input
@@ -219,12 +219,28 @@ information regarding how to obtain the source code for this library.
             </p>
             <p>
               SitePassword is different.  It calculates your password for the
-              site from a single master password and your nickname and username 
+              site from a single master password and your nickname and user name 
               (userid) for the site.  That means you can get your password if 
               you remember those three things.  Just come to 
               <a href="https://sitepassword.info">SitePassword</a> and 
               fill in the form.  There is also an extension for the Chrome 
               browser that you can install.
+            </p>
+          </section>
+          <section id="masterpassword">
+            <h2><a href="#masterpassword">Your Master Password</a></h2>
+            <p>
+              You should choose a strong master password, one with upper and 
+              lower case letters, numbers, and special characters.  The stronger
+              the better.  The reason is simple.  A bad guy who knows one site 
+              password and can guess your nickname and user name for that site
+              can start guessing master passwords.  You want to make that job 
+              has hard as you can.
+            </p>
+            <p>
+              SitePassword cannot retrieve your master password. 
+              You should make sure it's something you won't easily forget.  You 
+              might even want to write it down and keep the copy in a secure place.
             </p>
           </section>
           <section id="common">
@@ -358,7 +374,7 @@ information regarding how to obtain the source code for this library.
               button.  
             </p>
             <p>
-              Alternatively, you can paste the site's domain name into the form.  Your
+              Alternatively, you can paste the login page's URL into the form.  Your
               site name and user name will be filled in if you had clicked the 
               <em>Remember</em> button earlier for this domain name.
             </p>
@@ -392,7 +408,7 @@ information regarding how to obtain the source code for this library.
             <h2><a href="#personas">What's this Everyone thingy?</a></h2>
             <p>
               That's a 'persona.' It lets SitePassword remember different
-              sitenames and usernames for different people who share a machine.
+              sitenames and user names for different people who share a machine.
               Say that you have a machine you leave logged in for your family to
               use. Each person probably has a different userid and password for
               the same site, such as Facebook. Without personas, SitePassword

@@ -24,6 +24,19 @@ It's too hard for you to remember a strong password for every site you use. Pass
 
 SitePassword is different. It calculates your password for the site from a single master password and your nickname and username (userid) for the site. That means you can get your password if you remember those three things. Just come to [SitePassword](https://sitepassword.info) and fill in the form. There is also an extension for the Chrome browser that you can install.
 
+[Your Master Password](#masterpassword)
+
+You should choose a strong master password, one with upper and 
+lower case letters, numbers, and special characters.  The stronger
+the better.  The reason is simple.  A bad guy who knows one site 
+password and can guess your nickname and user name for that site
+can start guessing master passwords.  You want to make that job 
+has hard as you can.
+
+SitePassword cannot retrieve your master password. 
+You should make sure it's something you won't easily forget.  You 
+might even want to write it down and keep the copy in a secure place.
+
 [Common Features](#common)
 --------------------------
 
@@ -65,7 +78,7 @@ There is a _Download Site Data_ button at the bottom of the page. Clicking it le
 
 The SitePassword [web page](sitepassword.info) can use bookmarks created by the extension to automate filling in the form. Simply find the appropriate bookmark in the SitePasswordData bookmark folder, and paste it into the top field on the form. You will see the domainname, site name, and user name fields get filled in. If you would like to skip this step in the future on this machine, click the _Remember_ button.
 
-You can paste the site's domain name into the form. Your site name and user name will be filled in if you had clicked the _Remember_ button earlier for this domain name.
+You can paste the login page's URL into the form. Your site name and user name will be filled in if you had clicked the _Remember_ button earlier for this domain name.
 
 There is a _Download Local Data_ button at the bottom of the page. Clicking it lets you save your settings in a file you can reference if you're at a machine that doesn't have your SitePassword settings. **Only settings for sites you've chosen to remember on this machine will be included.**
 
