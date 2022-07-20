@@ -76,7 +76,6 @@ information regarding how to obtain the source code for this library.
             id="sitename"
             size="20"
             placeholder="Your nickname for this site"
-            disabled
           /><br />
           <label>User name:</label>
           <input
@@ -85,7 +84,6 @@ information regarding how to obtain the source code for this library.
             size="20"
             list="usernames"
             placeholder="Your userid for this site"
-            disabled
           />
           <datalist id="usernames"> </datalist><br />
           <label>Site password:</label>
@@ -128,8 +126,8 @@ information regarding how to obtain the source code for this library.
           </div>
         </div>
         <div id="buttons">
-          <button id="remember" type="button">Remember</button>
           <button id="settingsshow" type="button">More</button>
+          <button id="remember" type="button" disabled aria-disabled="">Remember</button>
           <button id="settingssave" type="button" style="visibility: hidden">
             Less
           </button>
@@ -377,6 +375,13 @@ information regarding how to obtain the source code for this library.
               Alternatively, you can paste the login page's URL into the form.  Your
               site name and user name will be filled in if you had clicked the 
               <em>Remember</em> button earlier for this domain name.
+            </p>
+            <p>
+              You should always paste the URL of the page you are logging into in the 
+              <em>Domain name</em> field, but you can calculate your password without 
+              providing a domain name, say to get the password for an app on your smart 
+              phone.  Of course, you won't be able to remember the settings until you 
+              provide a domain name. 
             </p>
             <p>
               There is a <em>Download Local Data</em> button at the bottom of 

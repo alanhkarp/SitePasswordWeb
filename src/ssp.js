@@ -105,9 +105,11 @@ window.onload = function () {
         get("masterpw").focus();
     }
     get("username").onkeyup = function () {
+        enable();
         handlekeyup("username", "username");
     }
     get("sitename").onkeyup = function () {
+        enable();
         getsettings();
         settings.sitename = get("sitename").value;
         if (isphishing(settings.sitename)) {
@@ -292,15 +294,10 @@ function init() {
     get("bookmark").focus();
 }
 function enable() {
-    if (get("domainname").value) {
-        get("masterpw").disabled = false;
-        get("sitename").disabled = false;
-        get("username").disabled = false;
-    } else {
-        get("masterpw").disabled = true;
-        get("sitename").disabled = true;
-        get("username").disabled = true;
-        get("sitename").value = "";
+    if (get("domainname").value && get("sitename").value && get("username").value) {
+        get("remember").disabled = false;
+   } else {
+        get("remember").disabled = true;
     }
 }
 function setfocus() {
