@@ -130,8 +130,8 @@ information regarding how to obtain the source code for this library.
           </div>
         </div>
         <div id="buttons">
-          <button id="settingsshow" type="button">More</button>
           <button id="remember" type="button" disabled aria-disabled="">Remember</button>
+          <button id="settingsshow" type="button">More</button>
           <button id="settingssave" type="button" style="visibility: hidden">
             Less
           </button>
@@ -222,9 +222,9 @@ information regarding how to obtain the source code for this library.
             <p>
               SitePassword is different.  It calculates your password for the
               site from a single master password and your nickname and user name 
-              (userid) for the site.  That means you can get your password if 
-              you remember those three things.  Just come to 
-              <a href="https://sitepassword.info">SitePassword</a> and 
+              for the site.  That means you can get your password if 
+              you remember those three things.  Just go to 
+              <a href="https://sitepassword.info">SitePassword.info</a> and 
               fill in the form.  There is also an extension for the Chrome 
               browser that you can install.
             </p>
@@ -248,7 +248,7 @@ information regarding how to obtain the source code for this library.
           <section id="common">
             <h2><a href="#common">Common Features</a></h2>
             <p>
-              Using the <a href="https://sitepassword.info">SitePassword</a> 
+              Using the <a href="https://sitepassword.info">SitePassword.info</a> 
               web page to compute a password is similar to the way you use 
               the Chrome extension.  In both cases, you fill in your master 
               password, nickname and user name for the site, and your  password 
@@ -298,10 +298,10 @@ information regarding how to obtain the source code for this library.
             </h2>
             <p>
               After you install the Chrome extension and visit a page with a 
-              password field, you'll see that it tells you to <em>Click SitePassword</em>.
+              login form, you'll see that the password field tells you to <em>Click SitePassword</em>.
               When you click on the SitePassword icon, you'll see a form like the 
-              one at <a href="https://sitepassword.info">SitePassword</a> with the 
-              Domain Name field filled in.  Enter your master password, an easy to 
+              one at <a href="https://sitepassword.info">SitePassword.info</a> with the 
+              domain name field filled in.  Enter your master password, an easy to 
               remember nickname for the site and your user name for the site.  You 
               will see your site password being calculated as you type.  Mouse over 
               to the site's password field, which now should tell you to <em>Click 
@@ -316,31 +316,33 @@ information regarding how to obtain the source code for this library.
               browser session.
             </p>
             <p>
-              If you go to the same web page on a different machine which you
+              If you go to the same web page on a different machine that you
               synchronize bookmarks with, you'll see your nickname and user name for  
               the site filled in for you.  That's because the extension stores your
               settings in a bookmark folder called <em>SitePasswordData</em>.
               The extension uses the bookmarks with numeric titles, <em>e.g.,
               </em> "0", "1"<em>, etc</em>.  The bookmarks with domain names for 
-              titles are for use on <a href="https://sitepassword.info">SitePassword</a>.
+              titles are for use on <a href="https://sitepassword.info">SitePassword.info</a>.
             </p>
             <p>
               Some pages have more than one password field, such as those for 
               creating an account or changing your password.  In those cases,
               you may see instructions to <em>Paste your password here</em>.
-              SitePassword has already put your site password on the clipboard
-              and will remove it in a minute.
+              Clicking on the SitePassword icon and your site password will put 
+              your site password on the clipboard.  After you're done pasting it, 
+              you should copy something else so your password isn't on the 
+              clipboard any longer than necessary.
             </p>
             <p>
-              SitePassword is able to find the password field on all of the hundreds
-              of sites it's been tested on.  If the instructions don't show up in 
+              SitePassword is able to find the password field on all of the 120
+              sites it's been tested on.  If the instructions don't show up in 
               the site's password field, and holding the mouse over it for a few
               seconds doesn't show a popup with the instructions, try clicking a blank 
               spot on the page.  If that doesn't work you can always click the 
               SitePassword icon and manually copy your site password to the clipboard. 
             </p>
             <p>
-              If you click the <em>More</em> button, you'll see and <em>Instructions</em>
+              If you click the <em>More</em> button, you'll see an <em>Instructions</em>
               button.  Clicking it will take you to this page.
             </p>
             <p>
@@ -366,11 +368,17 @@ information regarding how to obtain the source code for this library.
               </a>
             </h2>
             <p>
-              The SitePassword <a href="sitepassword.info">web page</a> 
+              There are times when you can't use the SitePassword extension, such
+              as on a smart device that doesn't support browser extensions.  In 
+              those cases you can open <a href="sitepassword.info">SitePassord.info</a>
+              and fill in the form manually.
+            </p>
+            <p>
+              <a href="sitepassword.info">SitePassword.info</a> 
               can use bookmarks created by the extension to automate filling in 
               the form.  Simply find the appropriate bookmark in the 
-              SitePasswordData bookmark folder, and paste it into the top field 
-              on the form.  You will see the domainname, site name, and user
+              <em>SitePasswordData</em> bookmark folder, and paste it into the top field 
+              on the form.  You will see the domain name, site name, and user
               name fields get filled in.  If you would like to skip this step 
               in the future on this machine, click the <em>Remember</em>
               button.  
@@ -378,7 +386,7 @@ information regarding how to obtain the source code for this library.
             <p>
               Alternatively, you can paste the login page's URL into the form.  Your
               site name and user name will be filled in if you had clicked the 
-              <em>Remember</em> button earlier for this domain name.
+              <em>Remember</em> button earlier for this domain name on this machine.
             </p>
             <p>
               You should always paste the URL of the page you are logging into in the 
@@ -393,6 +401,21 @@ information regarding how to obtain the source code for this library.
               can reference if you're at a machine that doesn't have your 
               SitePassword settings. <b>Only settings for sites you've chosen
               to remember on this machine will be included.</b>
+            </p>
+          </section>
+          <section id="shared">
+            <h2><a href="#shared">Shared Machines</a></h2>
+            <p>
+              Many households have one machine shared by everybody.  It's likely that 
+              everyone uses the same user name and password for certain sites, such as 
+              streaming services.  It's also likely that those people use their individual
+              usernames and passwords for other sites, such as social media. 
+            </p> 
+            <p>
+              SitePassword accomodates those uses with a feature provided by Google 
+              called <em>profiles</em>.  Each profile gets its own bookmarks and local 
+              storage.  Simply create one profile for the shared account and one for each 
+              individual.
             </p>
           </section>
           <section id="source">
