@@ -37,11 +37,18 @@ window.onload = function () {
                 settings = JSON.parse(no7D);
             } catch {
                 alert("Invalid bookmark.  Copy it again.");
+                get("bookmark").value = "";
+                return;
             }
             persona.sitenames[settings.sitename] = settings;
             element.value = ""; 
             if (logging) console.log("Bookmark settings", settings);
-            get("domainname").value = settings.displayname;
+            if (get("domainname").value !== settings.displayname) {
+                message("phishing", true);
+            } else {
+                get("domainname").value = settings.displayname;
+            }
+            get("bookmark").disabled = true;
             get("sitename").value = settings.sitename;
             get("username").value = settings.username;
             get("pwlength").value = settings.length;
@@ -90,7 +97,13 @@ window.onload = function () {
     get("domainname").onpaste = function () {
         setTimeout(() => {
             let url = get("domainname").value.toLowerCase().trim();
-            if ( url.indexOf("http") != -1) get("domainname").value = url.split("/")[2];               
+            if ( url.indexOf("http") != -1) {
+                get("domainname").value = url.split("/")[2];
+                get("bookmark").disabled = false;              
+            } else {
+                alert("Invalid URL.  Try again.");
+                get("domainname").value = "";
+            }
         }, 0);
     }
     get("domainname").onblur = function () {
@@ -182,6 +195,7 @@ window.onload = function () {
     get("settingssave").onclick = save;
     get("sitedatagetbutton").onclick = sitedataHTML;
     get("warningbutton").onclick = function () {
+        get("bookmark").disabled = true;
         get("masterpw").disabled = false;
         get("username").disabled = false;
         get("sitename").disabled = false;

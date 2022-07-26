@@ -50,6 +50,7 @@ information regarding how to obtain the source code for this library.
               title="Find the bookmark with your domain name in the SitePasswordData bookmark folder and paste it here."
               placeholder="Paste bookmark from SitePasswordData"
               style="display: block; width:21em"
+              disabled
             /input>
             <p align="center">or fill in the form</p>
             <hr />
@@ -244,6 +245,12 @@ information regarding how to obtain the source code for this library.
               You should make sure it's something you won't easily forget.  You 
               might even want to write it down and keep the copy in a secure place.
             </p>
+            <p>
+              Since SitePassword doesn't store your passwords, there's no way
+              you can use your existing passwords with it.  You will have to use 
+              the web site's <em>Change Password</em> or <em>Forgot Password</em>
+              feature on sites where you already have accounts.
+            </p>
           </section>
           <section id="common">
             <h2><a href="#common">Common Features</a></h2>
@@ -283,12 +290,6 @@ information regarding how to obtain the source code for this library.
               names.  So, when you see the warning, check the URL of the page 
               to make sure it's a login page for the site you think it is.
             </p>
-            <p>
-              Since SitePassword doesn't store your passwords, there's no way
-              you can use your existing passwords with it.  You will have to use 
-              the web site's <em>Change Password</em> or <em>Forgot Password</em>
-              feature on sites where you already have accounts.
-            </p>
           </section>
           <section id="extension">
             <h2>
@@ -313,7 +314,9 @@ information regarding how to obtain the source code for this library.
               <em>Click SitePassword</em>, you will have to enter your master
               password again.  That's because SitePassword never stores your 
               master password; it only remembers it for the duration of your 
-              browser session.
+              browser session.  If your settings aren't there when you think 
+              they should be, reloading the page with the login form will 
+              solve the problem.
             </p>
             <p>
               If you go to the same web page on a different machine that you
@@ -334,7 +337,7 @@ information regarding how to obtain the source code for this library.
               clipboard any longer than necessary.
             </p>
             <p>
-              SitePassword is able to find the password field on all of the 120
+              SitePassword is able to find the password field on all of the more than 100
               sites it's been tested on.  If the instructions don't show up in 
               the site's password field, and holding the mouse over it for a few
               seconds doesn't show a popup with the instructions, try clicking a blank 
@@ -347,9 +350,10 @@ information regarding how to obtain the source code for this library.
             </p>
             <p>
               You might feel uncomfortable having your master password available for 
-              your entire browser session.  You might prefer to enter your master password every
-              time you need a site password.  The <em>Clear master password on use</em>
-              checkbox lets you specify this behavior. There is a risk to this choice; you 
+              your entire browser session.  The <em>Clear master password on use</em>
+              checkbox lets you specify this behavior. Of course, you'll have to enter your 
+              master password every
+              time you need a site password.  There is also a risk to this choice; you 
               are more likely to have a keylogger running the longer your browser session.
             </p>
             <p>
@@ -369,31 +373,41 @@ information regarding how to obtain the source code for this library.
             </h2>
             <p>
               There are times when you can't use the SitePassword extension, such
-              as on a smart device that doesn't support browser extensions.  In 
+              as on a smart device that doesn't support browser extensions, when you're on 
+              a friend's machine, or you're using a different browser.  In 
               those cases you can open <a href="sitepassword.info">SitePassord.info</a>
-              and fill in the form manually.
+              and fill in the form manually.  If you would like to skip this step 
+              in the future on this machine, click the <em>Remember</em>
+              button.
             </p>
             <p>
               <a href="sitepassword.info">SitePassword.info</a> 
               can use bookmarks created by the extension to automate filling in 
-              the form.  Simply find the appropriate bookmark in the 
+              the form.  If you are logging into a web site, paste the URL of
+              the login page into the domain name field.  Your site name and 
+              user name fields will be filled in if you had previously remembered 
+              this domain name.  If those fields aren't populated, find the appropriate bookmark in the 
               <em>SitePasswordData</em> bookmark folder, and paste it into the top field 
-              on the form.  You will see the domain name, site name, and user
-              name fields get filled in.  If you would like to skip this step 
-              in the future on this machine, click the <em>Remember</em>
-              button.  
+              on the form.  You will see the site name and user
+              name fields get filled in.  
             </p>
             <p>
-              Alternatively, you can paste the login page's URL into the form.  Your
-              site name and user name will be filled in if you had clicked the 
-              <em>Remember</em> button earlier for this domain name on this machine.
+              If the domain name of the URL you pasted does not match that of the 
+              bookmark you selected, you'll get a big scary warning.  It's telling you 
+              that you may be at a site 
+              spoofing the one you think you are at. Unfortunately, you will 
+              also see this warning when you are not being tricked.  Many 
+              websites have several different login pages with different domain 
+              names.  So, when you see the warning, check the URL of the page 
+              to make sure it's a login page for the site you think it is. 
+
             </p>
             <p>
-              You should always paste the URL of the page you are logging into in the 
-              <em>Domain name</em> field, but you can calculate your password without 
+              You can calculate your password without 
               providing a domain name, say to get the password for an app on your smart 
               phone.  Of course, you won't be able to remember the settings until you 
-              provide a domain name. 
+              provide a domain name.  You can just make one up, <em>e.g., MyApp</em>, which 
+              you'll use the next time you need a password for that app.
             </p>
             <p>
               There is a <em>Download Local Data</em> button at the bottom of 
