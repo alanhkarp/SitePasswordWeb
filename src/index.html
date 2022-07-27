@@ -45,16 +45,17 @@ information regarding how to obtain the source code for this library.
             />
           </h1>
           <div>
+            <p id="first">First paste the login page's URL</p>
+            <p id="second" style="display:none">Next</p>
             <input
               id="bookmark"
               title="Find the bookmark with your domain name in the SitePasswordData bookmark folder and paste it here."
               placeholder="Paste bookmark from SitePasswordData"
-              style="display: block; width:21em"
-              disabled
+              style="visibility: hidden; width:21em"
             /input>
-            <p align="center">or fill in the form</p>
+            <p id="alternate" style="visibility: hidden;">or fill in the form</p>
             <hr />
-            </div>
+          </div>
             <label>Domain name:</label>
           <input
             id="domainname"
@@ -93,7 +94,7 @@ information regarding how to obtain the source code for this library.
             value=""
             id="sitepass"
             readonly
-            size="20"
+            size="19"
             placeholder="Your site password"
           /><br />
           <div class="warning" id="nopw" style="display: none">
@@ -357,11 +358,13 @@ information regarding how to obtain the source code for this library.
             </p>
             <p>
               You might feel uncomfortable having your master password available for 
-              your entire browser session.  The <em>Clear master password on use</em>
-              checkbox lets you specify this behavior. Of course, you'll have to enter your 
+              your entire browser session, say when you walk away from your machine for 
+              a few minutes.  The <em>Clear master password on use</em>
+              checkbox avoids this risk. Of course, you'll have to enter your 
               master password every
               time you need a site password.  There is also a risk to this choice; you 
-              are more likely to have a keylogger running the longer your browser session lasts.
+              are more likely to have a keylogger that can capture your master password
+              running the longer your browser session lasts.
             </p>
             <p>
               There is a <em>Download Site Data</em> button at the bottom of 

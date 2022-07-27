@@ -99,7 +99,10 @@ window.onload = function () {
             let url = get("domainname").value.toLowerCase().trim();
             if ( url.indexOf("http") != -1) {
                 get("domainname").value = url.split("/")[2];
-                get("bookmark").disabled = false;              
+                get("bookmark").style.visibility = "visible";
+                get("alternate").style.visibility = "visible"; 
+                get("first").style.display = "none";
+                get("second").style.display = "block";             
             } else {
                 alert("Invalid URL.  Try again.");
                 get("domainname").value = "";
@@ -107,6 +110,7 @@ window.onload = function () {
         }, 0);
     }
     get("domainname").onblur = function () {
+        get("domainname").onpaste();
         enable();
         getsettings();
         ask2generate();
