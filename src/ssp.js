@@ -245,7 +245,23 @@ window.onload = function () {
             get("sections").style.display = "none";
         }
     }
+    get("overview").onclick = function() { sectionClick("overview"); };
+    get("masterpassword").onclick = function() { sectionClick("masterpassword"); };
+    get("common").onclick = function() { sectionClick("common"); };
+    get("extension").onclick = function() { sectionClick("extension"); };
+    get("webpage").onclick = function() { sectionClick("webpage"); };
+    get("shared").onclick = function() { sectionClick("shared"); };
+    get("source").onclick = function() { sectionClick("source"); };
+    get("payment").onclick = function() { sectionClick("payment"); };
     init();
+}
+function sectionClick(elementId) {
+    let element = get(elementId + "p");
+    if (element.style.display === "none") {
+        element.style.display = "block";
+    } else {
+        element.style.display = "none";
+    }
 }
 function handlekeyup(element, field) {
     settings[field] = get(element).value;
