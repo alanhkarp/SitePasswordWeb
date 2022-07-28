@@ -20,19 +20,19 @@ window.onload = function () {
         get("masterpw").value = "";
         get("masterpw").focus();
     }
-    get("bookmark").onclick = function() {
+    get("bookmark").onclick = function () {
         setTimeout(() => {
             this.focus();
         }, 0);
     }
     get("bookmark").onpaste = processBookmark;
     function processBookmark() {
-         let element = this;
+        let element = this;
         setTimeout(() => {
             if (!this.value) return;
             try {
                 let no22 = element.value.substring(6).replace(/%22/g, "\"");
-                let no7B = no22.replace(/%7B/,"{");
+                let no7B = no22.replace(/%7B/, "{");
                 let no7D = no7B.replace(/%7D/, "}");
                 settings = JSON.parse(no7D);
             } catch {
@@ -41,14 +41,13 @@ window.onload = function () {
                 return;
             }
             persona.sitenames[settings.sitename] = settings;
-            element.value = ""; 
+            element.value = "";
             if (logging) console.log("Bookmark settings", settings);
             if (get("domainname").value !== settings.displayname) {
                 message("phishing", true);
             } else {
                 get("domainname").value = settings.displayname;
             }
-            get("bookmark").disabled = true;
             get("sitename").value = settings.sitename;
             get("username").value = settings.username;
             get("pwlength").value = settings.length;
@@ -56,7 +55,7 @@ window.onload = function () {
             get("minnumber").value = settings.minnumber;
             get("minspecial").value = settings.minspecial;
             get("minupper").value = settings.minupper;
-            get("startwithletter").value = settings.startwithletter; 
+            get("startwithletter").value = settings.startwithletter;
             get("allowlowercheckbox").checked = settings.allowlower;
             if (settings.allowlower) {
                 get("allowlower").style.display = "none";
@@ -96,17 +95,13 @@ window.onload = function () {
     }
     get("domainname").onpaste = function () {
         setTimeout(() => {
-            let url = get("domainname").value.toLowerCase().trim();
-            if ( url.indexOf("http") != -1) {
-                get("domainname").value = url.split("/")[2];
-                get("bookmark").style.visibility = "visible";
-                get("alternate").style.visibility = "visible"; 
-                get("first").style.display = "none";
-                get("second").style.display = "block";             
+            let split = get("domainname").value.split("/");
+            if (split.length === 1) {
+                get("domainname").value = split[0];
             } else {
-                alert("Invalid URL.  Try again.");
-                get("domainname").value = "";
+                get("domainname").value = split[2];
             }
+            bookmarkOn()
         }, 0);
     }
     get("domainname").onblur = function () {
@@ -143,10 +138,13 @@ window.onload = function () {
             get("sitename").focus();
         }
     }
+    get("copy").onclick = function () {
+        navigator.clipboard.writeText(get("sitepass").value);
+    }
     get("pwlength").onmouseleave = function () {
         handlekeyup("pwlength", "length");
     }
-   get("pwlength").onblur = function () {
+    get("pwlength").onblur = function () {
         handleblur("pwlength", "length");
     }
     get("startwithletter").onclick = function () {
@@ -199,7 +197,6 @@ window.onload = function () {
     get("settingssave").onclick = save;
     get("sitedatagetbutton").onclick = sitedataHTML;
     get("warningbutton").onclick = function () {
-        get("bookmark").disabled = true;
         get("masterpw").disabled = false;
         get("username").disabled = false;
         get("sitename").disabled = false;
@@ -211,6 +208,7 @@ window.onload = function () {
         ask2generate();
     }
     get("cancelwarning").onclick = function () {
+        bookmarkOff();
         message("phishing", false);
         get("domainname").value = "";
         get("sitename").value = "";
@@ -249,15 +247,27 @@ window.onload = function () {
             get("sections").style.display = "none";
         }
     }
-    get("overview").onclick = function() { sectionClick("overview"); };
-    get("masterpassword").onclick = function() { sectionClick("masterpassword"); };
-    get("common").onclick = function() { sectionClick("common"); };
-    get("extension").onclick = function() { sectionClick("extension"); };
-    get("webpage").onclick = function() { sectionClick("webpage"); };
-    get("shared").onclick = function() { sectionClick("shared"); };
-    get("source").onclick = function() { sectionClick("source"); };
-    get("payment").onclick = function() { sectionClick("payment"); };
+    get("overview").onclick = function () { sectionClick("overview"); };
+    get("masterpassword").onclick = function () { sectionClick("masterpassword"); };
+    get("common").onclick = function () { sectionClick("common"); };
+    get("extension").onclick = function () { sectionClick("extension"); };
+    get("webpage").onclick = function () { sectionClick("webpage"); };
+    get("shared").onclick = function () { sectionClick("shared"); };
+    get("source").onclick = function () { sectionClick("source"); };
+    get("payment").onclick = function () { sectionClick("payment"); };
     init();
+}
+function bookmarkOn() {
+    get("bookmark").style.visibility = "visible";
+    get("alternate").style.visibility = "visible";
+    get("first").style.display = "none";
+    get("second").style.display = "block";
+}
+function bookmarkOff() {
+    get("bookmark").style.visibility = "hidden";
+    get("alternate").style.visibility = "hidden";
+    get("first").style.display = "block";
+    get("second").style.display = "none";
 }
 function sectionClick(elementId) {
     let element = get(elementId + "p");
@@ -330,7 +340,7 @@ function init() {
 function enable() {
     if (get("domainname").value && get("sitename").value && get("username").value) {
         get("remember").disabled = false;
-   } else {
+    } else {
         get("remember").disabled = true;
     }
 }
@@ -390,7 +400,7 @@ function fill() {
         get("pwlength").value = settings.length;
         get("startwithletter").checked !== settings.startwithletter;
         if (get("allowlowercheckbox").checked !== settings.allowlower) updateCheckbox("lower");
-         get("minlower").value = settings.minlower;
+        get("minlower").value = settings.minlower;
         if (get("allowuppercheckbox").checked !== settings.allowupper) updateCheckbox("upper");
         get("minupper").value = settings.minupper;
         if (get("allownumbercheckbox").checked = settings.allownumber) updateCheckbox("number");
