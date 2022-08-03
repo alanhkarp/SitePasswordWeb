@@ -4,22 +4,23 @@ var masterpw;
 var domainname;
 var debugssp = false;
 var settings = {};
+function get(element) {
+    if (typeof element === 'string') {
+        return document.getElementById(element);
+    }
+    return element;
+}
+function getlowertrim(element) {
+    return get(element).value.toLowerCase().trim();
+}
+function clone(object) {
+    return JSON.parse(JSON.stringify(object))
+}
+function copyToClipboard(element) {
+    //element.focus();
+    navigator.clipboard.writeText(element.value);
+}
 window.onload = function () {
-    get("persona").onkeyup = function () {
-        get("masterpw").value = "";
-        get("sitename").value = "";
-        get("username").value = "";
-        get("sitepass").value = "";
-        masterpw = "";
-    }
-    get("persona").onmouseleave = function () {
-        getsettings();
-        fill();
-        hpSPG.lastpersona = get("persona").value;
-        masterpw = "";
-        get("masterpw").value = "";
-        get("masterpw").focus();
-    }
     get("bookmark").onclick = function () {
         setTimeout(() => {
             this.focus();
@@ -40,7 +41,6 @@ window.onload = function () {
                 get("bookmark").value = "";
                 return;
             }
-            persona.sitenames[settings.sitename] = settings;
             element.value = "";
             if (logging) console.log("Bookmark settings", settings);
             if (get("domainname").value !== settings.displayname) {
@@ -93,6 +93,19 @@ window.onload = function () {
             setfocus();
         }, 0);
     }
+    get("maininfo").onclick = function () {
+        let $instructions = get("instructions");
+        let $instructionpanel = get("instructionpanel");
+        let $sections = get("sections");
+        $instructions.checked = !$instructions.checked;
+        if ($instructions.checked) {
+            $instructionpanel.style.display = "block";
+            $sections.style.display = "block";
+        } else {
+            $instructionpanel.style.display = "none";
+            $sections.style.display = "none";
+        }
+    }
     get("domainname").onpaste = function () {
         setTimeout(() => {
             let split = get("domainname").value.split("/");
@@ -101,7 +114,7 @@ window.onload = function () {
             } else {
                 get("domainname").value = split[2];
             }
-            bookmarkOn()
+            bookmarkOn();
         }, 0);
     }
     get("domainname").onblur = function () {
@@ -111,10 +124,23 @@ window.onload = function () {
         ask2generate();
         setfocus();
     }
-    get("masterpw").onkeyup = function () {
-        masterpw = get("masterpw").value;
+    let $masterpw = get("masterpw");
+    $masterpw.onkeyup = function () {
+        masterpw = $masterpw.value;
         ask2generate();
-        get("masterpw").focus();
+        $masterpw.focus();
+    }
+    let $masterpwhide = get("masterpwhide");
+    let $masterpwshow = get("masterpwshow");
+    $masterpwhide.onclick = function () {
+        $masterpw.type = "password";
+        $masterpwhide.style.display = "none";
+        $masterpwshow.style.display = "block";
+    }
+    $masterpwshow.onclick = function () {
+        $masterpw.type = "text";
+        $masterpwhide.style.display = "block";
+        $masterpwshow.style.display = "none";
     }
     get("username").onkeyup = function () {
         enable();
@@ -138,8 +164,21 @@ window.onload = function () {
             get("sitename").focus();
         }
     }
+    let $sitepw = get("sitepass");
+    let $sitepwhide = get("sitepwhide");
+    let $sitepwshow = get("sitepwshow");
+    $sitepwhide.onclick = function () {
+        $sitepw.type = "password";
+        $sitepwhide.style.display = "none";
+        $sitepwshow.style.display = "block";
+    }
+    $sitepwshow.onclick = function () {
+        $sitepw.type = "text";
+        $sitepwhide.style.display = "block";
+        $sitepwshow.style.display = "none";
+    }
     get("copy").onclick = function () {
-        navigator.clipboard.writeText(get("sitepass").value);
+        copyToClipboard($sitepw);
     }
     get("pwlength").onmouseleave = function () {
         handlekeyup("pwlength", "length");
@@ -201,9 +240,6 @@ window.onload = function () {
         get("username").disabled = false;
         get("sitename").disabled = false;
         message("phishing", false);
-        var n = get("sitename").value;
-        settings = clone(persona.sitenames[n]);
-        persona.sites[get("domainname").value] = settings.sitename;
         get("username").value = settings.username;
         ask2generate();
     }
@@ -230,22 +266,7 @@ window.onload = function () {
             ask2generate();
         }
         settings.sitename = get("sitename").value;
-        if (settings.sitename) {
-            persona.sitenames[settings.sitename] = clone(settings);
-            persona.sites[settings.domainname] = settings.sitename;
-        } else {
-            delete persona.sites[settings.domainname];
-            get("username").value = "";
-        }
-        hpSPG.lastpersona = getlowertrim("persona");
         persistObject("hpSPG", hpSPG);
-    }
-    get("instructions").onclick = function () {
-        if (get("instructions").checked) {
-            get("sections").style.display = "block";
-        } else {
-            get("sections").style.display = "none";
-        }
     }
     get("overview").onclick = function () { sectionClick("overview"); };
     get("masterpassword").onclick = function () { sectionClick("masterpassword"); };
@@ -259,22 +280,20 @@ window.onload = function () {
 }
 function bookmarkOn() {
     get("bookmark").style.visibility = "visible";
-    get("alternate").style.visibility = "visible";
-    get("first").style.display = "none";
-    get("second").style.display = "block";
 }
 function bookmarkOff() {
     get("bookmark").style.visibility = "hidden";
-    get("alternate").style.visibility = "hidden";
-    get("first").style.display = "block";
-    get("second").style.display = "none";
 }
 function sectionClick(elementId) {
     let element = get(elementId + "p");
     if (element.style.display === "none") {
         element.style.display = "block";
+        get("open" + elementId).style.display = "none";
+        get("close" + elementId).style.display = "block";
     } else {
         element.style.display = "none";
+        get("open" + elementId).style.display = "block";
+        get("close" + elementId).style.display = "none";
     }
 }
 function handlekeyup(element, field) {
@@ -320,19 +339,23 @@ function init() {
     get("sitename").value = "";
     get("username").value = "";
     bginit();
-    persona = hpSPG.personas[hpSPG.lastpersona.toLowerCase()];
-    get("persona").value = persona.personaname;
     settings = clone(persona.sitenames.default);
+/*
+    settings.length = get("pwlength").value;
+    settings.startwithletter = get("startwithletter").checked;
+    settings.allowlower = get("allowlower").checked;
+    settings.minlower = get("minlower").value;
+    settings.allowupper = get("allowupper").checked;
+    settings.minupper = get("minupper").value;
+    settings.allownumber = get("allownumber").checked;
+    settings.minnumber = get("minnumber").value;
+    settings.allowspecial = get("allowspecial").checked;
+    settings.minspecial = get("minspecial").value;
+    settings.specials = get("specials").value;
+*/
     var hostname = getlowertrim("domainname");
-    if (hostname && persona.sites[hostname]) {
-        settings = clone(persona.sitenames[persona.sites[hostname]]);
-    }
     settings.domainname = hostname;
-    if (persona.sites[domainname]) {
-        settings.username = persona.sites[domainname].username;
-    } else {
-        settings.username = "";
-    }
+    settings.username = "";
     fill();
     ask2generate();
     get("bookmark").focus();
@@ -351,10 +374,8 @@ function setfocus() {
     //if (!get("domainname").value) get("domainname").focus();
 }
 function getsettings() {
-    var personaname = getlowertrim("persona");
     var domainname = getlowertrim("domainname");
-    persona = hpSPG.personas[personaname];
-    if (!persona) {
+    /*
         hpSPG.personas[personaname] = clone(hpSPG.personas.default);
         persona = hpSPG.personas[personaname];
         settings = clone(persona.sitenames.default);
@@ -362,18 +383,13 @@ function getsettings() {
         settings.domainname = domainname;
         settings.sitename = getlowertrim("sitename");
         settings.characters = characters(settings);
-    }
-    if (persona.sites[domainname]) {
-        settings = clone(persona.sitenames[persona.sites[domainname]]);
-    } else {
-        settings = clone(persona.sitenames.default);
-    }
+    */
+    settings = clone(persona.sitenames.default);
     fill();
     get("masterpw").focus();
     return settings;
 }
 function ask2generate() {
-
     var p = "";
     if (!(settings.allowupper || settings.allowlower || settings.allownumber)) {
         message("nopw", true);
@@ -391,10 +407,10 @@ function ask2generate() {
         }
     }
     get("sitepass").value = p;
-    //copyToClipboard();
+    //copyToClipboard(get("sitepass"));
 }
 function fill() {
-    if (persona.sites[get("domainname").value]) {
+    /*
         if (!get("username").value) get("username").value = settings.username;
         if (!get("sitename").value) get("sitename").value = settings.sitename;
         get("pwlength").value = settings.length;
@@ -408,11 +424,10 @@ function fill() {
         if (get("allowspecialcheckbox").checked !== settings.allowspecial) updateCheckbox("special");
         get("minspecial").value = settings.minspecial;
         get("specials").value = settings.specials;
-    } else {
-        settings.domainname = get("domainname").value.toLowerCase().trim();
-        settings.sitename = get("sitename").value.toLowerCase().trim();
-        settings.username = get("username").value.toLowerCase().trim();
-    }
+    */
+    settings.domainname = get("domainname").value.toLowerCase().trim();
+    settings.sitename = get("sitename").value.toLowerCase().trim();
+    settings.username = get("username").value.toLowerCase().trim();
     get("clearmasterpw").checked = persona.clearmasterpw;
 }
 function updateCheckbox(which) {
@@ -422,7 +437,7 @@ function updateCheckbox(which) {
 }
 function show() {
     get("settingsshow").style.display = "none";
-    get("settingssave").style.visibility = "visible";
+    get("settingssave").style.display = "inline";
     get("domainname").value = settings.domainname;
     get("masterpw").value = masterpw;
     get("clearmasterpw").checked = persona.clearmasterpw;
@@ -442,7 +457,7 @@ function show() {
 function save() {
     persistObject("hpSPG", hpSPG);
     get("settingsshow").style.display = "inline";
-    get("settingssave").style.visibility = "hidden";
+    get("settingssave").style.display = "none";
     get("settings").style.display = "none";
 }
 function sitedataHTML() {
@@ -537,19 +552,6 @@ function retrieveObject(name) {
     } catch (e) {
         return undefined;
     }
-}
-function get(element) {
-    return document.getElementById(element);
-}
-function getlowertrim(element) {
-    return document.getElementById(element).value.toLowerCase().trim();
-}
-function clone(object) {
-    return JSON.parse(JSON.stringify(object))
-}
-function copyToClipboard() {
-    get("sitepass").focus();
-    navigator.clipboard.writeText(password);
 }
 var msgstate = [false, false, false, false, false];
 var msgpriority = ["phishing", "nopw"];
