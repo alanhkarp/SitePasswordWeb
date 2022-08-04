@@ -4,272 +4,14 @@
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
   <title>Site Password</title>
-  <script language="javascript" type="text/javascript" src="ssp.js"></script>
-  <script language="javascript" type="text/javascript" src="bg.js"></script>
   <script language="javascript" type="text/javascript" src="sha256.js"></script>
+  <script language="javascript" type="text/javascript" src="bg.js"></script>
+  <script language="javascript" type="text/javascript" src="ssp.js"></script>
+  <link type="text/css" href="ssp.css" rel="stylesheet" />
 <!--
-    <link type="text/css" href="ssp.css" rel="Stylesheet" />
--->
 <style type="text/css" media="all">
-.sspform {
-  width: 22em;
-  background-color: #87CEFA;
-  border: 1em solid black;
-  padding: 1em;
-}
-label {
-  display: inline-block;
-  width: 8em;
-  text-align: left;
-}
-h1 {
-  margin: 1ex;
-  text-align: center;
-}
-.warning {
-  border : 3pt solid red;
-  background-color : white;
-  padding : 1em;
-}
-.password {
-  font-family: "Courier";
-}
-#ssp {
-  display: none;
-}
-.serif {
-/*
-  font-family: "New York", Cambria, "Lucida Serif", Lucida, serif;
-*/
-  font-family: serif;
-}
-.sans {
-/*
-  font-family: "Helvetica Neue", Calibri, "Lucida Sans Unicode", sans-serif;
-*/
-  font-family: sans-serif;
-}
-.fixed {
-/*
-  font-family: Menlo, Consolas, "Lucida Console", monospace;
-*/
-  font-family: monospace;
-}
-.column {
-  flex: 1;
-}
-#root {
-  display: block;
-}
-#content {
-  display: flex;
-  flex-flow: row wrap;
-}
-#mainpanel {
-  flex: 0 0 auto;
-}
-#instructionpanel {
-  display: none;
-  flex: 0 0 auto;
-}
-#main {
-  margin: 1ex;
-  border: 2pt solid #47A;
-  border-radius: 6pt;
-  padding: 0 1ex 0.5ex;
-  width: 22em;
-  background-color: #8CF;
-}
-#bookmarks {
-  cursor: default;
-}
-#instructions {
-  float: left;
-  height: 1.5em;
-  margin-right: 1em;
-}
-#sections {
-  margin: 1em 1ex;
-/*
-  width: 36em;
-  width: 12em;
-*/
-  width: 22em;
-}
-#masterpw {
-  padding-right: 3em;
-}
-#sitepass {
-  padding-right: 5em;
-}
-.sr-only {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden !important;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-p {
-  margin: 1ex;
-}
-button {
-  flex: 1;
-  margin: 1ex 1ex;
-  border-radius: 6pt;
-  padding: 1ex 0.5ex;
-}
-button:disabled {
-  border: 1pt solid #666;
-  color: #CCC;
-  background-color: #999;
-  cursor: defaut;
-}
-button:enabled {
-  border: 1pt solid #000;
-  color: #FFF;
-  background-color: #369;
-  cursor: pointer;
-}
-button:enabled:hover {
-  border: 1pt solid #FFF;
-}
-button:enabled:active {
-  background-color: #58B;
-}
-.form-row {
-  display: flex;
-  position: relative;
-}
-.form-row input {
-  flex: auto;
-  border: 0;
-  border-radius: 4pt;
-  margin: 1ex 0;
-  padding: 1.2ex;
-  height: 16px;
-}
-.setting-row {
-  margin: 0.5ex 0;
-  height: 1.5em;
-}
-.icon {
-  flex: none;
-  margin: auto 0;
-  padding: 4px;
-  width: 24px;
-  height: 24px;
-  background-color: transparent;
-  cursor: pointer;
-}
-.inner-icon-1 {
-  position: absolute;
-  right: 0;
-  top: 5px;
-}
-.inner-icon-2 {
-  position: absolute;
-  right: 2em;
-  top: 5px;
-}
-.accordian {
-  float: left;
-  padding-right: 1ex;
-  cursor: pointer;
-}
-.nodisplay {
-  display: none;
-}
 </style>
-<!--
-<script language="javascript" type="text/javascript">
-function $(e) {
-  if (typeof e === 'string') {
-    return document.getElementById(e);
-  }
-  return e;
-}
-window.onload = function () {
-  var $remember = $('remember');
-  var $settings = $('settings');
-  var $settingsshow = $('settingsshow');
-  var $settingssave = $('settingssave');
-  var $allowlowercheckbox = $('allowlowercheckbox');
-  var $allowlower = $('allowlower');
-  var $requirelower = $('requirelower');
-  var $allowuppercheckbox = $('allowuppercheckbox');
-  var $allowupper = $('allowupper');
-  var $requireupper = $('requireupper');
-  var $allownumbercheckbox = $('allownumbercheckbox');
-  var $allownumber = $('allownumber');
-  var $requirenumber = $('requirenumber');
-  var $allowspecialcheckbox = $('allowspecialcheckbox');
-  var $allowspecial = $('allowspecial');
-  var $requirespecial = $('requirespecial');
-  var $instructions = $('instructions');
-  $settingsshow.onclick = function () {
-    $settings.style.display = 'block';
-    $settingsshow.style.display = 'none';
-    $settingssave.style.display = 'block';
-    //$remember.disabled = false;
-  }
-  $settingssave.onclick = function () {
-    $settings.style.display = 'none';
-    $settingsshow.style.display = 'block';
-    $settingssave.style.display = 'none';
-    //$remember.disabled = true;
-  }
-  $remember.onclick = function () {
-    alert('Remember what?');
-  }
-  $allowlowercheckbox.onclick = function () {
-    if ($allowlowercheckbox.checked) {
-      $allowlower.style.display = 'none';
-      $requirelower.style.display = 'inline';
-    } else {
-      $allowlower.style.display = 'inline';
-      $requirelower.style.display = 'none';
-    }
-  }
-  $allowuppercheckbox.onclick = function () {
-    if ($allowuppercheckbox.checked) {
-      $allowupper.style.display = 'none';
-      $requireupper.style.display = 'inline';
-    } else {
-      $allowupper.style.display = 'inline';
-      $requireupper.style.display = 'none';
-    }
-  }
-  $allownumbercheckbox.onclick = function () {
-    if ($allownumbercheckbox.checked) {
-      $allownumber.style.display = 'none';
-      $requirenumber.style.display = 'inline';
-    } else {
-      $allownumber.style.display = 'inline';
-      $requirenumber.style.display = 'none';
-    }
-  }
-  $allowspecialcheckbox.onclick = function () {
-    if ($allowspecialcheckbox.checked) {
-      $allowspecial.style.display = 'none';
-      $requirespecial.style.display = 'inline';
-    } else {
-      $allowspecial.style.display = 'inline';
-      $requirespecial.style.display = 'none';
-    }
-  }
-  $instructions.onclick = function () {
-    if ($instructions.checked) {
-      $('sections').style.display = 'block';
-    } else {
-      $('sections').style.display = 'none';
-    }
-  }
-}
-</script>
-//-->
+-->
 </head>
 <body>
   <noscript>JavaScript must be enabled to use this tool.</noscript>
@@ -282,19 +24,10 @@ window.onload = function () {
             <span style="flex: 1"></span>
             <h1>Site Password</h1>
             <span style="flex: 1"></span>
-            <svg id="maininfo" class="icon" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v-3m0-3v0"/></svg>
+            <div id="maininfo" class="icon" title="Instructions">
+              <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v-3m0-3v0"/></svg>
+            </div>
           </div>
-          <div class="form-row">
-            <label for="bookmark" class="sr-only">SitePasswordData bookmark:</label>
-            <input
-              id="bookmark"
-              title="Find the bookmark with your domain name in the SitePasswordData bookmark folder and paste it here."
-              placeholder="Paste a SitePasswordData bookmark here"
-            />
-            <svg id="bookmarks" class="icon nodisplay" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-4M8 3v9l3-3 3 3V3M8 3h6"/></svg>
-          </div>
-          <p>...or fill in the form below.</p>
-          <hr />
           <div class="form-row">
             <label for="domainname" class="sr-only">Domain name:</label>
             <input
@@ -302,9 +35,20 @@ window.onload = function () {
               class="fixed"
               type="text"
               value=""
-              placeholder="Paste login page URL here"
+              placeholder="First, paste the login page URL here"
             />
           </div>
+          <div class="form-row">
+            <label for="bookmark" class="sr-only">SitePasswordData bookmark:</label>
+            <input
+              id="bookmark"
+              title="Find the bookmark with your domain name in the SitePasswordData bookmark folder and paste it here."
+              placeholder="Then, paste a SitePasswordData bookmark here"
+            />
+            <svg id="bookmarks" class="icon nodisplay" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-4M8 3v9l3-3 3 3V3M8 3h6"/></svg>
+          </div>
+          <p>...or fill in the form below.</p>
+          <hr />
           <div class="form-row">
             <label for="masterpw" class="sr-only">Master password:</label>
             <input
@@ -314,8 +58,12 @@ window.onload = function () {
               value=""
               placeholder="Choose a strong master password"
             />
-            <svg id="masterpwhide" class="icon inner-icon-1 nodisplay" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5c-6.307 0-9.367 5.683-9.91 6.808a.435.435 0 0 0 0 .384C2.632 13.317 5.692 19 12 19s9.367-5.683 9.91-6.808a.435.435 0 0 0 0-.384C21.368 10.683 18.308 5 12 5z"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-            <svg id="masterpwshow" class="icon inner-icon-1" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 6.362A9.707 9.707 0 0 1 12 5c6.307 0 9.367 5.683 9.91 6.808.06.123.06.261 0 .385-.352.728-1.756 3.362-4.41 5.131M14 18.8a9.93 9.93 0 0 1-2 .2c-6.307 0-9.367-5.683-9.91-6.808a.44.44 0 0 1 0-.386c.219-.452.84-1.632 1.91-2.885m6 .843A3 3 0 0 1 14.236 14M3 3l18 18"/></svg>
+            <div id="masterpwhide" class="icon inner-icon-1 nodisplay" title="Hide Master Password">
+              <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5c-6.307 0-9.367 5.683-9.91 6.808a.435.435 0 0 0 0 .384C2.632 13.317 5.692 19 12 19s9.367-5.683 9.91-6.808a.435.435 0 0 0 0-.384C21.368 10.683 18.308 5 12 5z"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+            </div>
+            <div id="masterpwshow" class="icon inner-icon-1" title="Show Master Password">
+              <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 6.362A9.707 9.707 0 0 1 12 5c6.307 0 9.367 5.683 9.91 6.808.06.123.06.261 0 .385-.352.728-1.756 3.362-4.41 5.131M14 18.8a9.93 9.93 0 0 1-2 .2c-6.307 0-9.367-5.683-9.91-6.808a.44.44 0 0 1 0-.386c.219-.452.84-1.632 1.91-2.885m6 .843A3 3 0 0 1 14.236 14M3 3l18 18"/></svg>
+            </div>
           </div>
           <div class="form-row">
             <label for="sitename" class="sr-only">Site name:</label>
@@ -339,18 +87,27 @@ window.onload = function () {
             <datalist id="usernames"> </datalist>
           </div>
           <div class="form-row">
-            <label for="sitepass" class="sr-only">Site password:</label>
+            <label for="sitepw" class="sr-only">Site password:</label>
             <input
-              id="sitepass"
+              id="sitepw"
               class="fixed"
               readonly="readonly"
               type="password"
               value=""
               placeholder="Generated site password"
             />
-            <svg id="copy" class="icon inner-icon-2" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5v0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v0M8 5v0a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v0m-4 6v3m0 3v-3m0 0H9m3 0h3"/></svg>
-            <svg id="sitepwhide" class="icon inner-icon-1 nodisplay" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5c-6.307 0-9.367 5.683-9.91 6.808a.435.435 0 0 0 0 .384C2.632 13.317 5.692 19 12 19s9.367-5.683 9.91-6.808a.435.435 0 0 0 0-.384C21.368 10.683 18.308 5 12 5z"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
-            <svg id="sitepwshow" class="icon inner-icon-1" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 6.362A9.707 9.707 0 0 1 12 5c6.307 0 9.367 5.683 9.91 6.808.06.123.06.261 0 .385-.352.728-1.756 3.362-4.41 5.131M14 18.8a9.93 9.93 0 0 1-2 .2c-6.307 0-9.367-5.683-9.91-6.808a.44.44 0 0 1 0-.386c.219-.452.84-1.632 1.91-2.885m6 .843A3 3 0 0 1 14.236 14M3 3l18 18"/></svg>
+            <div id="copy" class="icon inner-icon-2" title="Copy to Clipboard">
+<!--
+              <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5v0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v0M8 5v0a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v0m-4 6v3m0 3v-3m0 0H9m3 0h3"/></svg>
+-->
+              <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5v0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v0M8 5v0a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v0"/></svg>
+            </div>
+            <div id="sitepwhide" class="icon inner-icon-1 nodisplay" title="Hide Site Password">
+              <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5c-6.307 0-9.367 5.683-9.91 6.808a.435.435 0 0 0 0 .384C2.632 13.317 5.692 19 12 19s9.367-5.683 9.91-6.808a.435.435 0 0 0 0-.384C21.368 10.683 18.308 5 12 5z"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg>
+            </div>
+            <div id="sitepwshow" class="icon inner-icon-1" title="Show Site Password">
+              <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 6.362A9.707 9.707 0 0 1 12 5c6.307 0 9.367 5.683 9.91 6.808.06.123.06.261 0 .385-.352.728-1.756 3.362-4.41 5.131M14 18.8a9.93 9.93 0 0 1-2 .2c-6.307 0-9.367-5.683-9.91-6.808a.44.44 0 0 1 0-.386c.219-.452.84-1.632 1.91-2.885m6 .843A3 3 0 0 1 14.236 14M3 3l18 18"/></svg>
+            </div>
           </div>
           <div class="form-row">
             <div id="nopw" class="warning nodisplay">
@@ -391,10 +148,10 @@ window.onload = function () {
           </div>
           <div class="form-row">
             <button id="remember" type="button" disabled="disabled">Remember</button>
-            <div id="settingsshow" style="display: block; margin-top: 6px;">
+            <div id="settingsshow" style="display: block; margin-top: 6px;" title="Open Settings">
               <svg class="icon" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 21h-4l-.551-2.48a6.991 6.991 0 0 1-1.819-1.05l-2.424.763-2-3.464 1.872-1.718a7.055 7.055 0 0 1 0-2.1L3.206 9.232l2-3.464 2.424.763A6.992 6.992 0 0 1 9.45 5.48L10 3h4l.551 2.48a6.992 6.992 0 0 1 1.819 1.05l2.424-.763 2 3.464-1.872 1.718a7.05 7.05 0 0 1 0 2.1l1.872 1.718-2 3.464-2.424-.763a6.99 6.99 0 0 1-1.819 1.052L14 21z"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
             </div>
-            <div id="settingssave" style="display: none; margin-top: 6px;">
+            <div id="settingssave" style="display: none; margin-top: 6px;" title="Save Settings">
               <svg class="icon" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 21h-4l-.551-2.48a6.991 6.991 0 0 1-1.819-1.05l-2.424.763-2-3.464 1.872-1.718a7.055 7.055 0 0 1 0-2.1L3.206 9.232l2-3.464 2.424.763A6.992 6.992 0 0 1 9.45 5.48L10 3h4l.551 2.48a6.994 6.994 0 0 1 1.819 1.05l2.424-.763 2 3.464-1.872 1.718a7.05 7.05 0 0 1 0 2.1l1.872 1.718-2 3.464-2.424-.763a6.992 6.992 0 0 1-1.819 1.052L14 21z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 12 2 2 4-4"/></svg>
             </div>
           </div>
@@ -489,11 +246,11 @@ window.onload = function () {
               </p>
             </div>
           </section>
-          <section id="masterpassword">
-            <svg id="openmasterpassword" class="accordian" style="display: block;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 11 3 3 3-3"/></svg>
-            <svg id="closemasterpassword" class="accordian" style="display: none;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 13 3-3 3 3"/></svg>
+          <section id="master">
+            <svg id="openmaster" class="accordian" style="display: block;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 11 3 3 3-3"/></svg>
+            <svg id="closemaster" class="accordian" style="display: none;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 13 3-3 3 3"/></svg>
             <h3>Your Master Password</h3>
-            <div id="masterpasswordp" style="display: none;">
+            <div id="masterp" style="display: none;">
               <p>
                 You should choose a strong master password, one with upper and 
                 lower case letters, numbers, and special characters.  The stronger
@@ -760,5 +517,5 @@ information regarding how to obtain the source code for this library.
 */
 -->
 <!--
-SVG Icons from https://www.svgrepo.com/collection/evericons-interface-icons/
+SVG Icons from https://www.svgrepo.com/collection/majesticons-line-interface-icons/1
 -->

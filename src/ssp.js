@@ -1,7 +1,14 @@
+"use strict";
+if (typeof masterpassword !== 'string') {
+    console.log("ERROR! Must include `bg.js` before `ssp.js`");
+}
+/*
+// defined in `bg.js`...
+function clone(object) {
+    return JSON.parse(JSON.stringify(object))
+}
+*/
 var logging = false;
-var hpSPG;
-var masterpw;
-var domainname;
 var debugssp = false;
 var settings = {};
 function get(element) {
@@ -10,24 +17,22 @@ function get(element) {
     }
     return element;
 }
-function getlowertrim(element) {
+function get_value(element) {
     return get(element).value.toLowerCase().trim();
-}
-function clone(object) {
-    return JSON.parse(JSON.stringify(object))
 }
 function copyToClipboard(element) {
     //element.focus();
     navigator.clipboard.writeText(element.value);
 }
 window.onload = function () {
+/*
     get("bookmark").onclick = function () {
         setTimeout(() => {
             this.focus();
         }, 0);
     }
-    get("bookmark").onpaste = processBookmark;
-    function processBookmark() {
+*/
+    get("bookmark").onpaste = function () {
         let element = this;
         setTimeout(() => {
             if (!this.value) return;
@@ -122,11 +127,12 @@ window.onload = function () {
         enable();
         getsettings();
         ask2generate();
-        setfocus();
+        //setfocus();
+        get("bookmark").focus();
     }
     let $masterpw = get("masterpw");
     $masterpw.onkeyup = function () {
-        masterpw = $masterpw.value;
+        masterpassword = $masterpw.value;
         ask2generate();
         $masterpw.focus();
     }
@@ -155,7 +161,7 @@ window.onload = function () {
             get("domainname").value = settings.domainname;
             get("masterpw").disabled = true;
             get("username").disabled = true;
-            get("sitepass").value = "";
+            get("sitepw").value = "";
         } else {
             message("phishing", false);
             get("masterpw").disabled = false;
@@ -164,7 +170,7 @@ window.onload = function () {
             get("sitename").focus();
         }
     }
-    let $sitepw = get("sitepass");
+    let $sitepw = get("sitepw");
     let $sitepwhide = get("sitepwhide");
     let $sitepwshow = get("sitepwshow");
     $sitepwhide.onclick = function () {
@@ -269,7 +275,7 @@ window.onload = function () {
         persistObject("hpSPG", hpSPG);
     }
     get("overview").onclick = function () { sectionClick("overview"); };
-    get("masterpassword").onclick = function () { sectionClick("masterpassword"); };
+    get("master").onclick = function () { sectionClick("master"); };
     get("common").onclick = function () { sectionClick("common"); };
     get("extension").onclick = function () { sectionClick("extension"); };
     get("webpage").onclick = function () { sectionClick("webpage"); };
@@ -303,7 +309,7 @@ function handlekeyup(element, field) {
 }
 function handleblur(element, field) {
     if (element === "masterpw") {
-        masterpw = get(element).value;
+        masterpassword = get(element).value;
     } else {
         settings[field] = get(element).value;
     }
@@ -338,7 +344,7 @@ function init() {
     get("masterpw").value = "";
     get("sitename").value = "";
     get("username").value = "";
-    bginit();
+    bg_init();
     settings = clone(persona.sitenames.default);
 /*
     settings.length = get("pwlength").value;
@@ -353,12 +359,12 @@ function init() {
     settings.minspecial = get("minspecial").value;
     settings.specials = get("specials").value;
 */
-    var hostname = getlowertrim("domainname");
-    settings.domainname = hostname;
+    settings.domainname = get_value("domainname");
     settings.username = "";
     fill();
     ask2generate();
-    get("bookmark").focus();
+    //get("bookmark").focus();
+    setfocus();
 }
 function enable() {
     if (get("domainname").value && get("sitename").value && get("username").value) {
@@ -371,17 +377,17 @@ function setfocus() {
     if (!get("username").value) get("username").focus();
     if (!get("sitename").value) get("sitename").focus();
     if (!get("masterpw").value) get("masterpw").focus();
-    //if (!get("domainname").value) get("domainname").focus();
+    if (!get("domainname").value) get("domainname").focus();
 }
 function getsettings() {
-    var domainname = getlowertrim("domainname");
+    var domainname = get_value("domainname");
     /*
         hpSPG.personas[personaname] = clone(hpSPG.personas.default);
         persona = hpSPG.personas[personaname];
         settings = clone(persona.sitenames.default);
         persona.personaname = get("persona").value;
         settings.domainname = domainname;
-        settings.sitename = getlowertrim("sitename");
+        settings.sitename = get_value("sitename");
         settings.characters = characters(settings);
     */
     settings = clone(persona.sitenames.default);
@@ -406,8 +412,8 @@ function ask2generate() {
             }
         }
     }
-    get("sitepass").value = p;
-    //copyToClipboard(get("sitepass"));
+    get("sitepw").value = p;
+    //copyToClipboard(get("sitepw"));
 }
 function fill() {
     /*
@@ -425,9 +431,9 @@ function fill() {
         get("minspecial").value = settings.minspecial;
         get("specials").value = settings.specials;
     */
-    settings.domainname = get("domainname").value.toLowerCase().trim();
-    settings.sitename = get("sitename").value.toLowerCase().trim();
-    settings.username = get("username").value.toLowerCase().trim();
+    settings.domainname = get_value("domainname");
+    settings.sitename = get_value("sitename");
+    settings.username = get_value("username");
     get("clearmasterpw").checked = persona.clearmasterpw;
 }
 function updateCheckbox(which) {
@@ -439,7 +445,7 @@ function show() {
     get("settingsshow").style.display = "none";
     get("settingssave").style.display = "inline";
     get("domainname").value = settings.domainname;
-    get("masterpw").value = masterpw;
+    get("masterpw").value = masterpassword;
     get("clearmasterpw").checked = persona.clearmasterpw;
     get("pwlength").value = settings.length;
     get("startwithletter").checked = settings.startwithletter;
@@ -488,7 +494,7 @@ function sitedataHTML() {
     sd += "</tr>";
     for (var i = 0; i < sorted.length; i++) {
         var domainname = sorted[i];
-        var sitename = sites[sorted[i]];
+        var sitename = sites[domainname];
         var s = sitenames[sitename];
         sd += "<tr>";
         sd += "<td><pre>" + sitename + "</pre></td>";
@@ -516,7 +522,7 @@ function sitedataHTML() {
 }
 function isphishing(sitename) {
     if (!sitename) return false;
-    var domainname = get("domainname").value.toLowerCase().trim();
+    var domainname = get_value("domainname");
     var domains = Object.keys(persona.sites);
     var phishing = false;
     domains.forEach(function (d) {

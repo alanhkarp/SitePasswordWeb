@@ -1,15 +1,39 @@
 "use strict";
+var hpSPG;
 var legacy = false;  // true to emulate HP Antiphishing Toolbar
 // State I want to keep around that doesn't appear in the file system
 var activetabid;
-var masterpw = "";
+var masterpassword = "";
 var domainname = "";
 var protocol = "";
 var persona;
 var pwcount = 0;
 var settings = {};
-function bginit() {
-    hpSPG = retrieveObject("hpSPG");
+function clone(object) {
+    return JSON.parse(JSON.stringify(object))
+}
+function persistObject(name, value) {
+    try {
+        localStorage[name] = JSON.stringify(value);
+    } catch (e) {
+        return undefined;
+    }
+}
+function retrieveObject(name) {
+    try {
+        return JSON.parse(localStorage[name]);
+    } catch (e) {
+        return undefined;
+    }
+}
+function getdomainname(url) {
+    return url.split("/")[2];
+}
+function getprotocol(url) {
+    return url.split(":")[0];
+}
+function bg_init() {
+    hpSPG = retrieveObject("hpSPG");//"SitePasswordData"
     if (!hpSPG) {
         hpSPG = {
             digits: "0123456789",
@@ -71,7 +95,7 @@ function bginit() {
 function generate(settings) {
     var n = settings.sitename.toLowerCase().trim();
     var u = settings.username.toLowerCase().trim();
-    var m = masterpw;
+    var m = masterpassword;
     if (!m) {
         return { p: "", r: pwcount };
     }
@@ -133,20 +157,6 @@ function verify(p, settings) {
     }
     return valOK;
 }
-function persistObject(name, value) {
-    try {
-        localStorage[name] = JSON.stringify(value);
-    } catch (e) {
-        return undefined;
-    }
-}
-function retrieveObject(name) {
-    try {
-        return JSON.parse(localStorage[name]);
-    } catch (e) {
-        return undefined;
-    }
-}
 function characters(settings) {
     var chars = hpSPG.lower + hpSPG.upper + hpSPG.digits + hpSPG.lower.substr(0, 2);
     if (settings.allowspecial) {
@@ -172,15 +182,6 @@ function characters(settings) {
         }
     }
     return chars;
-}
-function clone(object) {
-    return JSON.parse(JSON.stringify(object))
-}
-function getdomainname(url) {
-    return url.split("/")[2];
-}
-function getprotocol(url) {
-    return url.split(":")[0];
 }
 /* 
 This code is a major modification of the code released with the
