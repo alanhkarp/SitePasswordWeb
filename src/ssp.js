@@ -42,6 +42,7 @@ window.onload = function () {
             }
             persona.sitenames[settings.sitename] = settings;
             element.value = "";
+            bookmarkOff();
             if (logging) console.log("Bookmark settings", settings);
             if (get("domainname").value !== settings.displayname) {
                 message("phishing", true);
@@ -101,6 +102,9 @@ window.onload = function () {
             } else {
                 get("domainname").value = split[2];
             }
+            get("sitename").value = "";
+            get("username").value = "";
+            get("sitepass").value = "";
             bookmarkOn()
         }, 0);
     }
