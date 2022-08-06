@@ -1,188 +1,199 @@
 "use strict";
-var hpSPG;
-var legacy = false;  // true to emulate HP Antiphishing Toolbar
-// State I want to keep around that doesn't appear in the file system
-var activetabid;
-var masterpassword = "";
-var domainname = "";
-var protocol = "";
-var persona;
-var pwcount = 0;
-var settings = {};
-function clone(object) {
-    return JSON.parse(JSON.stringify(object))
-}
-function persistObject(name, value) {
-    try {
-        localStorage[name] = JSON.stringify(value);
-    } catch (e) {
+let SitePassword = ((function (self) {
+    let storagekey = "SitePasswordData";
+    let defaultsettings = {
+        domainname: "",
+        sitename: "",
+        username: "",
+        pwlength: 12,
+        startwithletter: true,
+        allowlower: true,
+        minlower: 1,
+        allowupper: true,
+        minupper: 1,
+        allownumber: true,
+        minnumber: 1,
+        allowspecial: false,
+        minspecial: 1,
+        specials: (self.specials || "_"),
+    }
+    var masterpassword = "";
+
+    function normalize(name) {
+        try {
+            return name.trim().toLowerCase();
+        } catch (e) {
+            console.log(e);
+        }
         return undefined;
     }
-}
-function retrieveObject(name) {
-    try {
-        return JSON.parse(localStorage[name]);
-    } catch (e) {
+    function cloneObject(object) {
+        return JSON.parse(JSON.stringify(object))
+    }
+    function persistDatabase(database) {
+        try {
+            if (typeof database === 'object') {
+                localStorage[storagekey] = JSON.stringify(database);
+            } else {
+                console.log("can't persist database:", database);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    function retrieveDatabase() {
+        try {
+            return JSON.parse(localStorage[storagekey]);
+        } catch (e) {
+            console.log(e);
+        }
         return undefined;
     }
-}
-function getdomainname(url) {
-    return url.split("/")[2];
-}
-function getprotocol(url) {
-    return url.split(":")[0];
-}
-function bg_init() {
-    hpSPG = retrieveObject("hpSPG");//"SitePasswordData"
-    if (!hpSPG) {
-        hpSPG = {
-            digits: "0123456789",
-            lower: "abcdefghijklmnopqrstuvwxyz",
-            upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            specials: "/!=@?._-",
-            miniter: 10,
-            maxiter: 1000,
-            lastpersona: "everyone",
-            personas: {
-                default: {
-                    personaname: "default",
-                    autofill: true,
-                    clearmasterpw: false,
-                    specials: "",
-                    sites: {},
-                    sitenames: {
-                        default: {
-                            sitename: "",
-                            username: "",
-                            hostname: "",
-                            length: 12,
-                            domainname: "",
-                            startwithletter: true,
-                            allowlower: true,
-                            allowupper: true,
-                            allownumber: true,
-                            allowspecial: false,
-                            minlower: 1,
-                            minupper: 1,
-                            minnumber: 1,
-                            minspecial: 1,
-                            specials: "",
-                            characters: ""
-                        }
-                    }
-                }
+    function generateCharacterSet(settings) {
+        var chars = self.lower + self.upper + self.digits + self.lower.substr(0, 2);
+        if (settings.allowspecial) {
+            chars = settings.specials + self.lower.substr(settings.specials.length - 2) + self.upper + self.digits;
+        } else {
+            chars = self.lower + self.upper + self.digits + self.lower.substr(0, 2);
+        }
+        if (!settings.allowlower) chars = chars.toUpperCase();
+        if (!settings.allowupper) chars = chars.toLowerCase();
+        if (!(settings.allowlower || settings.allowupper)) {
+            chars = self.digits + self.digits + self.digits +
+                self.digits + self.digits + self.digits;
+            if (settings.allowspecials) {
+                chars = chars + settings.specials.substr(0, 4);
+            } else {
+                chars = chars + self.digits.substr(0, 4);
             }
         }
-        hpSPG.personas.default.sitenames.default.specials = hpSPG.specials;
-        var defaultsettings = hpSPG.personas.default.sitenames.default;
-        defaultsettings.characters = characters(defaultsettings);
-        hpSPG.personas.everyone = clone(hpSPG.personas.default);
-        persona = hpSPG.personas.everyone;
-        persona.personaname = "Everyone";
-        hpSPG.lastpersona = persona.personaname;
-        persistObject("hpSPG", hpSPG);
+        return chars;
     }
-    persona = hpSPG.personas[hpSPG.lastpersona.toLowerCase().trim()];
-    if (persona.sites[domainname]) {
-        settings = clone(persona.sitenames[persona.sites[domainname]]);
-    } else if (hpSPG.personas.everyone.sites[domainname]) {
-        settings = clone(hpSPG.personas.everyone.sites[domainname]);
-    } else {
-        settings = clone(persona.sitenames.default);
+    function verifyPassword(pw, settings) {
+        var counts = { lower: 0, upper: 0, number: 0, special: 0 };
+        for (var i = 0; i < pw.length; i++) {
+            var c = pw.charAt(i);
+            if (-1 < self.lower.indexOf(c)) counts.lower++;
+            if (-1 < self.upper.indexOf(c)) counts.upper++;
+            if (-1 < self.digits.indexOf(c)) counts.number++;
+            if (-1 < settings.specials.indexOf(c)) counts.special++;
+        }
+        var valOK = true;
+        if (settings.startwithletter) {
+            var start = pw.charAt(0).toLowerCase();
+            valOK = valOK && -1 < self.lower.indexOf(start);
+        }
+        if (settings.allowlower) valOK = valOK && (counts.lower >= settings.minlower)
+        if (settings.allowupper) {
+            valOK = valOK && (counts.upper >= settings.minupper)
+        } else {
+            valOK = valOK && (counts.upper == 0);
+        }
+        if (settings.allownumber) {
+            valOK = valOK && (counts.number >= settings.minnumber);
+        } else {
+            valOK = valOK && (counts.number == 0);
+        }
+        if (settings.allowspecial) {
+            valOK = valOK && (counts.special >= settings.minspecial);
+        } else {
+            valOK = valOK && (counts.special == 0);
+        }
+        return valOK;
     }
-    settings.domainname = domainname;
-}
-function generate(settings) {
-    var n = settings.sitename.toLowerCase().trim();
-    var u = settings.username.toLowerCase().trim();
-    var m = masterpassword;
-    if (!m) {
-        return { p: "", r: pwcount };
+    function computePassword(payload, settings) {
+        var pw = "";
+        payload = Utf8Encode(payload);
+        let cset = generateCharacterSet(settings);
+        var h = core_sha256(str2binb(payload), payload.length * chrsz);
+        for (var iter = 1; iter < self.miniter; iter++) {
+            h = core_sha256(h, 16 * chrsz);
+        }
+        while (iter < self.maxiter) {
+            h = core_sha256(h, 16 * chrsz);
+            var hswap = Array(h.length);
+            for (var i = 0; i < h.length; i++) {
+                hswap[i] = swap32(h[i]);
+            }
+            pw = binl2b64(hswap, cset).substring(0, settings.pwlength);
+            if (verifyPassword(pw, settings)) {
+                return pw;
+            }
+            iter++;
+        }
+        return "";
     }
-    var s = n.toString() + u.toString() + m.toString();
-    var p = compute(s, settings);
-    return { p: p, r: pwcount };
-}
-function compute(s, settings) {
-    s = Utf8Encode(s);
+    function generatePassword() {
+        var settings = self.settings;
+        if (settings.allowupper || settings.allowlower || settings.allownumber) {
+            var n = normalize(settings.sitename);
+            var u = normalize(settings.username);
+            var m = self.getMasterPassword();
+            if (!m) {
+                return "";
+            }
+            var s = n.toString() + u.toString() + m.toString();
+            return computePassword(s, settings);
+        }
+        return "";
+    }
 
-    var h = core_sha256(str2binb(s), s.length * chrsz);
-    for (var iter = 1; iter < hpSPG.miniter; iter++) {
-        h = core_sha256(h, 16 * chrsz);
+    self.normalize = normalize;
+    self.generatePassword = generatePassword;
+    self.getMasterPassword = function () {
+        return cloneObject(masterpassword);
     }
-    while (iter < hpSPG.maxiter) {
-        h = core_sha256(h, 16 * chrsz);
-        var hswap = Array(h.length);
-        for (var i = 0; i < h.length; i++) {
-            hswap[i] = swap32(h[i]);
+    self.setMasterPassword = function (pw) {
+        if (typeof pw === 'string') {
+            masterpassword = cloneObject(pw);
+            return pw;
         }
-        var sitePassword = binl2b64(hswap, settings.characters).substring(0, settings.length);
-        if (verify(sitePassword, settings)) break;
-        iter++;
-        if (iter >= hpSPG.maxiter) {
-            sitePassword = "";
+        return undefined;
+    }
+    self.getDefaultSettings = function () {
+        return cloneObject(defaultsettings);
+    }
+    self.settings = self.getDefaultSettings();
+    if (typeof self.database !== 'object') {
+        self.database = retrieveDatabase();
+    }
+    if (typeof self.database !== 'object') {
+        console.log("creating new database:", storagekey);
+        self.database = {
+            domains: {},  // domainname -> sitename
+            sites: {},  // sitename -> settings
+        };
+    }
+    self.loadSettings = function (domainname) {
+        var sitename = self.database.domains[domainname];
+        var settings = (sitename ? self.database.sites[sitename] : undefined);
+        if (!settings) {
+            settings = defaultsettings;
         }
+        self.settings = cloneObject(settings);
+        self.settings.domainname = domainname;
+        return self.settings;
     }
-    return sitePassword;
-}
-function verify(p, settings) {
-    var counts = { lower: 0, upper: 0, number: 0, special: 0 };
-    for (var i = 0; i < p.length; i++) {
-        var c = p.substr(i, 1);
-        if (-1 < hpSPG.lower.indexOf(c)) counts.lower++;
-        if (-1 < hpSPG.upper.indexOf(c)) counts.upper++;
-        if (-1 < hpSPG.digits.indexOf(c)) counts.number++;
-        if (-1 < settings.specials.indexOf(c)) counts.special++;
-    }
-    var valOK = true;
-    if (settings.startwithletter) {
-        var start = p.substr(0, 1).toLowerCase();
-        valOK = valOK && -1 < hpSPG.lower.indexOf(start);
-    }
-    if (settings.allowlower) valOK = valOK && (counts.lower >= settings.minlower)
-    if (settings.allowupper) {
-        valOK = valOK && (counts.upper >= settings.minupper)
-    } else {
-        valOK = valOK && (counts.upper == 0);
-    }
-    if (settings.allownumber) {
-        valOK = valOK && (counts.number >= settings.minnumber);
-    } else {
-        valOK = valOK && (counts.number == 0);
-    }
-    if (settings.allowspecial) {
-        valOK = valOK && (counts.special >= settings.minspecial);
-    } else {
-        valOK = valOK && (counts.special == 0);
-    }
-    return valOK;
-}
-function characters(settings) {
-    var chars = hpSPG.lower + hpSPG.upper + hpSPG.digits + hpSPG.lower.substr(0, 2);
-    if (settings.allowspecial) {
-        if (legacy) {
-            // Use for AntiPhishing Toolbar passwords
-            chars = chars.substr(0, 32) + settings.specials.substr(1) + chars.substr(31 + settings.specials.length);
-        } else {
-            // Use for SitePassword passwords
-            chars = settings.specials + hpSPG.lower.substr(settings.specials.length - 2) + hpSPG.upper + hpSPG.digits;
-        }
-    } else {
-        chars = hpSPG.lower + hpSPG.upper + hpSPG.digits + hpSPG.lower.substr(0, 2);
-    }
-    if (!settings.allowlower) chars = chars.toUpperCase();
-    if (!settings.allowupper) chars = chars.toLowerCase();
-    if (!(settings.allowlower || settings.allowupper)) {
-        chars = hpSPG.digits + hpSPG.digits + hpSPG.digits +
-            hpSPG.digits + hpSPG.digits + hpSPG.digits;
-        if (settings.allowspecials) {
-            chars = chars + persona.specials.substr(0, 4);
-        } else {
-            chars = chars + hpSPG.digits.substr(0, 4);
+    self.storeSettings = function () {
+        var settings = self.settings;
+        if (settings.domainname && settings.sitename) {
+            var sitename = normalize(settings.sitename);
+            self.database.domains[settings.domainname] = sitename;
+            self.database.sites[sitename] = cloneObject(settings);
+            persistDatabase(self.database);
         }
     }
-    return chars;
-}
+    return self;
+})({
+    version: "1.2.0",
+    clearmasterpw: false,
+    miniter: 10,
+    maxiter: 1000,
+    digits: "0123456789",
+    lower: "abcdefghijklmnopqrstuvwxyz",
+    upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    specials: "/!=@?._-",
+}));
 /* 
 This code is a major modification of the code released with the
 following licence.  Neither Hewlett-Packard Company nor Hewlett-Packard

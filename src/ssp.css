@@ -30,8 +30,8 @@
   flex: 0 0 auto;
 }
 #instructionpanel {
-  display: none;
   flex: 0 0 auto;
+  padding-left: 1em;
 }
 #main {
   margin: 1ex;
@@ -44,17 +44,8 @@
 #bookmarks {
   cursor: default;
 }
-#instructions {
-  float: left;
-  height: 1.5em;
-  margin-right: 1em;
-}
 #sections {
-  margin: 1em 1ex;
-/*
-  width: 36em;
-  width: 12em;
-*/
+  margin: 1ex 0;
   width: 22em;
 }
 #masterpw {
@@ -145,7 +136,8 @@ button:enabled:active {
   cursor: pointer;
 }
 .warning {
-  border : 3pt solid red;
+  margin: 1ex;
+  border : 4pt solid red;
   background-color : white;
   padding : 1em;
 }
