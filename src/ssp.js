@@ -96,16 +96,29 @@ window.onload = function () {
     }
     get("domainname").onpaste = function () {
         setTimeout(() => {
+            let bookmarkoff = false;
             let split = get("domainname").value.split("/");
+            if (split[0] === "") return;
             if (split.length === 1) {
                 get("domainname").value = split[0];
             } else {
                 get("domainname").value = split[2];
             }
+            if (!isValidDomain(getlowertrim("domainname"))) {
+                alert("Invalid URL.  Try again.");
+                get("domainname").value = "";
+                bookmarkoff = true;
+            }
             get("sitename").value = "";
             get("username").value = "";
-            get("sitepass").value = "";
-            bookmarkOn()
+            settings.sitename = "";
+            settings.username = "";
+            if (bookmarkoff) {
+                bookmarkOff();
+            } else{
+                bookmarkOn();
+            }
+            ask2generate();
         }, 0);
     }
     get("domainname").onblur = function () {
@@ -253,10 +266,12 @@ window.onload = function () {
     }
     get("overview").onclick = function () { sectionClick("overview"); };
     get("masterpassword").onclick = function () { sectionClick("masterpassword"); };
-    get("common").onclick = function () { sectionClick("common"); };
+    get("acceptable").onclick = function () { sectionClick("acceptable"); };
+    get("change").onclick = function () { sectionClick("change"); };
+    get("phishinginst").onclick = function () { sectionClick("phishinginst"); };
     get("extension").onclick = function () { sectionClick("extension"); };
-    get("webpage").onclick = function () { sectionClick("webpage"); };
-    get("shared").onclick = function () { sectionClick("shared"); };
+    get("apps").onclick = function () { sectionClick("apps"); };
+    get("download").onclick = function () { sectionClick("download"); };
     get("source").onclick = function () { sectionClick("source"); };
     get("payment").onclick = function () { sectionClick("payment"); };
     init();
@@ -570,6 +585,12 @@ function message(msgname, turnon) {
         get("phishing").style.display = "block";
         get("nopw").style.display = "none";
     }
+}
+// From https://miguelmota.com/bytes/validate-domain-regex/
+function isValidDomain(v) {
+    if (!v) return false;
+    var re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
+    return re.test(v);
 }
 /* 
 This code is a major modification of the code released with the
