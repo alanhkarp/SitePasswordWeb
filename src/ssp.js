@@ -171,20 +171,37 @@ let SitePasswordWeb = ((function (self) {
             return split[2];
         }
 
+        // loginurl = https://alantheguru.alanhkarp.com/
+        // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22,%22characters%22:%22abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ab%22,%22displayname%22:%22alantheguru.alanhkarp.com%22}
         $bookmark.onpaste = function () {
             setTimeout(() => {
                 var settings = parseBookmark($bookmark.value);
-                setNotice("phishing", isPhishing(settings));
-                SitePassword.settings = settings;
-                $domainname.value = settings.domainname;  // FIXME: do we really want to set this?
-                $sitename.value = settings.sitename;
-                $username.value = settings.username;
-                loadSettingControls(settings);
-                generatePassword();
+                if (settings) {
+                    setNotice("phishing", isPhishing(settings));
+                    SitePassword.settings = settings;  // update data-model
+                    $domainname.value = settings.domainname;  // FIXME: do we really want to set this?
+                    $sitename.value = settings.sitename;
+                    $username.value = settings.username;
+                    loadSettingControls(settings);
+                    generatePassword();
+                } else {
+                    alert("Invalid bookmark.  Copy it again.");
+                }
+                $bookmark.value = "";  // clear bookmark field
             }, 0);
         }
         function parseBookmark(bookmark) {
-            return SitePassword.getDefaultSettings();  // FIXME: TEMPORARY HACK!
+            var settings = SitePassword.getDefaultSettings();
+            try {
+                let no22 = bookmark.substring(6).replace(/%22/g, "\"");
+                let no7B = no22.replace(/%7B/, "{");
+                let no7D = no7B.replace(/%7D/, "}");
+                settings = JSON.parse(no7D);
+            } catch {
+                console.log(e);
+            }
+            console.log("Bookmark settings:", settings);
+            return settings;
         }
         function enableBookmark() {
             $bookmark.disabled = !($domainname.value);
