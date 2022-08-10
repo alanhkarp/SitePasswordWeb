@@ -17,25 +17,26 @@ let SitePasswordWeb = ((function (self) {
     }
 
     self.onload = function () {
-        let $masterpw = get("masterpw");
-        let $domainname = get("domainname");
-        let $bookmark = get("bookmark");
-        let $sitename = get("sitename");
-        let $username = get("username");
-        let $sitepw = get("sitepw");
-        let $remember = get("remember");
-        let $pwlength = get("pwlength");
-        let $startwithletter = get("startwithletter");
-        let $allowlowercheckbox = get("allowlowercheckbox");
-        let $minlower = get("minlower");
-        let $allowuppercheckbox = get("allowuppercheckbox");
-        let $minupper = get("minupper");
-        let $allownumbercheckbox = get("allownumbercheckbox");
-        let $minnumber = get("minnumber");
-        let $allowspecialcheckbox = get("allowspecialcheckbox");
-        let $minspecial = get("minspecial");
-        let $specials = get("specials");
-        let $downloadbutton = get("downloadbutton");
+        const $masterpw = get("masterpw");
+        const $domainname = get("domainname");
+        const $bookmark = get("bookmark");
+        const $sitename = get("sitename");
+        const $username = get("username");
+        const $resetbutton = get("resetbutton");
+        const $sitepw = get("sitepw");
+        const $remember = get("remember");
+        const $pwlength = get("pwlength");
+        const $startwithletter = get("startwithletter");
+        const $allowlowercheckbox = get("allowlowercheckbox");
+        const $minlower = get("minlower");
+        const $allowuppercheckbox = get("allowuppercheckbox");
+        const $minupper = get("minupper");
+        const $allownumbercheckbox = get("allownumbercheckbox");
+        const $minnumber = get("minnumber");
+        const $allowspecialcheckbox = get("allowspecialcheckbox");
+        const $minspecial = get("minspecial");
+        const $specials = get("specials");
+        const $downloadbutton = get("downloadbutton");
 
         function loadSettingControls(settings) {
             $pwlength.value = settings.pwlength;
@@ -91,10 +92,19 @@ let SitePasswordWeb = ((function (self) {
             settings.minspecial = $minspecial.value;
             settings.specials = $specials.value;
         }
+        let $pwok = get("pwok");
+        let $pwfail = get("pwfail");
         function generatePassword() {
             saveSettingControls(SitePassword.settings);
             let pw = SitePassword.generatePassword();
-            setNotice("nopw", !pw);
+            if (pw || !$masterpw.value) {
+                $pwok.style.display = "flex";
+                $pwfail.style.display = "none";
+            } else {
+                $pwok.style.display = "none";
+                $pwfail.style.display = "flex";
+            }
+            //setNotice("nopw", !pw);
             $sitepw.value = pw;
             enableRemember();
         }
@@ -144,10 +154,10 @@ let SitePasswordWeb = ((function (self) {
         }
 
         $domainname.onblur = function () {
-            var domainname = parseDomain(normalize($domainname.value));
+            const domainname = parseDomain(normalize($domainname.value));
             $domainname.value = domainname;
-            SitePassword.settings.domainname = domainname;
-            var settings = SitePassword.loadSettings(domainname);
+            SitePassword.domainname = domainname;
+            const settings = SitePassword.loadSettings();
             $sitename.value = settings.sitename;
             $username.value = settings.username;
             loadSettingControls(settings);
@@ -164,7 +174,7 @@ let SitePasswordWeb = ((function (self) {
             enableBookmark();
         }
         function parseDomain(url) {
-            let split = url.split("/");
+            const split = url.split("/");
             if (split.length === 1) {
                 return split[0];
             }
@@ -173,32 +183,39 @@ let SitePasswordWeb = ((function (self) {
 
         // loginurl = https://alantheguru.alanhkarp.com/
         // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22,%22characters%22:%22abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ab%22,%22displayname%22:%22alantheguru.alanhkarp.com%22}
+        // bookmark = ssp://{"sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22}
+        // sitepw --> eUl6dpKDt9
+        // bookmark = ssp://{"sitename":"The Real Alan","username":"dalnefre","pwlength":"15","startwithletter":false,"allowlower":true,"minlower":"1","allowupper":true,"minupper":"1","allownumber":true,"minnumber":"1","allowspecial":true,"minspecial":"1","specials":"$/!=@?._-"}
+        // sitepw --> PZ5?5Aj7KtrJ/CW
         $bookmark.onpaste = function () {
             setTimeout(() => {
                 var settings = parseBookmark($bookmark.value);
                 if (settings) {
-                    setNotice("phishing", isPhishing(settings));
+                    phishingCheck(settings.sitename);
                     SitePassword.settings = settings;  // update data-model
-                    $domainname.value = settings.domainname;  // FIXME: do we really want to set this?
+                    //$domainname.value = settings.domainname;  // FIXME: do we really want to set this?
                     $sitename.value = settings.sitename;
                     $username.value = settings.username;
                     loadSettingControls(settings);
                     generatePassword();
                 } else {
-                    alert("Invalid bookmark.  Copy it again.");
+                    alert("Invalid bookmark. Copy it again?");
                 }
                 $bookmark.value = "";  // clear bookmark field
             }, 0);
         }
         function parseBookmark(bookmark) {
-            var settings = SitePassword.getDefaultSettings();
-            try {
-                let no22 = bookmark.substring(6).replace(/%22/g, "\"");
-                let no7B = no22.replace(/%7B/, "{");
-                let no7D = no7B.replace(/%7D/, "}");
-                settings = JSON.parse(no7D);
-            } catch {
-                console.log(e);
+            var settings = undefined;
+            if (bookmark.startsWith("ssp://")) {
+                try {
+                    let json = bookmark.substring(6)
+                        .replace(/%22/g, '"')
+                        .replace(/%7B/, '{')
+                        .replace(/%7D/, '}');
+                    settings = JSON.parse(json);
+                } catch {
+                    console.log(e);
+                }
             }
             console.log("Bookmark settings:", settings);
             return settings;
@@ -209,28 +226,36 @@ let SitePasswordWeb = ((function (self) {
 
         $sitename.onblur = function () {
             handleBlur("sitename");
-            setNotice("phishing", isPhishing(SitePassword.settings));
+            phishingCheck($sitename.value);
         }
-        function isPhishing(settings) {
-            return false;  // FIXME: implement phishing warning...
-/*
-            if (!sitename) return false;
-            var domainname = getLowerValue("domainname");
-            var db = SitePassword.database;
-            var ds = Object.keys(db.domains);
-            var phishing = false;
-            ds.forEach(function (d) {
-                var s = db.domains[d];
-                if ((s === sitename) && (d !== domainname)) {
-                    phishing = true;
-                }
-            });
-            return phishing;
-*/
+        function phishingCheck(sitename) {
+            const domainname = $domainname.value;
+            if (SitePassword.validateDomain(domainname, sitename)) {
+                setNotice("phishing", false);
+                //$domainname.style.background = "#FFF";
+                $domainname.style.color = "#000";
+                //$domainname.focus();
+            } else {
+                setNotice("phishing", true);
+                //$domainname.style.background = "#FF0";
+                $domainname.style.color = "#F00";
+                $resetbutton.focus();
+            }
         }
 
         $username.onkeyup = function () {
             handleKeyup("username");
+        }
+
+        $resetbutton.onclick = function () {
+            $domainname.value = "";
+            SitePassword.domainname = "";
+            const settings = SitePassword.loadSettings();
+            $sitename.value = settings.sitename;
+            $username.value = settings.username;
+            loadSettingControls(settings);
+            generatePassword();
+            phishingCheck(settings.sitename);
         }
 
         let $sitepwhide = get("sitepwhide");
@@ -272,6 +297,7 @@ let SitePasswordWeb = ((function (self) {
 
         $remember.onclick = function () {
             SitePassword.storeSettings();
+            phishingCheck($sitename.value);
         }
         function enableRemember() {
             $remember.disabled =
@@ -326,7 +352,10 @@ let SitePasswordWeb = ((function (self) {
             $specials.disabled = !($allowspecialcheckbox.checked);
         }
         $minspecial.onkeyup = function () {
-            handleKeyup("special");
+            handleKeyup("minspecial");
+        }
+        $specials.onkeyup = function () {
+            handleKeyup("specials");
         }
         function handleCheck(group) {
             let $allow_group_checkbox = get("allow"+group+"checkbox");
@@ -361,16 +390,16 @@ let SitePasswordWeb = ((function (self) {
         }
 
         $downloadbutton.onclick = function siteDataHTML() {
-            var domains = SitePassword.database.domains;
-            var sites = SitePassword.database.sites;
-            var sorted = Object.keys(domains).sort(function (x, y) {
+            const domains = SitePassword.database.domains;
+            const sites = SitePassword.database.sites;
+            const sorted = Object.keys(domains).sort(function (x, y) {
                 var a = x.toLowerCase();
                 var b = y.toLowerCase();
                 if (domains[a].toLowerCase() < domains[b].toLowerCase()) return -1;
                 if (domains[a].toLowerCase() == domains[b].toLowerCase()) return 0;
                 return 1;
             });
-            var sd = "<html><body><table>";
+            let sd = "<html><body><table>";
             sd += "<th>Site Name</th>";
             sd += "<th>Domain Name</th>";
             sd += "<th>User Name</th>";
@@ -386,12 +415,12 @@ let SitePasswordWeb = ((function (self) {
             sd += "<th>Min Specials</th>";
             sd += "<th>Specials</th>";
             sd += "</tr>";
-            for (var i = 0; i < sorted.length; i++) {
-                var domainname = sorted[i];
-                var sitename = domains[domainname];
-                var s = sites[sitename];
+            for (const i = 0; i < sorted.length; i++) {
+                const domainname = sorted[i];
+                const sitename = domains[domainname];
+                const s = sites[sitename];
                 sd += "<tr>";
-                sd += "<td><pre>" + s.domainname + "</pre></td>";
+                sd += "<td><pre>" + domainname + "</pre></td>";
                 sd += "<td><pre>" + s.sitename + "</pre></td>";
                 sd += "<td><pre>" + s.username + "</pre></td>";
                 sd += "<td><pre>" + s.pwlength + "</pre></td>";
@@ -408,10 +437,10 @@ let SitePasswordWeb = ((function (self) {
                 sd += "</tr>";
             }
             sd += "</table></body></html>";
-            var mimetype = "data:application/octet-stream,";
-            var download = get("data");
-            download.href = mimetype + sd;
-            download.click();
+            const $data = get("data");
+            const mimetype = "data:application/octet-stream,";
+            $data.href = mimetype + sd;
+            $data.click();
             return sd;
         }
 
@@ -425,7 +454,7 @@ let SitePasswordWeb = ((function (self) {
         get("source").onclick = function () { sectionClick("source"); };
         get("payment").onclick = function () { sectionClick("payment"); };
         function sectionClick(id) {
-            let element = get(id + "p");
+            const element = get(id + "p");
             if (element.style.display === "none") {
                 element.style.display = "block";
                 get("open" + id).style.display = "none";
@@ -446,130 +475,6 @@ let SitePasswordWeb = ((function (self) {
 window.onload = function () {
     SitePasswordWeb.onload();
 }
-
-/*
-    get("bookmark").onpaste = function () {
-        let element = this;
-        setTimeout(() => {
-            if (!this.value) return;
-            try {
-                let no22 = element.value.substring(6).replace(/%22/g, "\"");
-                let no7B = no22.replace(/%7B/, "{");
-                let no7D = no7B.replace(/%7D/, "}");
-                settings = JSON.parse(no7D);
-            } catch {
-                alert("Invalid bookmark.  Copy it again.");
-                get("bookmark").value = "";
-                return;
-            }
-            element.value = "";
-            if (logging) console.log("Bookmark settings", settings);
-            if (get("domainname").value !== settings.displayname) {
-                message("phishing", true);
-            } else {
-                get("domainname").value = settings.displayname;
-            }
-            get("sitename").value = settings.sitename;
-            get("username").value = settings.username;
-            get("pwlength").value = settings.pwlength;
-            get("minlower").value = settings.minlower;
-            get("minnumber").value = settings.minnumber;
-            get("minspecial").value = settings.minspecial;
-            get("minupper").value = settings.minupper;
-            get("startwithletter").value = settings.startwithletter;
-            get("allowlowercheckbox").checked = settings.allowlower;
-            if (settings.allowlower) {
-                get("allowlower").style.display = "none";
-                get("requirelower").style.display = "inline";
-            } else {
-                get("allowlower").style.display = "inline";
-                get("requirelower").style.display = "none";
-            }
-            get("allowuppercheckbox").checked = settings.allowupper;
-            if (settings.allowupper) {
-                get("allowupper").style.display = "none";
-                get("requireupper").style.display = "inline";
-            } else {
-                get("allowupper").style.display = "inline";
-                get("requireupper").style.display = "none";
-            }
-            get("allownumbercheckbox").checked = settings.allownumber;
-            if (settings.allownumber) {
-                get("allownumber").style.display = "none";
-                get("requirenumber").style.display = "inline";
-            } else {
-                get("allownumber").style.display = "inline";
-                get("requirenumber").style.display = "none";
-            }
-            get("allowspecialcheckbox").checked = settings.allowspecial;
-            if (settings.allowspecial) {
-                get("allowspecial").style.display = "none";
-                get("requirespecial").style.display = "inline";
-            } else {
-                get("allowspecial").style.display = "inline";
-                get("requirespecial").style.display = "none";
-            }
-            enableRemember();
-            ask2generate();
-            setFocus();
-        }, 0);
-    }
-    get("downloadbutton").onclick = siteDataHTML;
-    get("warningbutton").onclick = function () {
-        get("masterpw").disabled = false;
-        get("username").disabled = false;
-        get("sitename").disabled = false;
-        message("phishing", false);
-        get("username").value = settings.username;
-        ask2generate();
-    }
-    get("cancelwarning").onclick = function () {
-        get("bookmark").style.visibility = "hidden";
-        message("phishing", false);
-        get("domainname").value = "";
-        get("sitename").value = "";
-        get("username").value = "";
-        get("masterpw").disabled = false;
-        get("sitename").disabled = false;
-        get("username").disabled = false;
-        settings.sitename = "";
-        settings.username = "";
-        ask2generate();
-    }
-
-function setFocus() {
-    if (!get("masterpw").value) {
-        get("masterpw").focus();
-        return;
-    }
-    if (!get("domainname").value) {
-        get("domainname").focus();
-        return;
-    }
-    if (!get("sitename").value && !get("username").value) {
-        get("bookmark").focus();
-        return;
-    }
-    if (get("sitename").value && get("username").value) {
-        get("sitepw").focus();
-        return;
-    }
-}
-function isPhishing(sitename) {
-    if (!sitename) return false;
-    var domainname = getLowerValue("domainname");
-    var db = SitePassword.database;
-    var ds = Object.keys(db.domains);
-    var phishing = false;
-    ds.forEach(function (d) {
-        var s = db.domains[d];
-        if ((s === sitename) && (d !== domainname)) {
-            phishing = true;
-        }
-    });
-    return phishing;
-}
-*/
 
 /* 
 This code is a major modification of the code released with the

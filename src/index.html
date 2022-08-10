@@ -86,13 +86,32 @@
               value=""
               placeholder="Your user-id for this site"
             />
-<!--
-  FIXME: what is this datalist?
--->
-            <datalist id="usernames"> </datalist>
+          </div>
+          <div class="form-row">
+            <div id="nopw" class="warning nodisplay">
+              <span id="nopwtext">
+                Site Password can't compute a password with these settings. You
+                either need to enable some characters, increase the pasword length,
+                or reduce the number of special characters you're asking for.
+              </span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div id="phishing" class="warning nodisplay">
+              <h4>PHISHING WARNING!</h4>
+              <p>
+                The domain name does not match
+                the settings remembered for this site.
+                This may be a fake site
+                that is trying to steal your password.
+              </p>
+              <div class="form-row">
+                <button id="resetbutton" type="button">Clear Form Data</button>
+              </div>
+            </div>
           </div>
           <hr />
-          <div class="form-row">
+          <div id="pwok" class="form-row">
             <label for="sitepw" class="sr-only">Site password:</label>
             <input
               id="sitepw"
@@ -112,42 +131,10 @@
               <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 6.362A9.707 9.707 0 0 1 12 5c6.307 0 9.367 5.683 9.91 6.808.06.123.06.261 0 .385-.352.728-1.756 3.362-4.41 5.131M14 18.8a9.93 9.93 0 0 1-2 .2c-6.307 0-9.367-5.683-9.91-6.808a.44.44 0 0 1 0-.386c.219-.452.84-1.632 1.91-2.885m6 .843A3 3 0 0 1 14.236 14M3 3l18 18"/></svg>
             </div>
           </div>
-          <div class="form-row">
-            <div id="nopw" class="warning nodisplay">
-              <span id="nopwtext">
-                Site Password can't compute a password with these settings. You
-                either need to enable some characters, increase the pasword length,
-                or reduce the number of special characters you're asking for.
-              </span>
-            </div>
-          </div>
-          <div class="form-row">
-            <div id="phishing" class="warning nodisplay">
-              <span id="phishingtext">
-                Warning: The URL in the address bar is different from what you
-                saved for this site name. You may be at a fake site that is trying
-                to steal your password. </span
-              ><br />
-              <p></p>
-              <button
-                id="warningbutton"
-                class="warningbutton"
-                type="button"
-                style="background-color: #ff0000; color:white; width:100%"
-              >
-                <b>I'm willing to risk it.</b>
-              </button>
-              <p></p>
-              <button
-                id="cancelwarning"
-                class="warningbutton"
-                type="button"
-                style="background-color: #00ff00; width:100%"
-              >
-                I don't want to risk it.
-              </button>
-              <br />
-            </div>
+          <div id="pwfail" class="form-row">
+            <span id="failedpw" class="sans" title="You may need to enable some characters, increase the pasword length, or reduce the number of special characters you're asking for.">
+              Can't compute password with these settings!
+            </span>
           </div>
           <div class="form-row">
             <button id="remember" type="button" disabled="disabled">Remember</button>

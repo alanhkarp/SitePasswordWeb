@@ -1,8 +1,7 @@
 "use strict";
 let SitePassword = ((function (self) {
-    let storagekey = "SitePasswordData";
-    let defaultsettings = {
-        domainname: "",
+    const storagekey = "SitePasswordData";
+    const defaultsettings = {
         sitename: "",
         username: "",
         pwlength: 12,
@@ -17,7 +16,7 @@ let SitePassword = ((function (self) {
         minspecial: 1,
         specials: (self.specials || "_"),
     }
-    var masterpassword = "";
+    let masterpassword = "";
 
     function normalize(name) {
         try {
@@ -102,17 +101,17 @@ let SitePassword = ((function (self) {
         return valOK;
     }
     function computePassword(payload, settings) {
-        var pw = "";
+        let pw = "";
         payload = Utf8Encode(payload);
-        let cset = generateCharacterSet(settings);
-        var h = core_sha256(str2binb(payload), payload.length * chrsz);
+        const cset = generateCharacterSet(settings);
+        let h = core_sha256(str2binb(payload), payload.length * chrsz);
         for (var iter = 1; iter < self.miniter; iter++) {
             h = core_sha256(h, 16 * chrsz);
         }
         while (iter < self.maxiter) {
             h = core_sha256(h, 16 * chrsz);
-            var hswap = Array(h.length);
-            for (var i = 0; i < h.length; i++) {
+            let hswap = Array(h.length);
+            for (let i = 0; i < h.length; i++) {
                 hswap[i] = swap32(h[i]);
             }
             pw = binl2b64(hswap, cset).substring(0, settings.pwlength);
@@ -124,15 +123,15 @@ let SitePassword = ((function (self) {
         return "";
     }
     function generatePassword() {
-        var settings = self.settings;
+        const settings = self.settings;
         if (settings.allowupper || settings.allowlower || settings.allownumber) {
-            var n = normalize(settings.sitename);
-            var u = normalize(settings.username);
-            var m = self.getMasterPassword();
+            const n = normalize(settings.sitename);
+            const u = normalize(settings.username);
+            const m = self.getMasterPassword();
             if (!m) {
                 return "";
             }
-            var s = n.toString() + u.toString() + m.toString();
+            const s = n.toString() + u.toString() + m.toString();
             return computePassword(s, settings);
         }
         return "";
@@ -164,21 +163,38 @@ let SitePassword = ((function (self) {
             sites: {},  // sitename -> settings
         };
     }
-    self.loadSettings = function (domainname) {
-        var sitename = self.database.domains[domainname];
-        var settings = (sitename ? self.database.sites[sitename] : undefined);
+    self.validateDomain = function (domainname, sitename) {
+        domainname = normalize(domainname);
+        sitename = normalize(sitename);
+        if (!domainname || !sitename) return true;  // nothing to check...
+        const db = self.database;
+        if (!db.sites[sitename]) return true;  // candidate site...
+        const ds = Object.keys(db.domains);
+        for (const d of ds) {
+            const s = db.domains[d];
+            if ((s === sitename) && (d === domainname)) {
+                return true;  // found matching entry, domainname is valid.
+            }
+        }
+        return false;  // entry not found, could be a phishing attempt!
+    }
+    self.domainname = "";
+    self.loadSettings = function () {
+        const domainname = self.domainname;
+        const sitename = self.database.domains[domainname];
+        let settings = (sitename ? self.database.sites[sitename] : undefined);
         if (!settings) {
             settings = defaultsettings;
         }
         self.settings = cloneObject(settings);
-        self.settings.domainname = domainname;
         return self.settings;
     }
     self.storeSettings = function () {
-        var settings = self.settings;
-        if (settings.domainname && settings.sitename) {
-            var sitename = normalize(settings.sitename);
-            self.database.domains[settings.domainname] = sitename;
+        const domainname = self.domainname;
+        const settings = self.settings;
+        const sitename = normalize(settings.sitename);
+        if (domainname && sitename) {
+            self.database.domains[domainname] = sitename;
             self.database.sites[sitename] = cloneObject(settings);
             persistDatabase(self.database);
         }

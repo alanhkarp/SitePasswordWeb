@@ -51,8 +51,30 @@
 #masterpw {
   padding-right: 3em;
 }
+#resetbutton {
+/*
+  background-color: #060;
+*/
+  background-color: #FF0;
+  color: #000;
+}
 #sitepw {
   padding-right: 5em;
+}
+#pwfail {
+  display: none;
+}
+#failedpw {
+  flex: auto;
+  border: 0;
+  border-radius: 4pt;
+  margin: 6px 0;
+  padding: 6px;
+  background-color : #C00;
+  color: #FFF;
+  font-size: 10pt;
+  height: 16px;
+  overflow: clip;
 }
 .sr-only {
   border: 0;
@@ -64,7 +86,7 @@
   position: absolute;
   width: 1px;
 }
-h1 {
+h1, h4 {
   margin: 1ex;
   text-align: center;
 }
@@ -75,7 +97,7 @@ button {
   flex: 1;
   margin: 1ex 1ex;
   border-radius: 6pt;
-  padding: 1ex 0.5ex;
+  padding: 6px 3px;
 }
 button:disabled {
   border: 1pt solid #666;
@@ -103,8 +125,8 @@ button:enabled:active {
   flex: auto;
   border: 0;
   border-radius: 4pt;
-  margin: 1ex 0;
-  padding: 1.2ex;
+  margin: 6px 0;
+  padding: 6px;
   height: 16px;
 }
 .setting-row {
@@ -123,12 +145,12 @@ button:enabled:active {
 .inner-icon-1 {
   position: absolute;
   right: 0;
-  top: 5px;
+  top: 4px;
 }
 .inner-icon-2 {
   position: absolute;
   right: 2em;
-  top: 5px;
+  top: 4px;
 }
 .accordian {
   float: left;
@@ -137,9 +159,13 @@ button:enabled:active {
 }
 .warning {
   margin: 1ex;
+/*
   border : 4pt solid red;
   background-color : white;
-  padding : 1em;
+*/
+  padding : 1ex;
+  background-color : #C00;
+  color: #FFF;
 }
 .nodisplay {
   display: none;
