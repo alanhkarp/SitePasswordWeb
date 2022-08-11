@@ -51,22 +51,22 @@ let SitePassword = ((function (self) {
         return undefined;
     }
     function generateCharacterSet(settings) {
-        var chars = self.lower + self.upper + self.digits + self.lower.substr(0, 2);
+        // generate a set of 64 characters for encoding
+        let chars = "";
         if (settings.allowspecial) {
-            chars = settings.specials + self.lower.substr(settings.specials.length - 2) + self.upper + self.digits;
-        } else {
-            chars = self.lower + self.upper + self.digits + self.lower.substr(0, 2);
+            chars += settings.specials;
         }
-        if (!settings.allowlower) chars = chars.toUpperCase();
-        if (!settings.allowupper) chars = chars.toLowerCase();
-        if (!(settings.allowlower || settings.allowupper)) {
-            chars = self.digits + self.digits + self.digits +
-                self.digits + self.digits + self.digits;
-            if (settings.allowspecials) {
-                chars = chars + settings.specials.substr(0, 4);
-            } else {
-                chars = chars + self.digits.substr(0, 4);
-            }
+        if (settings.allownumber) {
+            chars += self.digits;
+        }
+        if (settings.allowupper) {
+            chars += self.upper;
+        }
+        if (settings.allowlower) {
+            chars += self.lower;
+        }
+        while ((chars.length > 0) && (chars.length < 64)) {
+            chars += chars;
         }
         return chars;
     }
@@ -106,6 +106,7 @@ let SitePassword = ((function (self) {
         let pw = "";
         payload = Utf8Encode(payload);
         const cset = generateCharacterSet(settings);
+        //console.log("computePassword: characterSet =", cset);
         let h = core_sha256(str2binb(payload), payload.length * chrsz);
         for (var iter = 1; iter < self.miniter; iter++) {
             h = core_sha256(h, 16 * chrsz);
@@ -208,8 +209,8 @@ let SitePassword = ((function (self) {
 })({
     version: "1.2.0",
     clearmasterpw: false,
-    miniter: 10,
-    maxiter: 1000,
+    miniter: 100,
+    maxiter: 10000,
     digits: "0123456789",
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",

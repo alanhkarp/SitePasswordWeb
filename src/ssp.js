@@ -286,6 +286,7 @@ let SitePasswordWeb = ((function (self) {
                 settings.sitename = $sitename.value;
                 settings.username = $username.value;
                 SitePassword.settings = settings;
+                phishingWarningOff();
             } else if (SitePassword.validateDomain(domainname, sitename)) {
                 updateSettings(settings);
             } else {
@@ -310,6 +311,7 @@ let SitePasswordWeb = ((function (self) {
             $phishing.style.display = "block";
             $results.style.display = "none";  // hide sitepw/remember/settings...
             $domainname.classList.add("bad-input");
+            $domainname.disabled = true;
             $resetbutton.focus();
             $trustbutton.onclick = function () {
                 SitePassword.settings = settings;
@@ -320,6 +322,7 @@ let SitePasswordWeb = ((function (self) {
             $phishing.style.display = "none";
             $results.style.display = "block";  // show sitepw/remember/settings...
             $domainname.classList.remove("bad-input");
+            $domainname.disabled = false;
             $trustbutton.onclick = function () {
                 console.log("WARNING! trustbutton clicked while phishing warning off.");
             };
@@ -400,6 +403,7 @@ let SitePasswordWeb = ((function (self) {
             handleKeyup("minspecial");
         }
         $specials.onkeyup = function () {
+            $specials.value = $specials.value.substring(0, 12);  // limit to 12 specials
             handleKeyup("specials");
         }
         function handleCheck(group) {

@@ -166,7 +166,7 @@ button:enabled:active {
 .bad-input {
   border: 2px solid #F00 !important;
   padding: 4px !important;
-  color: #F00 !important;
+  color: #C00 !important;
 }
 .warning {
   margin: 1ex;

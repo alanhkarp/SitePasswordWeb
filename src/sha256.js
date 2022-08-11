@@ -6,7 +6,7 @@
 *  Original code by Angel Marin, Paul Johnston.
 *
 **/
-var chrsz   = 16;// 8; UTF8 or UTF16
+var chrsz   = 8;// 8; UTF8 or UTF16
 var hexcase = 0;
  
 function core_sha256 (m, l) {
@@ -149,6 +149,7 @@ Lesser General Public License for more details. You should have
 received a copy of the GNU Lesser General Public License (LGPL) along
 with this library; if not, write to the Free Software Foundation,
 Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
-Please contact the Hewlett-Packard Company <www.hp.com> for
+Please contact the Hewlett-Packard Company <www.hp.com> for
+
 information regarding how to obtain the source code for this library.
 */
