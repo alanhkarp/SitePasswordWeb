@@ -19,12 +19,14 @@ let SitePassword = ((function (self) {
     let masterpassword = "";
 
     function normalize(name) {
-        try {
-            return name.trim().toLowerCase();
-        } catch (e) {
-            console.log(e);
+        if (name) {
+            try {
+                return name.trim().toLowerCase();
+            } catch (e) {
+                console.log(e);
+            }
         }
-        return undefined;
+        return "";
     }
     function cloneObject(object) {
         return JSON.parse(JSON.stringify(object))
@@ -179,9 +181,12 @@ let SitePassword = ((function (self) {
         return false;  // entry not found, could be a phishing attempt!
     }
     self.domainname = "";
-    self.loadSettings = function () {
-        const domainname = self.domainname;
-        const sitename = self.database.domains[domainname];
+    self.siteForDomain = function (domainname) {
+        domainname = normalize(domainname);
+        return self.database.domains[domainname];
+    }
+    self.loadSettings = function (sitename) {
+        sitename = normalize(sitename);
         let settings = (sitename ? self.database.sites[sitename] : undefined);
         if (!settings) {
             settings = defaultsettings;

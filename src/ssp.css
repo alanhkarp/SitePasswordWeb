@@ -58,6 +58,12 @@
   background-color: #FF0;
   color: #000;
 }
+#trustbutton {
+  background-color: #0C0;
+/*
+  color: #000;
+*/
+}
 #sitepw {
   padding-right: 5em;
 }
@@ -156,6 +162,11 @@ button:enabled:active {
   float: left;
   padding-right: 1ex;
   cursor: pointer;
+}
+.bad-input {
+  border: 2px solid #F00 !important;
+  padding: 4px !important;
+  color: #F00 !important;
 }
 .warning {
   margin: 1ex;

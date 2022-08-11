@@ -2,6 +2,51 @@
 if (typeof SitePassword !== 'object') {
     console.log("ERROR! `SitePassword` must be defined (include `bg.js`)");
 }
+/*
+    if domainname is empty
+        bookmark disabled
+        remember disabled
+    if domainname in database
+        bookmark enabled
+        sitename/username/settings loaded from database
+        remember enabled
+    if domainname unrecognized
+        bookmark enabled
+
+    if bookmark pasted
+        if pasted bookmark does not parse
+            bad bookmark alert!
+        if pasted bookmark does not match domainname
+            phishing warning!
+            if resetbutton
+                clear all fields except masterpassword
+            if trustbutton
+                sitename/username/settings loaded from bookmark
+                remember enabled
+        if pasted bookmark matches domainname
+            sitename/username/settings loaded from bookmark
+            remember enabled
+        bookmark cleared
+
+    if sitename is empty
+        remember disabled
+    if sitename in database
+        if domainname does not designate sitename
+            phishing warning!
+            if resetbutton
+                clear all fields except masterpassword
+            if trustbutton
+                username/settings loaded from database
+                remember enabled
+    if sitename unrecognized
+        if username is empty
+            remember disabled
+        if username is filled
+            remember enabled
+
+    if remember
+        domainname/sitename/username/settings saved to database
+*/
 let SitePasswordWeb = ((function (self) {
     let normalize = SitePassword.normalize;
 
@@ -23,6 +68,8 @@ let SitePasswordWeb = ((function (self) {
         const $sitename = get("sitename");
         const $username = get("username");
         const $resetbutton = get("resetbutton");
+        const $trustbutton = get("trustbutton");
+        const $results = get("results");
         const $sitepw = get("sitepw");
         const $remember = get("remember");
         const $pwlength = get("pwlength");
@@ -92,11 +139,11 @@ let SitePasswordWeb = ((function (self) {
             settings.minspecial = $minspecial.value;
             settings.specials = $specials.value;
         }
-        let $pwok = get("pwok");
-        let $pwfail = get("pwfail");
+        const $pwok = get("pwok");
+        const $pwfail = get("pwfail");
         function generatePassword() {
             saveSettingControls(SitePassword.settings);
-            let pw = SitePassword.generatePassword();
+            const pw = SitePassword.generatePassword();
             if (pw || !$masterpw.value) {
                 $pwok.style.display = "flex";
                 $pwfail.style.display = "none";
@@ -109,19 +156,19 @@ let SitePasswordWeb = ((function (self) {
             enableRemember();
         }
         function handleBlur(id) {
-            let $element = get(id);
+            const $element = get(id);
             SitePassword.settings[id] = $element.value;
             generatePassword();
         }
         function handleKeyup(id) {
-            let $element = get(id);
+            const $element = get(id);
             SitePassword.settings[id] = $element.value;
             generatePassword();
             //$element.focus();
         }
 
-        let $instructionpanel = get("instructionpanel");
-        let $maininfo = get("maininfo");
+        const $instructionpanel = get("instructionpanel");
+        const $maininfo = get("maininfo");
         $maininfo.onclick = function () {
             if ($instructionpanel.style.display === "none") {
                 $instructionpanel.style.display = "block";
@@ -138,8 +185,8 @@ let SitePasswordWeb = ((function (self) {
             $masterpw.onblur();
             //$masterpw.focus();
         }
-        let $masterpwhide = get("masterpwhide");
-        let $masterpwshow = get("masterpwshow");
+        const $masterpwhide = get("masterpwhide");
+        const $masterpwshow = get("masterpwshow");
         $masterpwhide.onclick = function () {
             $masterpw.type = "password";
             $masterpwhide.style.display = "none";
@@ -157,11 +204,9 @@ let SitePasswordWeb = ((function (self) {
             const domainname = parseDomain(normalize($domainname.value));
             $domainname.value = domainname;
             SitePassword.domainname = domainname;
-            const settings = SitePassword.loadSettings();
-            $sitename.value = settings.sitename;
-            $username.value = settings.username;
-            loadSettingControls(settings);
-            generatePassword();
+            const sitename = SitePassword.siteForDomain(domainname);
+            const settings = SitePassword.loadSettings(sitename);
+            updateSettings(settings);
         }
         $domainname.onpaste = function () {
             setTimeout(() => {
@@ -180,32 +225,40 @@ let SitePasswordWeb = ((function (self) {
             }
             return split[2];
         }
+        function updateSettings(settings) {
+            $sitename.value = settings.sitename;
+            $username.value = settings.username;
+            loadSettingControls(settings);
+            phishingWarningOff();
+            generatePassword();
+        }
 
         // loginurl = https://alantheguru.alanhkarp.com/
         // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22,%22characters%22:%22abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ab%22,%22displayname%22:%22alantheguru.alanhkarp.com%22}
-        // bookmark = ssp://{"sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22}
+        // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22}
         // sitepw --> eUl6dpKDt9
-        // bookmark = ssp://{"sitename":"The Real Alan","username":"dalnefre","pwlength":"15","startwithletter":false,"allowlower":true,"minlower":"1","allowupper":true,"minupper":"1","allownumber":true,"minnumber":"1","allowspecial":true,"minspecial":"1","specials":"$/!=@?._-"}
+        // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"The Real Alan","username":"dalnefre","pwlength":"15","startwithletter":false,"allowlower":true,"minlower":"1","allowupper":true,"minupper":"1","allownumber":true,"minnumber":"1","allowspecial":true,"minspecial":"1","specials":"$/!=@?._-"}
         // sitepw --> PZ5?5Aj7KtrJ/CW
         $bookmark.onpaste = function () {
             setTimeout(() => {
-                var settings = parseBookmark($bookmark.value);
+                const settings = parseBookmark($bookmark.value);
+                $bookmark.value = "";  // clear bookmark field
                 if (settings) {
-                    phishingCheck(settings.sitename);
-                    SitePassword.settings = settings;  // update data-model
-                    //$domainname.value = settings.domainname;  // FIXME: do we really want to set this?
-                    $sitename.value = settings.sitename;
-                    $username.value = settings.username;
-                    loadSettingControls(settings);
-                    generatePassword();
+                    if (settings.domainname === $domainname.value) {
+                        SitePassword.settings = settings;  // update data-model
+                        updateSettings(settings);
+                    } else {
+                        $sitename.value = settings.sitename;
+                        //alert("Bookmark is not for this domain. Try another one.");
+                        phishingWarningOn(settings);
+                    }
                 } else {
                     alert("Invalid bookmark. Copy it again?");
                 }
-                $bookmark.value = "";  // clear bookmark field
             }, 0);
         }
         function parseBookmark(bookmark) {
-            var settings = undefined;
+            let settings = undefined;
             if (bookmark.startsWith("ssp://")) {
                 try {
                     let json = bookmark.substring(6)
@@ -226,20 +279,18 @@ let SitePasswordWeb = ((function (self) {
 
         $sitename.onblur = function () {
             handleBlur("sitename");
-            phishingCheck($sitename.value);
-        }
-        function phishingCheck(sitename) {
             const domainname = $domainname.value;
-            if (SitePassword.validateDomain(domainname, sitename)) {
-                setNotice("phishing", false);
-                //$domainname.style.background = "#FFF";
-                $domainname.style.color = "#000";
-                //$domainname.focus();
+            const settings = SitePassword.loadSettings($sitename.value);
+            const sitename = settings.sitename;
+            if (!sitename) {
+                // retain sitename/username for unknown site
+                settings.sitename = $sitename.value;
+                settings.username = $username.value;
+                SitePassword.settings = settings;
+            } else if (SitePassword.validateDomain(domainname, sitename)) {
+                updateSettings(settings);
             } else {
-                setNotice("phishing", true);
-                //$domainname.style.background = "#FF0";
-                $domainname.style.color = "#F00";
-                $resetbutton.focus();
+                phishingWarningOn(settings);
             }
         }
 
@@ -249,17 +300,35 @@ let SitePasswordWeb = ((function (self) {
 
         $resetbutton.onclick = function () {
             $domainname.value = "";
+            enableBookmark();
             SitePassword.domainname = "";
+            $results.style.display = "block";  // show sitepw/remember/settings...
             const settings = SitePassword.loadSettings();
-            $sitename.value = settings.sitename;
-            $username.value = settings.username;
-            loadSettingControls(settings);
-            generatePassword();
-            phishingCheck(settings.sitename);
+            updateSettings(settings);
+        }
+        function phishingWarningOn(settings) {
+            //setNotice("phishing", true);
+            $phishing.style.display = "block";
+            $results.style.display = "none";  // hide sitepw/remember/settings...
+            $domainname.classList.add("bad-input");
+            $resetbutton.focus();
+            $trustbutton.onclick = function () {
+                SitePassword.settings = settings;
+                updateSettings(settings);
+            };
+        }
+        function phishingWarningOff() {
+            //setNotice("phishing", false);
+            $phishing.style.display = "none";
+            $results.style.display = "block";  // show sitepw/remember/settings...
+            $domainname.classList.remove("bad-input");
+            $trustbutton.onclick = function () {
+                console.log("WARNING! trustbutton clicked while phishing warning off.");
+            };
         }
 
-        let $sitepwhide = get("sitepwhide");
-        let $sitepwshow = get("sitepwshow");
+        const $sitepwhide = get("sitepwhide");
+        const $sitepwshow = get("sitepwshow");
         $sitepwhide.onclick = function () {
             $sitepw.type = "password";
             $sitepwhide.style.display = "none";
@@ -276,10 +345,10 @@ let SitePasswordWeb = ((function (self) {
             copyToClipboard($sitepw);
         }
 
-        let $nopw = get("nopw");
-        let $phishing = get("phishing");
-        var nopwNoteOn = false;
-        var phishingNoteOn = false;
+        const $nopw = get("nopw");
+        const $phishing = get("phishing");
+        let nopwNoteOn = false;
+        let phishingNoteOn = false;
         function setNotice(id, turnon) {
             if ("nopw" == id) nopwNoteOn = turnon;
             if ("phishing" == id) phishingNoteOn = turnon;
@@ -297,28 +366,25 @@ let SitePasswordWeb = ((function (self) {
 
         $remember.onclick = function () {
             SitePassword.storeSettings();
-            phishingCheck($sitename.value);
+            //phishingWarningOff();
         }
         function enableRemember() {
             $remember.disabled =
                 !($domainname.value && $sitename.value && $username.value && $sitepw.value);
         }
 
-        let $settingsshow = get("settingsshow");
-        let $settingssave = get("settingssave");
-        let $settings = get("settings");
+        const $settingsshow = get("settingsshow");
+        const $settingssave = get("settingssave");
+        const $settings = get("settings");
         $settingsshow.onclick = function () {
-            //loadSettingControls(SitePassword.settings);  // FIXME: already loaded...
             $settingsshow.style.display = "none";
             $settingssave.style.display = "inline";
             $settings.style.display = "block";
         }
         $settingssave.onclick = function () {
-            //saveSettingControls(SitePassword.settings);  // FIXME: sync'd by generatePassword()
             $settingsshow.style.display = "inline";
             $settingssave.style.display = "none";
             $settings.style.display = "none";
-            //SitePassword.storeSettings();  // FIXME: don't persist here, use $remember
         }
 
         $pwlength.onkeyup = function () {
@@ -358,10 +424,10 @@ let SitePasswordWeb = ((function (self) {
             handleKeyup("specials");
         }
         function handleCheck(group) {
-            let $allow_group_checkbox = get("allow"+group+"checkbox");
-            let $min_group = get("min"+group);
-            let $allow_group = get("allow"+group);
-            let $require_group = get("require"+group);
+            const $allow_group_checkbox = get("allow"+group+"checkbox");
+            const $min_group = get("min"+group);
+            const $allow_group = get("allow"+group);
+            const $require_group = get("require"+group);
             if ($allow_group_checkbox && $allow_group && $require_group && $min_group) {
                 SitePassword.settings["allow"+group] = $allow_group_checkbox.checked;
                 if ($allow_group_checkbox.checked) {
