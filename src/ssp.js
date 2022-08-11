@@ -151,7 +151,6 @@ let SitePasswordWeb = ((function (self) {
                 $pwok.style.display = "none";
                 $pwfail.style.display = "flex";
             }
-            //setNotice("nopw", !pw);
             $sitepw.value = pw;
             enableRemember();
         }
@@ -298,6 +297,7 @@ let SitePasswordWeb = ((function (self) {
             handleKeyup("username");
         }
 
+        const $phishing = get("phishing");
         $resetbutton.onclick = function () {
             $domainname.value = "";
             enableBookmark();
@@ -307,7 +307,6 @@ let SitePasswordWeb = ((function (self) {
             updateSettings(settings);
         }
         function phishingWarningOn(settings) {
-            //setNotice("phishing", true);
             $phishing.style.display = "block";
             $results.style.display = "none";  // hide sitepw/remember/settings...
             $domainname.classList.add("bad-input");
@@ -318,7 +317,6 @@ let SitePasswordWeb = ((function (self) {
             };
         }
         function phishingWarningOff() {
-            //setNotice("phishing", false);
             $phishing.style.display = "none";
             $results.style.display = "block";  // show sitepw/remember/settings...
             $domainname.classList.remove("bad-input");
@@ -343,25 +341,6 @@ let SitePasswordWeb = ((function (self) {
         }
         get("sitepwcopy").onclick = function () {
             copyToClipboard($sitepw);
-        }
-
-        const $nopw = get("nopw");
-        const $phishing = get("phishing");
-        let nopwNoteOn = false;
-        let phishingNoteOn = false;
-        function setNotice(id, turnon) {
-            if ("nopw" == id) nopwNoteOn = turnon;
-            if ("phishing" == id) phishingNoteOn = turnon;
-            if (phishingNoteOn) {
-                $nopw.style.display = "none";
-                $phishing.style.display = "block";
-            } else if (nopwNoteOn) {
-                $nopw.style.display = "block";
-                $phishing.style.display = "none";
-            } else {
-                $nopw.style.display = "none";
-                $phishing.style.display = "none";
-            }
         }
 
         $remember.onclick = function () {
