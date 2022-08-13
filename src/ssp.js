@@ -402,8 +402,11 @@ let SitePasswordWeb = ((function (self) {
         $minspecial.onkeyup = function () {
             handleKeyup("minspecial");
         }
+        const alphanumerics = /[0-9A-Za-z]/g;
         $specials.onkeyup = function () {
-            $specials.value = $specials.value.substring(0, 12);  // limit to 12 specials
+            $specials.value = $specials.value
+                .replace(alphanumerics, '')  // eliminate alphanumerics
+                .substring(0, 12);  // limit to 12 specials
             handleKeyup("specials");
         }
         function handleCheck(group) {
