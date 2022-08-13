@@ -134,7 +134,9 @@ let SitePassword = ((function (self) {
             if (!m) {
                 return "";
             }
-            const s = n.toString() + u.toString() + m.toString();
+            const s = n.toString() + '\t'
+                + u.toString() + '\t'
+                + m.toString();
             return computePassword(s, settings);
         }
         return "";
@@ -216,6 +218,7 @@ let SitePassword = ((function (self) {
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     specials: "/!=@?._-",
 }));
+
 /* 
 This code is a major modification of the code released with the
 following licence.  Neither Hewlett-Packard Company nor Hewlett-Packard
