@@ -141,6 +141,8 @@ window.onload = function () {
         enable();
         getsettings();
         settings.sitename = get("sitename").value;
+    }
+    get("sitename").onblur = function() {
         if (isphishing(settings.sitename)) {
             message("phishing", true);
             get("domainname").value = settings.domainname;
@@ -388,7 +390,7 @@ function getsettings() {
         settings = clone(persona.sitenames.default);
     }
     fill();
-    get("masterpw").focus();
+    //get("masterpw").focus();
     return settings;
 }
 function ask2generate() {
