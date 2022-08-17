@@ -209,7 +209,7 @@ let SitePassword = ((function (self) {
     }
     return self;
 })({
-    version: "1.2.0",
+    version: "1.0",
     clearmasterpw: false,
     miniter: 100,
     maxiter: 10000,
