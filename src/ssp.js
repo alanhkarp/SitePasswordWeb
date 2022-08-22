@@ -491,13 +491,12 @@ let SitePasswordWeb = ((function (self) {
             sd += "</table></body></html>";
             const $data = get("data");
             const mimetype = "data:application/octet-stream,";
-            $data.href = mimetype + sd;
+            $data.href = mimetype + encodeURIComponent(sd);
             $data.click();
             return sd;
         }
 
-        // FIXME: these ids are very generic, maybe add an "info" suffix?
-        get("overview").onclick = function () { sectionClick("overview"); };
+        get("overviewinfo").onclick = function () { sectionClick("overview"); };
         get("master").onclick = function () { sectionClick("master"); };
         get("common").onclick = function () { sectionClick("common"); };
         get("extension").onclick = function () { sectionClick("extension"); };
@@ -506,7 +505,7 @@ let SitePasswordWeb = ((function (self) {
         get("source").onclick = function () { sectionClick("source"); };
         get("payment").onclick = function () { sectionClick("payment"); };
         function sectionClick(id) {
-            const element = get(id + "p");
+            const element = get(id + "div");
             if (element.style.display === "none") {
                 element.style.display = "block";
                 get("open" + id).style.display = "none";
@@ -522,7 +521,7 @@ let SitePasswordWeb = ((function (self) {
     }
     return self;
 })({
-    version: "1.2.0",
+    version: "1.0",
 }));
 window.onload = function () {
     SitePasswordWeb.onload();
