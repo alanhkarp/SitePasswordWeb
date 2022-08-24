@@ -227,10 +227,22 @@ let SitePasswordWeb = ((function (self) {
         }
         function parseDomain(url) {
             const split = url.split("/");
+            let domain = "";
             if (split.length === 1) {
-                return split[0];
+                domain = split[0];
             }
-            return split[2];
+            domain = split[2];
+            if (!isValidDomain(normalize(domain))) {
+                alert("Invalid domain.  Try again.");
+                domain = "";
+            }
+            return domain;
+        }
+        // From https://miguelmota.com/bytes/validate-domain-regex/
+        function isValidDomain(v) {
+            if (!v) return false;
+            var re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
+            return re.test(v);
         }
         function updateSettings(settings) {
             $sitename.value = settings.sitename;
