@@ -497,13 +497,15 @@ let SitePasswordWeb = ((function (self) {
         }
 
         get("overviewinfo").onclick = function () { sectionClick("overview"); };
-        get("master").onclick = function () { sectionClick("master"); };
-        get("common").onclick = function () { sectionClick("common"); };
-        get("extension").onclick = function () { sectionClick("extension"); };
-        get("webpage").onclick = function () { sectionClick("webpage"); };
-        get("shared").onclick = function () { sectionClick("shared"); };
-        get("source").onclick = function () { sectionClick("source"); };
-        get("payment").onclick = function () { sectionClick("payment"); };
+        get("masterinfo").onclick = function () { sectionClick("master"); };
+        get("acceptableinfo").onclick = function () { sectionClick("acceptable"); };
+        get("changeinfo").onclick = function () { sectionClick("change"); };
+        get("phishinginfo").onclick = function () { sectionClick("phishing"); };
+        get("extensioninfo").onclick = function () { sectionClick("extension"); };
+        get("appsinfo").onclick = function () { sectionClick("apps"); };
+        get("downloadinfo").onclick = function () { sectionClick("download"); };
+        get("sourceinfo").onclick = function () { sectionClick("source"); };
+        get("paymentinfo").onclick = function () { sectionClick("payment"); };
         function sectionClick(id) {
             const element = get(id + "div");
             if (element.style.display === "none") {
