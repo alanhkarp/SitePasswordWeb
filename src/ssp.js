@@ -362,7 +362,7 @@ let SitePasswordWeb = ((function (self) {
             delete SitePassword.database.domains[$domainname.value];
             // Delete the item in domain.sites if there are no entries in
             // database.domains that refers to it
-            if (Object.values(SitePassword.database.domains).indexOf($sitename.value) == -1) {
+            if (Object.values(SitePassword.database.domains).includes($sitename.value)) {
                 delete SitePassword.database.sites[$sitename.value];
             }
             $sitename.value = "";
