@@ -72,6 +72,7 @@ let SitePasswordWeb = ((function (self) {
         const $results = get("results");
         const $sitepw = get("sitepw");
         const $remember = get("remember");
+        const $forget = get("forget");
         const $pwlength = get("pwlength");
         const $startwithletter = get("startwithletter");
         const $allowlowercheckbox = get("allowlowercheckbox");
@@ -204,6 +205,13 @@ let SitePasswordWeb = ((function (self) {
             $domainname.value = domainname;
             SitePassword.domainname = domainname;
             const sitename = SitePassword.siteForDomain(domainname);
+            if (sitename) {
+                $remember.style.display = "none";
+                $forget.style.display = "block";
+            } else {
+                $remember.style.display = "block";
+                $forget.style.display = "none";
+            }
             const settings = SitePassword.loadSettings(sitename);
             updateSettings(settings);
         }
@@ -349,6 +357,17 @@ let SitePasswordWeb = ((function (self) {
         $remember.onclick = function () {
             SitePassword.storeSettings();
             //phishingWarningOff();
+        }
+        $forget.onclick = function () {
+            delete SitePassword.database.domains[$domainname.value];
+            // Delete the item in domain.sites if there are no entries in
+            // database.domains that refers to it
+            if (Object.values(SitePassword.database.domains).indexOf($sitename.value) == -1) {
+                delete SitePassword.database.sites[$sitename.value];
+            }
+            $sitename.value = "";
+            $username.value = "";
+            SitePassword.persistDatabase(SitePassword.database);
         }
         function enableRemember() {
             $remember.disabled =

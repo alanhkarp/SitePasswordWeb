@@ -144,6 +144,7 @@ let SitePassword = ((function (self) {
 
     self.normalize = normalize;
     self.generatePassword = generatePassword;
+    self.persistDatabase = persistDatabase;
     self.getMasterPassword = function () {
         return cloneObject(masterpassword);
     }
