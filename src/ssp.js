@@ -352,7 +352,7 @@ let SitePasswordWeb = ((function (self) {
         }
         function enableRemember() {
             $remember.disabled =
-                !($domainname.value && $sitename.value && $username.value && $sitepw.value);
+                !($domainname.value && $sitename.value && $username.value);
         }
 
         const $settingsshow = get("settingsshow");
