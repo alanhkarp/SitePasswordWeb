@@ -205,13 +205,6 @@ let SitePasswordWeb = ((function (self) {
             $domainname.value = domainname;
             SitePassword.domainname = domainname;
             const sitename = SitePassword.siteForDomain(domainname);
-            if (sitename) {
-                $remember.style.display = "none";
-                $forget.style.display = "block";
-            } else {
-                $remember.style.display = "block";
-                $forget.style.display = "none";
-            }
             const settings = SitePassword.loadSettings(sitename);
             updateSettings(settings);
         }
@@ -227,10 +220,18 @@ let SitePasswordWeb = ((function (self) {
         }
         function parseDomain(url) {
             const split = url.split("/");
-            if (split.length === 1) {
-                return split[0];
+            let domain = (split.length > 1 ? split[2] : split[0]);
+            if (domain && !isValidDomain(normalize(domain))) {
+                alert("Invalid domain.  Try again.");
+                domain = "";
             }
-            return split[2];
+            return domain;
+        }
+        // From https://miguelmota.com/bytes/validate-domain-regex/
+        function isValidDomain(v) {
+            if (!v) return false;
+            var re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
+            return re.test(v);
         }
         function updateSettings(settings) {
             $sitename.value = settings.sitename;
@@ -243,9 +244,9 @@ let SitePasswordWeb = ((function (self) {
         // loginurl = https://alantheguru.alanhkarp.com/
         // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22,%22characters%22:%22abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ab%22,%22displayname%22:%22alantheguru.alanhkarp.com%22}
         // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22}
-        // sitepw --> eUl6dpKDt9
+        // sitepw --> qPz43sW0Ws
         // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"The Real Alan","username":"dalnefre","pwlength":"15","startwithletter":false,"allowlower":true,"minlower":"1","allowupper":true,"minupper":"1","allownumber":true,"minnumber":"1","allowspecial":true,"minspecial":"1","specials":"$/!=@?._-"}
-        // sitepw --> PZ5?5Aj7KtrJ/CW
+        // sitepw --> G.iJQEp-qB65UF5
         $bookmark.onpaste = function () {
             setTimeout(() => {
                 const settings = parseBookmark($bookmark.value);
@@ -357,21 +358,18 @@ let SitePasswordWeb = ((function (self) {
         $remember.onclick = function () {
             SitePassword.storeSettings();
             //phishingWarningOff();
+            enableRemember();
         }
         $forget.onclick = function () {
-            delete SitePassword.database.domains[$domainname.value];
-            // Delete the item in domain.sites if there are no entries in
-            // database.domains that refers to it
-            if (Object.values(SitePassword.database.domains).includes($sitename.value)) {
-                delete SitePassword.database.sites[$sitename.value];
-            }
-            $sitename.value = "";
-            $username.value = "";
-            SitePassword.persistDatabase(SitePassword.database);
+            const settings = SitePassword.forgetSettings();
+            $domainname.value = "";
+            updateSettings(settings);
         }
         function enableRemember() {
             $remember.disabled =
-                !($domainname.value && $sitename.value && $username.value);
+                !($domainname.value && $sitename.value && $username.value && SitePassword.settingsModified());
+            $forget.disabled =
+                (!$domainname.value || SitePassword.settingsModified());
         }
 
         const $settingsshow = get("settingsshow");

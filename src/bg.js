@@ -31,6 +31,7 @@ let SitePassword = ((function (self) {
     function cloneObject(object) {
         return JSON.parse(JSON.stringify(object))
     }
+
     function persistDatabase(database) {
         try {
             if (typeof database === 'object') {
@@ -50,6 +51,7 @@ let SitePassword = ((function (self) {
         }
         return undefined;
     }
+
     function generateCharacterSet(settings) {
         // generate a set of 64 characters for encoding
         let chars = "";
@@ -144,7 +146,6 @@ let SitePassword = ((function (self) {
 
     self.normalize = normalize;
     self.generatePassword = generatePassword;
-    self.persistDatabase = persistDatabase;
     self.getMasterPassword = function () {
         return cloneObject(masterpassword);
     }
@@ -189,6 +190,7 @@ let SitePassword = ((function (self) {
         domainname = normalize(domainname);
         return self.database.domains[domainname];
     }
+    let cachedsettings = "";
     self.loadSettings = function (sitename) {
         sitename = normalize(sitename);
         let settings = (sitename ? self.database.sites[sitename] : undefined);
@@ -196,6 +198,7 @@ let SitePassword = ((function (self) {
             settings = defaultsettings;
         }
         self.settings = cloneObject(settings);
+        cachedsettings = JSON.stringify(self.settings);
         return self.settings;
     }
     self.storeSettings = function () {
@@ -206,7 +209,24 @@ let SitePassword = ((function (self) {
             self.database.domains[domainname] = sitename;
             self.database.sites[sitename] = cloneObject(settings);
             persistDatabase(self.database);
+            cachedsettings = JSON.stringify(settings);
         }
+    }
+    self.settingsModified = function () {
+        return (cachedsettings !== JSON.stringify(self.settings));
+    }
+    self.forgetSettings = function () {
+        const domainname = self.domainname;
+        const sitename = self.siteForDomain(domainname);
+        delete self.database.domains[domainname];
+        // Delete the item in database.sites if there are no entries
+        // in database.domains that refer to it
+        if (!Object.values(self.database.domains).includes(sitename)) {
+            delete self.database.sites[sitename];
+        }
+        persistDatabase(self.database);
+        self.domainname = "";
+        return self.loadSettings();  // reset to default settings
     }
     return self;
 })({
