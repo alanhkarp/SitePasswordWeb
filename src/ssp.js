@@ -302,6 +302,9 @@ let SitePasswordWeb = ((function (self) {
                 phishingWarningOn(settings);
             }
         }
+        $sitename.onkeyup = function () {
+            handleKeyup("sitename");
+        }
 
         $username.onkeyup = function () {
             handleKeyup("username");
