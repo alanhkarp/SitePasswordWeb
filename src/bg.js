@@ -1,187 +1,245 @@
 "use strict";
-var legacy = false;  // true to emulate HP Antiphishing Toolbar
-// State I want to keep around that doesn't appear in the file system
-var activetabid;
-var masterpw = "";
-var domainname = "";
-var protocol = "";
-var persona;
-var pwcount = 0;
-var settings = {};
-function bginit() {
-    hpSPG = retrieveObject("hpSPG");
-    if (!hpSPG) {
-        hpSPG = {
-            digits: "0123456789",
-            lower: "abcdefghijklmnopqrstuvwxyz",
-            upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            specials: "/!=@?._-",
-            miniter: 10,
-            maxiter: 1000,
-            lastpersona: "everyone",
-            personas: {
-                default: {
-                    personaname: "default",
-                    autofill: true,
-                    clearmasterpw: false,
-                    specials: "",
-                    sites: {},
-                    sitenames: {
-                        default: {
-                            sitename: "",
-                            username: "",
-                            hostname: "",
-                            length: 12,
-                            domainname: "",
-                            startwithletter: true,
-                            allowlower: true,
-                            allowupper: true,
-                            allownumber: true,
-                            allowspecial: false,
-                            minlower: 1,
-                            minupper: 1,
-                            minnumber: 1,
-                            minspecial: 1,
-                            specials: "",
-                            characters: ""
-                        }
-                    }
-                }
+let SitePassword = ((function (self) {
+    const storagekey = "SitePasswordData";
+    const defaultsettings = {
+        sitename: "",
+        username: "",
+        pwlength: 12,
+        startwithletter: true,
+        allowlower: true,
+        minlower: 1,
+        allowupper: true,
+        minupper: 1,
+        allownumber: true,
+        minnumber: 1,
+        allowspecial: false,
+        minspecial: 1,
+        specials: (self.specials || "_"),
+    }
+    let masterpassword = "";
+
+    function normalize(name) {
+        if (name) {
+            try {
+                return name.trim().toLowerCase();
+            } catch (e) {
+                console.log(e);
             }
         }
-        hpSPG.personas.default.sitenames.default.specials = hpSPG.specials;
-        var defaultsettings = hpSPG.personas.default.sitenames.default;
-        defaultsettings.characters = characters(defaultsettings);
-        hpSPG.personas.everyone = clone(hpSPG.personas.default);
-        persona = hpSPG.personas.everyone;
-        persona.personaname = "Everyone";
-        hpSPG.lastpersona = persona.personaname;
-        persistObject("hpSPG", hpSPG);
+        return "";
     }
-    persona = hpSPG.personas[hpSPG.lastpersona.toLowerCase().trim()];
-    if (persona.sites[domainname]) {
-        settings = clone(persona.sitenames[persona.sites[domainname]]);
-    } else if (hpSPG.personas.everyone.sites[domainname]) {
-        settings = clone(hpSPG.personas.everyone.sites[domainname]);
-    } else {
-        settings = clone(persona.sitenames.default);
+    function cloneObject(object) {
+        return JSON.parse(JSON.stringify(object))
     }
-    settings.domainname = domainname;
-}
-function generate(settings) {
-    var n = settings.sitename.toLowerCase().trim();
-    var u = settings.username.toLowerCase().trim();
-    var m = masterpw;
-    if (!m) {
-        return { p: "", r: pwcount };
-    }
-    var s = n.toString() + u.toString() + m.toString();
-    var p = compute(s, settings);
-    return { p: p, r: pwcount };
-}
-function compute(s, settings) {
-    s = Utf8Encode(s);
 
-    var h = core_sha256(str2binb(s), s.length * chrsz);
-    for (var iter = 1; iter < hpSPG.miniter; iter++) {
-        h = core_sha256(h, 16 * chrsz);
-    }
-    while (iter < hpSPG.maxiter) {
-        h = core_sha256(h, 16 * chrsz);
-        var hswap = Array(h.length);
-        for (var i = 0; i < h.length; i++) {
-            hswap[i] = swap32(h[i]);
-        }
-        var sitePassword = binl2b64(hswap, settings.characters).substring(0, settings.length);
-        if (verify(sitePassword, settings)) break;
-        iter++;
-        if (iter >= hpSPG.maxiter) {
-            sitePassword = "";
+    function persistDatabase(database) {
+        try {
+            if (typeof database === 'object') {
+                localStorage[storagekey] = JSON.stringify(database);
+            } else {
+                console.log("can't persist database:", database);
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
-    return sitePassword;
-}
-function verify(p, settings) {
-    var counts = { lower: 0, upper: 0, number: 0, special: 0 };
-    for (var i = 0; i < p.length; i++) {
-        var c = p.substr(i, 1);
-        if (-1 < hpSPG.lower.indexOf(c)) counts.lower++;
-        if (-1 < hpSPG.upper.indexOf(c)) counts.upper++;
-        if (-1 < hpSPG.digits.indexOf(c)) counts.number++;
-        if (-1 < settings.specials.indexOf(c)) counts.special++;
-    }
-    var valOK = true;
-    if (settings.startwithletter) {
-        var start = p.substr(0, 1).toLowerCase();
-        valOK = valOK && -1 < hpSPG.lower.indexOf(start);
-    }
-    if (settings.allowlower) valOK = valOK && (counts.lower >= settings.minlower)
-    if (settings.allowupper) {
-        valOK = valOK && (counts.upper >= settings.minupper)
-    } else {
-        valOK = valOK && (counts.upper == 0);
-    }
-    if (settings.allownumber) {
-        valOK = valOK && (counts.number >= settings.minnumber);
-    } else {
-        valOK = valOK && (counts.number == 0);
-    }
-    if (settings.allowspecial) {
-        valOK = valOK && (counts.special >= settings.minspecial);
-    } else {
-        valOK = valOK && (counts.special == 0);
-    }
-    return valOK;
-}
-function persistObject(name, value) {
-    try {
-        localStorage[name] = JSON.stringify(value);
-    } catch (e) {
+    function retrieveDatabase() {
+        try {
+            return JSON.parse(localStorage[storagekey]);
+        } catch (e) {
+            console.log(e);
+        }
         return undefined;
     }
-}
-function retrieveObject(name) {
-    try {
-        return JSON.parse(localStorage[name]);
-    } catch (e) {
+
+    function generateCharacterSet(settings) {
+        // generate a set of 64 characters for encoding
+        let chars = "";
+        if (settings.allowspecial) {
+            chars += settings.specials;
+        }
+        if (settings.allownumber) {
+            chars += self.digits;
+        }
+        if (settings.allowupper) {
+            chars += self.upper;
+        }
+        if (settings.allowlower) {
+            chars += self.lower;
+        }
+        while ((chars.length > 0) && (chars.length < 64)) {
+            chars += chars;
+        }
+        return chars;
+    }
+    function verifyPassword(pw, settings) {
+        var counts = { lower: 0, upper: 0, number: 0, special: 0 };
+        for (var i = 0; i < pw.length; i++) {
+            var c = pw.charAt(i);
+            if (-1 < self.lower.indexOf(c)) counts.lower++;
+            if (-1 < self.upper.indexOf(c)) counts.upper++;
+            if (-1 < self.digits.indexOf(c)) counts.number++;
+            if (-1 < settings.specials.indexOf(c)) counts.special++;
+        }
+        var valOK = true;
+        if (settings.startwithletter) {
+            var start = pw.charAt(0).toLowerCase();
+            valOK = valOK && -1 < self.lower.indexOf(start);
+        }
+        if (settings.allowlower) valOK = valOK && (counts.lower >= settings.minlower)
+        if (settings.allowupper) {
+            valOK = valOK && (counts.upper >= settings.minupper)
+        } else {
+            valOK = valOK && (counts.upper == 0);
+        }
+        if (settings.allownumber) {
+            valOK = valOK && (counts.number >= settings.minnumber);
+        } else {
+            valOK = valOK && (counts.number == 0);
+        }
+        if (settings.allowspecial) {
+            valOK = valOK && (counts.special >= settings.minspecial);
+        } else {
+            valOK = valOK && (counts.special == 0);
+        }
+        return valOK;
+    }
+    function computePassword(payload, settings) {
+        let pw = "";
+        payload = Utf8Encode(payload);
+        const cset = generateCharacterSet(settings);
+        //console.log("computePassword: characterSet =", cset);
+        let h = core_sha256(str2binb(payload), payload.length * chrsz);
+        for (var iter = 1; iter < self.miniter; iter++) {
+            h = core_sha256(h, 16 * chrsz);
+        }
+        while (iter < self.maxiter) {
+            h = core_sha256(h, 16 * chrsz);
+            let hswap = Array(h.length);
+            for (let i = 0; i < h.length; i++) {
+                hswap[i] = swap32(h[i]);
+            }
+            pw = binl2b64(hswap, cset).substring(0, settings.pwlength);
+            if (verifyPassword(pw, settings)) {
+                return pw;
+            }
+            iter++;
+        }
+        return "";
+    }
+    function generatePassword() {
+        const settings = self.settings;
+        if (settings.allowupper || settings.allowlower || settings.allownumber) {
+            const n = normalize(settings.sitename);
+            const u = normalize(settings.username);
+            const m = self.getMasterPassword();
+            if (!m) {
+                return "";
+            }
+            const s = n.toString() + '\t'
+                + u.toString() + '\t'
+                + m.toString();
+            return computePassword(s, settings);
+        }
+        return "";
+    }
+
+    self.normalize = normalize;
+    self.generatePassword = generatePassword;
+    self.getMasterPassword = function () {
+        return cloneObject(masterpassword);
+    }
+    self.setMasterPassword = function (pw) {
+        if (typeof pw === 'string') {
+            masterpassword = cloneObject(pw);
+            return pw;
+        }
         return undefined;
     }
-}
-function characters(settings) {
-    var chars = hpSPG.lower + hpSPG.upper + hpSPG.digits + hpSPG.lower.substr(0, 2);
-    if (settings.allowspecial) {
-        if (legacy) {
-            // Use for AntiPhishing Toolbar passwords
-            chars = chars.substr(0, 32) + settings.specials.substr(1) + chars.substr(31 + settings.specials.length);
-        } else {
-            // Use for SitePassword passwords
-            chars = settings.specials + hpSPG.lower.substr(settings.specials.length - 2) + hpSPG.upper + hpSPG.digits;
-        }
-    } else {
-        chars = hpSPG.lower + hpSPG.upper + hpSPG.digits + hpSPG.lower.substr(0, 2);
+    self.getDefaultSettings = function () {
+        return cloneObject(defaultsettings);
     }
-    if (!settings.allowlower) chars = chars.toUpperCase();
-    if (!settings.allowupper) chars = chars.toLowerCase();
-    if (!(settings.allowlower || settings.allowupper)) {
-        chars = hpSPG.digits + hpSPG.digits + hpSPG.digits +
-            hpSPG.digits + hpSPG.digits + hpSPG.digits;
-        if (settings.allowspecials) {
-            chars = chars + persona.specials.substr(0, 4);
-        } else {
-            chars = chars + hpSPG.digits.substr(0, 4);
+    self.settings = self.getDefaultSettings();
+    if (typeof self.database !== 'object') {
+        self.database = retrieveDatabase();
+    }
+    if (typeof self.database !== 'object') {
+        console.log("creating new database:", storagekey);
+        self.database = {
+            domains: {},  // domainname -> sitename
+            sites: {},  // sitename -> settings
+        };
+    }
+    self.validateDomain = function (domainname, sitename) {
+        domainname = normalize(domainname);
+        sitename = normalize(sitename);
+        if (!domainname || !sitename) return true;  // nothing to check...
+        const db = self.database;
+        if (!db.sites[sitename]) return true;  // candidate site...
+        const ds = Object.keys(db.domains);
+        for (const d of ds) {
+            const s = db.domains[d];
+            if ((s === sitename) && (d === domainname)) {
+                return true;  // found matching entry, domainname is valid.
+            }
+        }
+        return false;  // entry not found, could be a phishing attempt!
+    }
+    self.domainname = "";
+    self.siteForDomain = function (domainname) {
+        domainname = normalize(domainname);
+        return self.database.domains[domainname];
+    }
+    let cachedsettings = "";
+    self.loadSettings = function (sitename) {
+        sitename = normalize(sitename);
+        let settings = (sitename ? self.database.sites[sitename] : undefined);
+        if (!settings) {
+            settings = defaultsettings;
+        }
+        self.settings = cloneObject(settings);
+        cachedsettings = JSON.stringify(self.settings);
+        return self.settings;
+    }
+    self.storeSettings = function () {
+        const domainname = self.domainname;
+        const settings = self.settings;
+        const sitename = normalize(settings.sitename);
+        if (domainname && sitename) {
+            self.database.domains[domainname] = sitename;
+            self.database.sites[sitename] = cloneObject(settings);
+            persistDatabase(self.database);
+            cachedsettings = JSON.stringify(settings);
         }
     }
-    return chars;
-}
-function clone(object) {
-    return JSON.parse(JSON.stringify(object))
-}
-function getdomainname(url) {
-    return url.split("/")[2];
-}
-function getprotocol(url) {
-    return url.split(":")[0];
-}
+    self.settingsModified = function () {
+        return (cachedsettings !== JSON.stringify(self.settings));
+    }
+    self.forgetSettings = function () {
+        const domainname = self.domainname;
+        const sitename = self.siteForDomain(domainname);
+        delete self.database.domains[domainname];
+        // Delete the item in database.sites if there are no entries
+        // in database.domains that refer to it
+        if (!Object.values(self.database.domains).includes(sitename)) {
+            delete self.database.sites[sitename];
+        }
+        persistDatabase(self.database);
+        self.domainname = "";
+        return self.loadSettings();  // reset to default settings
+    }
+    return self;
+})({
+    version: "1.0",
+    clearmasterpw: false,
+    miniter: 100,
+    maxiter: 10000,
+    digits: "0123456789",
+    lower: "abcdefghijklmnopqrstuvwxyz",
+    upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    specials: "/!=@?._-",
+}));
+
 /* 
 This code is a major modification of the code released with the
 following licence.  Neither Hewlett-Packard Company nor Hewlett-Packard

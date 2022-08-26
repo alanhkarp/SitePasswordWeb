@@ -1,63 +1,103 @@
-var logging = false;
-var hpSPG;
-var masterpw;
-var domainname;
-var debugssp = false;
-var settings = {};
-window.onload = function () {
-    get("persona").onkeyup = function () {
-        get("masterpw").value = "";
-        get("sitename").value = "";
-        get("username").value = "";
-        get("sitepass").value = "";
-        masterpw = "";
+"use strict";
+if (typeof SitePassword !== 'object') {
+    console.log("ERROR! `SitePassword` must be defined (include `bg.js`)");
+}
+/*
+    if domainname is empty
+        bookmark disabled
+        remember disabled
+    if domainname in database
+        bookmark enabled
+        sitename/username/settings loaded from database
+        remember enabled
+    if domainname unrecognized
+        bookmark enabled
+
+    if bookmark pasted
+        if pasted bookmark does not parse
+            bad bookmark alert!
+        if pasted bookmark does not match domainname
+            phishing warning!
+            if resetbutton
+                clear all fields except masterpassword
+            if trustbutton
+                sitename/username/settings loaded from bookmark
+                remember enabled
+        if pasted bookmark matches domainname
+            sitename/username/settings loaded from bookmark
+            remember enabled
+        bookmark cleared
+
+    if sitename is empty
+        remember disabled
+    if sitename in database
+        if domainname does not designate sitename
+            phishing warning!
+            if resetbutton
+                clear all fields except masterpassword
+            if trustbutton
+                username/settings loaded from database
+                remember enabled
+    if sitename unrecognized
+        if username is empty
+            remember disabled
+        if username is filled
+            remember enabled
+
+    if remember
+        domainname/sitename/username/settings saved to database
+*/
+let SitePasswordWeb = ((function (self) {
+    let normalize = SitePassword.normalize;
+
+    function get(element) {
+        if (typeof element === 'string') {
+            return document.getElementById(element);
+        }
+        return element;
     }
-    get("persona").onmouseleave = function () {
-        getsettings();
-        fill();
-        hpSPG.lastpersona = get("persona").value;
-        masterpw = "";
-        get("masterpw").value = "";
-        get("masterpw").focus();
+    function copyToClipboard(element) {
+        element.focus();
+        navigator.clipboard.writeText(element.value);
     }
-    get("bookmark").onclick = function () {
-        setTimeout(() => {
-            this.focus();
-        }, 0);
-    }
-    get("bookmark").onpaste = processBookmark;
-    function processBookmark() {
-        let element = this;
-        setTimeout(() => {
-            if (!this.value) return;
-            try {
-                let no22 = element.value.substring(6).replace(/%22/g, "\"");
-                let no7B = no22.replace(/%7B/, "{");
-                let no7D = no7B.replace(/%7D/, "}");
-                settings = JSON.parse(no7D);
-            } catch {
-                alert("Invalid bookmark.  Copy it again.");
-                get("bookmark").value = "";
-                return;
-            }
-            persona.sitenames[settings.sitename] = settings;
-            element.value = "";
-            bookmarkOff();
-            if (logging) console.log("Bookmark settings", settings);
-            if (get("domainname").value !== settings.displayname) {
-                message("phishing", true);
-            } else {
-                get("domainname").value = settings.displayname;
-            }
-            get("sitename").value = settings.sitename;
-            get("username").value = settings.username;
-            get("pwlength").value = settings.length;
-            get("minlower").value = settings.minlower;
-            get("minnumber").value = settings.minnumber;
-            get("minspecial").value = settings.minspecial;
-            get("minupper").value = settings.minupper;
-            get("startwithletter").value = settings.startwithletter;
-            get("allowlowercheckbox").checked = settings.allowlower;
+
+    self.onload = function () {
+        const $masterpw = get("masterpw");
+        const $domainname = get("domainname");
+        const $bookmark = get("bookmark");
+        const $sitename = get("sitename");
+        const $username = get("username");
+        const $resetbutton = get("resetbutton");
+        const $trustbutton = get("trustbutton");
+        const $results = get("results");
+        const $sitepw = get("sitepw");
+        const $remember = get("remember");
+        const $forget = get("forget");
+        const $pwlength = get("pwlength");
+        const $startwithletter = get("startwithletter");
+        const $allowlowercheckbox = get("allowlowercheckbox");
+        const $minlower = get("minlower");
+        const $allowuppercheckbox = get("allowuppercheckbox");
+        const $minupper = get("minupper");
+        const $allownumbercheckbox = get("allownumbercheckbox");
+        const $minnumber = get("minnumber");
+        const $allowspecialcheckbox = get("allowspecialcheckbox");
+        const $minspecial = get("minspecial");
+        const $specials = get("specials");
+        const $downloadbutton = get("downloadbutton");
+
+        function loadSettingControls(settings) {
+            $pwlength.value = settings.pwlength;
+            $startwithletter.checked = settings.startwithletter;
+            $allowlowercheckbox.checked = settings.allowlower;
+            $minlower.value = settings.minlower;
+            $allowuppercheckbox.checked = settings.allowupper;
+            $minupper.value = settings.minupper;
+            $allownumbercheckbox.checked = settings.allownumber;
+            $minnumber.value = settings.minnumber;
+            $allowspecialcheckbox.checked = settings.allowspecial;
+            $minspecial.value = settings.minspecial;
+            $specials.value = settings.specials;
             if (settings.allowlower) {
                 get("allowlower").style.display = "none";
                 get("requirelower").style.display = "inline";
@@ -65,7 +105,6 @@ window.onload = function () {
                 get("allowlower").style.display = "inline";
                 get("requirelower").style.display = "none";
             }
-            get("allowuppercheckbox").checked = settings.allowupper;
             if (settings.allowupper) {
                 get("allowupper").style.display = "none";
                 get("requireupper").style.display = "inline";
@@ -73,7 +112,6 @@ window.onload = function () {
                 get("allowupper").style.display = "inline";
                 get("requireupper").style.display = "none";
             }
-            get("allownumbercheckbox").checked = settings.allownumber;
             if (settings.allownumber) {
                 get("allownumber").style.display = "none";
                 get("requirenumber").style.display = "inline";
@@ -81,7 +119,6 @@ window.onload = function () {
                 get("allownumber").style.display = "inline";
                 get("requirenumber").style.display = "none";
             }
-            get("allowspecialcheckbox").checked = settings.allowspecial;
             if (settings.allowspecial) {
                 get("allowspecial").style.display = "none";
                 get("requirespecial").style.display = "inline";
@@ -89,511 +126,429 @@ window.onload = function () {
                 get("allowspecial").style.display = "inline";
                 get("requirespecial").style.display = "none";
             }
-            enable();
-            ask2generate();
-            setfocus();
-        }, 0);
-    }
-    get("domainname").onpaste = function () {
-        setTimeout(() => {
-            let bookmarkoff = false;
-            let split = get("domainname").value.split("/");
-            if (split[0] === "") return;
-            if (split.length === 1) {
-                get("domainname").value = split[0];
+        }
+        function saveSettingControls(settings) {
+            settings.pwlength = $pwlength.value;
+            settings.startwithletter = $startwithletter.checked;
+            settings.allowlower = $allowlowercheckbox.checked;
+            settings.minlower = $minlower.value;
+            settings.allowupper = $allowuppercheckbox.checked;
+            settings.minupper = $minupper.value;
+            settings.allownumber = $allownumbercheckbox.checked;
+            settings.minnumber = $minnumber.value;
+            settings.allowspecial = $allowspecialcheckbox.checked;
+            settings.minspecial = $minspecial.value;
+            settings.specials = $specials.value;
+        }
+        const $pwok = get("pwok");
+        const $pwfail = get("pwfail");
+        function generatePassword() {
+            saveSettingControls(SitePassword.settings);
+            const pw = SitePassword.generatePassword();
+            if (pw || !$masterpw.value) {
+                $pwok.style.display = "flex";
+                $pwfail.style.display = "none";
             } else {
-                get("domainname").value = split[2];
+                $pwok.style.display = "none";
+                $pwfail.style.display = "flex";
             }
-            if (!isValidDomain(getlowertrim("domainname"))) {
-                alert("Invalid URL.  Try again.");
-                get("domainname").value = "";
-                bookmarkoff = true;
-            }
-            get("sitename").value = "";
-            get("username").value = "";
-            settings.sitename = "";
-            settings.username = "";
-            if (bookmarkoff) {
-                bookmarkOff();
-            } else{
-                bookmarkOn();
-            }
-            ask2generate();
-        }, 0);
-    }
-    get("domainname").onblur = function () {
-        get("domainname").onpaste();
-        enable();
-        getsettings();
-        ask2generate();
-        setfocus();
-    }
-    get("masterpw").onkeyup = function () {
-        masterpw = get("masterpw").value;
-        ask2generate();
-        get("masterpw").focus();
-    }
-    get("username").onkeyup = function () {
-        enable();
-        handlekeyup("username", "username");
-    }
-    get("sitename").onkeyup = function () {
-        enable();
-        getsettings();
-        settings.sitename = get("sitename").value;
-    }
-    get("sitename").onblur = function() {
-        if (isphishing(settings.sitename)) {
-            message("phishing", true);
-            get("domainname").value = settings.domainname;
-            get("masterpw").disabled = true;
-            get("username").disabled = true;
-            get("sitepass").value = "";
-        } else {
-            message("phishing", false);
-            get("masterpw").disabled = false;
-            get("username").disabled = false
-            ask2generate();
-            get("sitename").focus();
+            $sitepw.value = pw;
+            enableRemember();
         }
-    }
-    get("copy").onclick = function () {
-        navigator.clipboard.writeText(get("sitepass").value);
-    }
-    get("pwlength").onmouseleave = function () {
-        handlekeyup("pwlength", "length");
-    }
-    get("pwlength").onblur = function () {
-        handleblur("pwlength", "length");
-    }
-    get("startwithletter").onclick = function () {
-        settings.startwithletter = get("startwithletter").checked;
-        ask2generate();
-    }
-    get("allowlowercheckbox").onclick = function () {
-        handleclick("lower");
-    }
-    get("allowuppercheckbox").onclick = function () {
-        handleclick("upper");
-    }
-    get("allownumbercheckbox").onclick = function () {
-        handleclick("number");
-    }
-    get("allowspecialcheckbox").onclick = function () {
-        handleclick("special");
-    }
-    get("minlower").onblur = function () {
-        handleblur("minlower", "minlower");
-    }
-    get("minlower").onmouseleave = function () {
-        handleblur("minlower", "minlower");
-    }
-    get("minupper").onblur = function () {
-        handleblur("minupper", "minupper");
-    }
-    get("minupper").onmouseleave = function () {
-        handleblur("minupper", "minupper");
-    }
-    get("minnumber").onblur = function () {
-        handleblur("minnumber", "minnumber");
-    }
-    get("minnumber").onmouseleave = function () {
-        handleblur("minnumber", "minnumber");
-    }
-    get("minspecial").onblur = function () {
-        handleblur("minspecial", "minspecial");
-    }
-    get("minspecial").onmouseleave = function () {
-        handleblur("minspecial", "minspecial");
-    }
-    get("specials").onblur = function () {
-        handleblur("specials", "specials");
-    }
-    get("specials").onmouseleave = function () {
-        handleblur("specials", "specials");
-    }
-    get("settingsshow").onclick = show;
-    get("settingssave").onclick = save;
-    get("sitedatagetbutton").onclick = sitedataHTML;
-    get("warningbutton").onclick = function () {
-        get("masterpw").disabled = false;
-        get("username").disabled = false;
-        get("sitename").disabled = false;
-        message("phishing", false);
-        var n = get("sitename").value;
-        settings = clone(persona.sitenames[n]);
-        persona.sites[get("domainname").value] = settings.sitename;
-        get("username").value = settings.username;
-        ask2generate();
-    }
-    get("cancelwarning").onclick = function () {
-        bookmarkOff();
-        message("phishing", false);
-        get("domainname").value = "";
-        get("sitename").value = "";
-        get("username").value = "";
-        get("masterpw").disabled = false;
-        get("sitename").disabled = false;
-        get("username").disabled = false;
-        settings.sitename = "";
-        settings.username = "";
-        ask2generate();
-    }
-    get("remember").onclick = function () {
-        if (debugssp) {
-            localStorage.removeItem("hpSPG");
-            return;
+        function handleBlur(id) {
+            const $element = get(id);
+            SitePassword.settings[id] = $element.value;
+            generatePassword();
         }
-        if (get("clearmasterpw").checked) {
-            get("masterpw").value = "";
-            ask2generate();
+        function handleKeyup(id) {
+            const $element = get(id);
+            SitePassword.settings[id] = $element.value;
+            generatePassword();
+            //$element.focus();
         }
-        settings.sitename = get("sitename").value;
-        if (settings.sitename) {
-            persona.sitenames[settings.sitename] = clone(settings);
-            persona.sites[settings.domainname] = settings.sitename;
-        } else {
-            delete persona.sites[settings.domainname];
-            get("username").value = "";
-        }
-        hpSPG.lastpersona = getlowertrim("persona");
-        persistObject("hpSPG", hpSPG);
-    }
-    get("instructions").onclick = function () {
-        if (get("instructions").checked) {
-            get("sections").style.display = "block";
-        } else {
-            get("sections").style.display = "none";
-        }
-    }
-    get("overview").onclick = function () { sectionClick("overview"); };
-    get("masterpassword").onclick = function () { sectionClick("masterpassword"); };
-    get("acceptable").onclick = function () { sectionClick("acceptable"); };
-    get("change").onclick = function () { sectionClick("change"); };
-    get("phishinginst").onclick = function () { sectionClick("phishinginst"); };
-    get("extension").onclick = function () { sectionClick("extension"); };
-    get("apps").onclick = function () { sectionClick("apps"); };
-    get("download").onclick = function () { sectionClick("download"); };
-    get("source").onclick = function () { sectionClick("source"); };
-    get("payment").onclick = function () { sectionClick("payment"); };
-    init();
-}
-function bookmarkOn() {
-    get("bookmark").style.visibility = "visible";
-    get("alternate").style.visibility = "visible";
-    get("first").style.display = "none";
-    get("second").style.display = "block";
-}
-function bookmarkOff() {
-    get("bookmark").style.visibility = "hidden";
-    get("alternate").style.visibility = "hidden";
-    get("first").style.display = "block";
-    get("second").style.display = "none";
-}
-function sectionClick(elementId) {
-    let element = get(elementId + "p");
-    if (element.style.display === "none") {
-        element.style.display = "block";
-    } else {
-        element.style.display = "none";
-    }
-}
-function handlekeyup(element, field) {
-    settings[field] = get(element).value;
-    ask2generate();
-    get(element).focus();
-}
-function handleblur(element, field) {
-    if (element === "masterpw") {
-        masterpw = get(element).value;
-    } else {
-        settings[field] = get(element).value;
-    }
-    settings.characters = characters(settings, hpSPG);
-    ask2generate();
-}
-function handleclick(which) {
-    settings["allow" + which] = get("allow" + which + "checkbox").checked;
-    var minwhich = get("min" + which);
-    if (get("allow" + which + "checkbox").checked) {
-        get("allow" + which).style.display = "none";
-        get("require" + which).style.display = "inline";
-        minwhich.disabled = false;
-        minwhich.value = settings["min" + which];
-        if (which == "special") get("specials").disabled = false;
-    } else {
-        if (!(settings.allowupper || settings.allowlower)) {
-            settings.startwithletter = false;
-            get("startwithletter").checked = false;
-        }
-        get("allow" + which).style.display = "inline";
-        get("require" + which).style.display = "none";
-        minwhich.disabled = true;
-        minwhich.value = settings["min" + which];
-        if (which == "special") get("specials").disabled = true;
-    }
-    settings.characters = characters(settings)
-    ask2generate();
-}
-function init() {
-    get("domainname").value = "";
-    get("masterpw").value = "";
-    get("sitename").value = "";
-    get("username").value = "";
-    bginit();
-    persona = hpSPG.personas[hpSPG.lastpersona.toLowerCase()];
-    get("persona").value = persona.personaname;
-    settings = clone(persona.sitenames.default);
-    var hostname = getlowertrim("domainname");
-    if (hostname && persona.sites[hostname]) {
-        settings = clone(persona.sitenames[persona.sites[hostname]]);
-    }
-    settings.domainname = hostname;
-    if (persona.sites[domainname]) {
-        settings.username = persona.sites[domainname].username;
-    } else {
-        settings.username = "";
-    }
-    fill();
-    ask2generate();
-    get("bookmark").focus();
-}
-function enable() {
-    if (get("domainname").value && get("sitename").value && get("username").value) {
-        get("remember").disabled = false;
-    } else {
-        get("remember").disabled = true;
-    }
-}
-function setfocus() {
-    if (!get("username").value) get("username").focus();
-    if (!get("sitename").value) get("sitename").focus();
-    if (!get("masterpw").value) get("masterpw").focus();
-    //if (!get("domainname").value) get("domainname").focus();
-}
-function getsettings() {
-    var personaname = getlowertrim("persona");
-    var domainname = getlowertrim("domainname");
-    persona = hpSPG.personas[personaname];
-    if (!persona) {
-        hpSPG.personas[personaname] = clone(hpSPG.personas.default);
-        persona = hpSPG.personas[personaname];
-        settings = clone(persona.sitenames.default);
-        persona.personaname = get("persona").value;
-        settings.domainname = domainname;
-        settings.sitename = getlowertrim("sitename");
-        settings.characters = characters(settings);
-    }
-    if (persona.sites[domainname]) {
-        settings = clone(persona.sitenames[persona.sites[domainname]]);
-    } else {
-        settings = clone(persona.sitenames.default);
-    }
-    fill();
-    //get("masterpw").focus();
-    return settings;
-}
-function ask2generate() {
 
-    var p = "";
-    if (!(settings.allowupper || settings.allowlower || settings.allownumber)) {
-        message("nopw", true);
-    } else {
-        message("nopw", false);
-        var r = generate(settings);
-        p = r.p;
-        if (p) {
-            message("nopw", false);
-        } else {
-            p = "";
-            if (get("masterpw").value) {
-                message("nopw", true);
+        const $instructionpanel = get("instructionpanel");
+        const $maininfo = get("maininfo");
+        $maininfo.onclick = function () {
+            if ($instructionpanel.style.display === "none") {
+                $instructionpanel.style.display = "block";
+            } else {
+                $instructionpanel.style.display = "none";
             }
         }
+
+        $masterpw.onblur = function () {
+            SitePassword.setMasterPassword($masterpw.value);
+            generatePassword();
+        }
+        $masterpw.onkeyup = function () {
+            $masterpw.onblur();
+            //$masterpw.focus();
+        }
+        const $masterpwhide = get("masterpwhide");
+        const $masterpwshow = get("masterpwshow");
+        $masterpwhide.onclick = function () {
+            $masterpw.type = "password";
+            $masterpwhide.style.display = "none";
+            $masterpwshow.style.display = "block";
+            $masterpw.focus();
+        }
+        $masterpwshow.onclick = function () {
+            $masterpw.type = "text";
+            $masterpwhide.style.display = "block";
+            $masterpwshow.style.display = "none";
+            $masterpw.focus();
+        }
+
+        $domainname.onblur = function () {
+            const domainname = parseDomain(normalize($domainname.value));
+            $domainname.value = domainname;
+            SitePassword.domainname = domainname;
+            const sitename = SitePassword.siteForDomain(domainname);
+            const settings = SitePassword.loadSettings(sitename);
+            updateSettings(settings);
+        }
+        $domainname.onpaste = function () {
+            setTimeout(() => {
+                enableBookmark();
+                //$domainname.onblur();
+                $bookmark.focus();  // NOTE: this causes `onblur`
+            }, 0);
+        }
+        $domainname.onkeyup = function () {
+            enableBookmark();
+        }
+        function parseDomain(url) {
+            const split = url.split("/");
+            let domain = (split.length > 1 ? split[2] : split[0]);
+            if (domain && !isValidDomain(normalize(domain))) {
+                alert("Invalid domain.  Try again.");
+                domain = "";
+            }
+            return domain;
+        }
+        // From https://miguelmota.com/bytes/validate-domain-regex/
+        function isValidDomain(v) {
+            if (!v) return false;
+            var re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
+            return re.test(v);
+        }
+        function updateSettings(settings) {
+            $sitename.value = settings.sitename;
+            $username.value = settings.username;
+            loadSettingControls(settings);
+            phishingWarningOff();
+            generatePassword();
+        }
+
+        // loginurl = https://alantheguru.alanhkarp.com/
+        // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22,%22characters%22:%22abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ab%22,%22displayname%22:%22alantheguru.alanhkarp.com%22}
+        // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22}
+        // sitepw --> qPz43sW0Ws
+        // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"The Real Alan","username":"dalnefre","pwlength":"15","startwithletter":false,"allowlower":true,"minlower":"1","allowupper":true,"minupper":"1","allownumber":true,"minnumber":"1","allowspecial":true,"minspecial":"1","specials":"$/!=@?._-"}
+        // sitepw --> G.iJQEp-qB65UF5
+        $bookmark.onpaste = function () {
+            setTimeout(() => {
+                const settings = parseBookmark($bookmark.value);
+                $bookmark.value = "";  // clear bookmark field
+                if (settings) {
+                    if (settings.domainname === $domainname.value) {
+                        SitePassword.settings = settings;  // update data-model
+                        updateSettings(settings);
+                    } else {
+                        $sitename.value = settings.sitename;
+                        //alert("Bookmark is not for this domain. Try another one.");
+                        phishingWarningOn(settings);
+                    }
+                } else {
+                    alert("Invalid bookmark. Copy it again?");
+                }
+            }, 0);
+        }
+        function parseBookmark(bookmark) {
+            let settings = undefined;
+            if (bookmark.startsWith("ssp://")) {
+                try {
+                    let json = bookmark.substring(6)
+                        .replace(/%22/g, '"')
+                        .replace(/%7B/, '{')
+                        .replace(/%7D/, '}');
+                    settings = JSON.parse(json);
+                } catch {
+                    console.log(e);
+                }
+            }
+            console.log("Bookmark settings:", settings);
+            return settings;
+        }
+        function enableBookmark() {
+            $bookmark.disabled = !($domainname.value);
+        }
+
+        $sitename.onblur = function () {
+            handleBlur("sitename");
+            const domainname = $domainname.value;
+            const settings = SitePassword.loadSettings($sitename.value);
+            const sitename = settings.sitename;
+            if (!sitename) {
+                // retain sitename/username for unknown site
+                settings.sitename = $sitename.value;
+                settings.username = $username.value;
+                SitePassword.settings = settings;
+                phishingWarningOff();
+            } else if (SitePassword.validateDomain(domainname, sitename)) {
+                updateSettings(settings);
+            } else {
+                phishingWarningOn(settings);
+            }
+        }
+        $sitename.onkeyup = function () {
+            handleKeyup("sitename");
+        }
+
+        $username.onkeyup = function () {
+            handleKeyup("username");
+        }
+
+        const $phishing = get("phishing");
+        $resetbutton.onclick = function () {
+            $domainname.value = "";
+            enableBookmark();
+            SitePassword.domainname = "";
+            $results.style.display = "block";  // show sitepw/remember/settings...
+            const settings = SitePassword.loadSettings();
+            updateSettings(settings);
+        }
+        function phishingWarningOn(settings) {
+            $phishing.style.display = "block";
+            $results.style.display = "none";  // hide sitepw/remember/settings...
+            $domainname.classList.add("bad-input");
+            $domainname.disabled = true;
+            $resetbutton.focus();
+            $trustbutton.onclick = function () {
+                SitePassword.settings = settings;
+                updateSettings(settings);
+            };
+        }
+        function phishingWarningOff() {
+            $phishing.style.display = "none";
+            $results.style.display = "block";  // show sitepw/remember/settings...
+            $domainname.classList.remove("bad-input");
+            $domainname.disabled = false;
+            $trustbutton.onclick = function () {
+                console.log("WARNING! trustbutton clicked while phishing warning off.");
+            };
+        }
+
+        const $sitepwhide = get("sitepwhide");
+        const $sitepwshow = get("sitepwshow");
+        $sitepwhide.onclick = function () {
+            $sitepw.type = "password";
+            $sitepwhide.style.display = "none";
+            $sitepwshow.style.display = "block";
+            //$sitepw.focus();
+        }
+        $sitepwshow.onclick = function () {
+            $sitepw.type = "text";
+            $sitepwhide.style.display = "block";
+            $sitepwshow.style.display = "none";
+            $sitepw.focus();
+        }
+        get("sitepwcopy").onclick = function () {
+            copyToClipboard($sitepw);
+        }
+
+        $remember.onclick = function () {
+            SitePassword.storeSettings();
+            //phishingWarningOff();
+            enableRemember();
+        }
+        $forget.onclick = function () {
+            const settings = SitePassword.forgetSettings();
+            $domainname.value = "";
+            updateSettings(settings);
+        }
+        function enableRemember() {
+            $remember.disabled =
+                !($domainname.value && $sitename.value && $username.value && SitePassword.settingsModified());
+            $forget.disabled =
+                (!$domainname.value || SitePassword.settingsModified());
+        }
+
+        const $settingsshow = get("settingsshow");
+        const $settingssave = get("settingssave");
+        const $settings = get("settings");
+        $settingsshow.onclick = function () {
+            $settingsshow.style.display = "none";
+            $settingssave.style.display = "inline";
+            $settings.style.display = "block";
+        }
+        $settingssave.onclick = function () {
+            $settingsshow.style.display = "inline";
+            $settingssave.style.display = "none";
+            $settings.style.display = "none";
+        }
+
+        $pwlength.onkeyup = function () {
+            handleKeyup("pwlength");
+        }
+        $startwithletter.onclick = function () {
+            SitePassword.settings.startwithletter = $startwithletter.checked;
+            restrictStartsWithLetter();
+            generatePassword();
+        }
+        $allowlowercheckbox.onclick = function () {
+            handleCheck("lower");
+        }
+        $minlower.onkeyup = function () {
+            handleKeyup("minlower");
+        }
+        $allowuppercheckbox.onclick = function () {
+            handleCheck("upper");
+        }
+        $minupper.onkeyup = function () {
+            handleKeyup("minupper");
+        }
+        $allownumbercheckbox.onclick = function () {
+            handleCheck("number");
+        }
+        $minnumber.onkeyup = function () {
+            handleKeyup("minnumber");
+        }
+        $allowspecialcheckbox.onclick = function () {
+            handleCheck("special");
+            $specials.disabled = !($allowspecialcheckbox.checked);
+        }
+        $minspecial.onkeyup = function () {
+            handleKeyup("minspecial");
+        }
+        const alphanumerics = /[0-9A-Za-z]/g;
+        $specials.onkeyup = function () {
+            $specials.value = $specials.value
+                .replace(alphanumerics, '')  // eliminate alphanumerics
+                .substring(0, 12);  // limit to 12 specials
+            handleKeyup("specials");
+        }
+        function handleCheck(group) {
+            const $allow_group_checkbox = get("allow"+group+"checkbox");
+            const $min_group = get("min"+group);
+            const $allow_group = get("allow"+group);
+            const $require_group = get("require"+group);
+            if ($allow_group_checkbox && $allow_group && $require_group && $min_group) {
+                SitePassword.settings["allow"+group] = $allow_group_checkbox.checked;
+                if ($allow_group_checkbox.checked) {
+                    $allow_group.style.display = "none";
+                    $require_group.style.display = "inline";
+                    $min_group.disabled = false;
+                    $min_group.value = SitePassword.settings["min"+group];
+                } else {
+                    $allow_group.style.display = "inline";
+                    $require_group.style.display = "none";
+                    $min_group.disabled = true;
+                    $min_group.value = SitePassword.settings["min"+group];
+                }
+                restrictStartsWithLetter();
+                generatePassword();
+            } else {
+                console.log('handleCheck: missing control(s) for group:', group);
+            }
+        }
+        function restrictStartsWithLetter() {
+            let settings = SitePassword.settings;
+            if (!(settings.allowupper || settings.allowlower)) {
+                settings.startwithletter = false;
+                $startwithletter.checked = false;
+            }
+        }
+
+        $downloadbutton.onclick = function siteDataHTML() {
+            const domains = SitePassword.database.domains;
+            const sites = SitePassword.database.sites;
+            const sorted = Object.keys(domains).sort(function (x, y) {
+                var a = x.toLowerCase();
+                var b = y.toLowerCase();
+                if (domains[a].toLowerCase() < domains[b].toLowerCase()) return -1;
+                if (domains[a].toLowerCase() == domains[b].toLowerCase()) return 0;
+                return 1;
+            });
+            let sd = "<html><body><table>";
+            sd += "<th>Site Name</th>";
+            sd += "<th>Domain Name</th>";
+            sd += "<th>User Name</th>";
+            sd += "<th>Password Length</th>";
+            sd += "<th>Start with Letter</th>";
+            sd += "<th>Allow Lower</th>";
+            sd += "<th>Min Lower</th>";
+            sd += "<th>Allow Upper</th>";
+            sd += "<th>Min Upper</th>";
+            sd += "<th>Allow Numbers</th>";
+            sd += "<th>Min Numbers</th>";
+            sd += "<th>Allow Specials</th>";
+            sd += "<th>Min Specials</th>";
+            sd += "<th>Specials</th>";
+            sd += "</tr>";
+            for (const i = 0; i < sorted.length; i++) {
+                const domainname = sorted[i];
+                const sitename = domains[domainname];
+                const s = sites[sitename];
+                sd += "<tr>";
+                sd += "<td><pre>" + domainname + "</pre></td>";
+                sd += "<td><pre>" + s.sitename + "</pre></td>";
+                sd += "<td><pre>" + s.username + "</pre></td>";
+                sd += "<td><pre>" + s.pwlength + "</pre></td>";
+                sd += "<td><pre>" + s.startwithletter + "</pre></td>";
+                sd += "<td><pre>" + s.allowlower + "</pre></td>";
+                sd += "<td><pre>" + s.minlower + "</pre></td>";
+                sd += "<td><pre>" + s.allowupper + "</pre></td>";
+                sd += "<td><pre>" + s.minupper + "</pre></td>";
+                sd += "<td><pre>" + s.allownumber + "</pre></td>";
+                sd += "<td><pre>" + s.minnumber + "</pre></td>";
+                sd += "<td><pre>" + s.allowspecial + "</pre></td>";
+                sd += "<td><pre>" + s.minspecial + "</pre></td>";
+                sd += "<td><pre>" + s.specials + "</pre></td>";
+                sd += "</tr>";
+            }
+            sd += "</table></body></html>";
+            const $data = get("data");
+            const mimetype = "data:application/octet-stream,";
+            $data.href = mimetype + encodeURIComponent(sd);
+            $data.click();
+            return sd;
+        }
+
+        get("overviewinfo").onclick = function () { sectionClick("overview"); };
+        get("masterinfo").onclick = function () { sectionClick("master"); };
+        get("acceptableinfo").onclick = function () { sectionClick("acceptable"); };
+        get("changeinfo").onclick = function () { sectionClick("change"); };
+        get("phishinginfo").onclick = function () { sectionClick("phishing"); };
+        get("extensioninfo").onclick = function () { sectionClick("extension"); };
+        get("appsinfo").onclick = function () { sectionClick("apps"); };
+        get("downloadinfo").onclick = function () { sectionClick("download"); };
+        get("sourceinfo").onclick = function () { sectionClick("source"); };
+        get("paymentinfo").onclick = function () { sectionClick("payment"); };
+        function sectionClick(id) {
+            const element = get(id + "div");
+            if (element.style.display === "none") {
+                element.style.display = "block";
+                get("open" + id).style.display = "none";
+                get("close" + id).style.display = "block";
+            } else {
+                element.style.display = "none";
+                get("open" + id).style.display = "block";
+                get("close" + id).style.display = "none";
+            }
+        }
+
+        $masterpw.focus();
     }
-    get("sitepass").value = p;
-    //copyToClipboard();
+    return self;
+})({
+    version: "1.0",
+}));
+window.onload = function () {
+    SitePasswordWeb.onload();
 }
-function fill() {
-    if (persona.sites[get("domainname").value]) {
-        if (!get("username").value) get("username").value = settings.username;
-        if (!get("sitename").value) get("sitename").value = settings.sitename;
-        get("pwlength").value = settings.length;
-        get("startwithletter").checked !== settings.startwithletter;
-        if (get("allowlowercheckbox").checked !== settings.allowlower) updateCheckbox("lower");
-        get("minlower").value = settings.minlower;
-        if (get("allowuppercheckbox").checked !== settings.allowupper) updateCheckbox("upper");
-        get("minupper").value = settings.minupper;
-        if (get("allownumbercheckbox").checked = settings.allownumber) updateCheckbox("number");
-        get("minnumber").value = settings.minnumber;
-        if (get("allowspecialcheckbox").checked !== settings.allowspecial) updateCheckbox("special");
-        get("minspecial").value = settings.minspecial;
-        get("specials").value = settings.specials;
-    } else {
-        settings.domainname = get("domainname").value.toLowerCase().trim();
-        settings.sitename = get("sitename").value.toLowerCase().trim();
-        settings.username = get("username").value.toLowerCase().trim();
-    }
-    get("clearmasterpw").checked = persona.clearmasterpw;
-}
-function updateCheckbox(which) {
-    let checkbox = get("allow" + which + "checkbox");
-    checkbox.checked = settings["allow" + which];
-    handleclick(which);
-}
-function show() {
-    get("settingsshow").style.display = "none";
-    get("settingssave").style.visibility = "visible";
-    get("domainname").value = settings.domainname;
-    get("masterpw").value = masterpw;
-    get("clearmasterpw").checked = persona.clearmasterpw;
-    get("pwlength").value = settings.length;
-    get("startwithletter").checked = settings.startwithletter;
-    get("allowlower").checked = settings.allowlower;
-    get("allowupper").checked = settings.allowupper;
-    get("allownumber").checked = settings.allownumber;
-    get("allowspecial").checked = settings.allowspecial;
-    get("minnumber").value = settings.minnumber;
-    get("minlower").value = settings.minlower;
-    get("minupper").value = settings.minupper;
-    get("minspecial").value = settings.minspecial;
-    get("specials").value = settings.specials;
-    get("settings").style.display = "block";
-}
-function save() {
-    persistObject("hpSPG", hpSPG);
-    get("settingsshow").style.display = "inline";
-    get("settingssave").style.visibility = "hidden";
-    get("settings").style.display = "none";
-}
-function sitedataHTML() {
-    var sites = persona.sites
-    var sitenames = persona.sitenames;
-    var sorted = Object.keys(sites).sort(function (x, y) {
-        var a = x.toLowerCase();
-        var b = y.toLowerCase();
-        if (sites[a].toLowerCase() < sites[b].toLowerCase()) return -1;
-        if (sites[a].toLowerCase() == sites[b].toLowerCase()) return 0;
-        return 1;
-    });
-    var sd = "<html><body><table>";
-    sd += "<th>Site Name</th>";
-    sd += "<th>Domain Name</th>";
-    sd += "<th>User Name</th>";
-    sd += "<th>Password Length</th>";
-    sd += "<th>Start with Letter</th>";
-    sd += "<th>Allow Lower</th>";
-    sd += "<th>Min Lower</th>";
-    sd += "<th>Allow Upper</th>";
-    sd += "<th>Min Upper</th>";
-    sd += "<th>Allow Numbers</th>";
-    sd += "<th>Min Numbers</th>";
-    sd += "<th>Allow Specials</th>";
-    sd += "<th>Min Specials</th>";
-    sd += "<th>Specials</th>";
-    sd += "</tr>";
-    for (var i = 0; i < sorted.length; i++) {
-        var domainname = sorted[i];
-        var sitename = sites[sorted[i]];
-        var s = sitenames[sitename];
-        sd += "<tr>";
-        sd += "<td><pre>" + sitename + "</pre></td>";
-        sd += "<td><pre>" + domainname + "</pre></td>";
-        sd += "<td><pre>" + s.username + "</pre></td>";
-        sd += "<td><pre>" + s.length + "</pre></td>";
-        sd += "<td><pre>" + s.startwithletter + "</pre></td>";
-        sd += "<td><pre>" + s.allowlower + "</pre></td>";
-        sd += "<td><pre>" + s.minlower + "</pre></td>";
-        sd += "<td><pre>" + s.allowupper + "</pre></td>";
-        sd += "<td><pre>" + s.minupper + "</pre></td>";
-        sd += "<td><pre>" + s.allownumber + "</pre></td>";
-        sd += "<td><pre>" + s.minnumber + "</pre></td>";
-        sd += "<td><pre>" + s.allowspecial + "</pre></td>";
-        sd += "<td><pre>" + s.minspecial + "</pre></td>";
-        sd += "<td><pre>" + s.specials + "</pre></td>";
-        sd += "</tr>";
-    }
-    sd += "</table></body></html>";
-    var mimetype = "data:application/octet-stream,";
-    var download = get("data");
-    download.href = mimetype + sd;
-    download.click();
-    return sd;
-}
-function isphishing(sitename) {
-    if (!sitename) return false;
-    var domainname = get("domainname").value.toLowerCase().trim();
-    var domains = Object.keys(persona.sites);
-    var phishing = false;
-    domains.forEach(function (d) {
-        if ((persona.sites[d].toLowerCase().trim() == sitename.toLowerCase().trim()) &&
-            (d.toLowerCase().trim() != domainname)) phishing = true;
-    });
-    return phishing;
-}
-function specialclick() {
-    var minspecial = get("minspecial");
-    var specials = get("specials");
-    if (get("allowspecial").checked) {
-        minspecial.disabled = false;
-        minspecial.value = settings.minspecial;
-        specials.disabled = false;
-        specials.value = "/!=@?._-";
-    } else {
-        minspecial.disabled = true;
-        specials.disabled = true;
-    }
-    settings.characters = characters(settings);
-}
-function persistObject(name, value) {
-    if (value) {
-        localStorage[name] = JSON.stringify(value);
-    } else {
-        alert("Persist error: No value for :" + name);
-    }
-}
-function retrieveObject(name) {
-    try {
-        return JSON.parse(localStorage[name]);
-    } catch (e) {
-        return undefined;
-    }
-}
-function get(element) {
-    return document.getElementById(element);
-}
-function getlowertrim(element) {
-    return document.getElementById(element).value.toLowerCase().trim();
-}
-function clone(object) {
-    return JSON.parse(JSON.stringify(object))
-}
-function copyToClipboard() {
-    get("sitepass").focus();
-    navigator.clipboard.writeText(password);
-}
-var msgstate = [false, false, false, false, false];
-var msgpriority = ["phishing", "nopw"];
-function message(msgname, turnon) {
-    if ("phishing" == msgname) msgstate[0] = turnon;
-    if ("nopw" == msgname) msgstate[1] = turnon;
-    get("phishing").style.display = "none";
-    get("nopw").style.display = "none";
-    if (msgstate[1]) {
-        get("phishing").style.display = "none";
-        get("nopw").style.display = "block";
-    }
-    if (msgstate[0]) {
-        get("phishing").style.display = "block";
-        get("nopw").style.display = "none";
-    }
-}
-// From https://miguelmota.com/bytes/validate-domain-regex/
-function isValidDomain(v) {
-    if (!v) return false;
-    var re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
-    return re.test(v);
-}
+
 /* 
 This code is a major modification of the code released with the
 following licence.  Neither Hewlett-Packard Company nor Hewlett-Packard
