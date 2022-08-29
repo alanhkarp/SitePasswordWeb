@@ -327,8 +327,9 @@ let SitePasswordWeb = ((function (self) {
             $resetbutton.focus();
             $trustbutton.onclick = function () {
                 SitePassword.settings = settings;
+                SitePassword.storeSettings();
                 updateSettings(settings);
-            };
+           };
         }
         function phishingWarningOff() {
             $phishing.style.display = "none";

@@ -206,7 +206,20 @@ let SitePassword = ((function (self) {
         const settings = self.settings;
         const sitename = normalize(settings.sitename);
         if (domainname && sitename) {
-            self.database.domains[domainname] = sitename;
+            let oldsitename = self.database.domains[domainname];
+            if ((!oldsitename) || sitename === oldsitename) {
+                self.database.domains[domainname] = sitename;
+            } else {
+                // Find all domains that point to oldsitename 
+                // and have them point to the new one
+                for (let key of Object.keys(self.database.domains)) {
+                    if (self.database.domains[key] === oldsitename) {
+                        self.database.domains[key] = sitename;
+                    }
+                }
+                // then remove the old site name from database.sites
+                delete self.database.sites[oldsitename];
+            }
             self.database.sites[sitename] = cloneObject(settings);
             persistDatabase(self.database);
             cachedsettings = JSON.stringify(settings);
