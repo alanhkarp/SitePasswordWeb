@@ -222,11 +222,11 @@ let SitePassword = ((function (self) {
             }
             self.database.sites[sitename] = cloneObject(settings);
             persistDatabase(self.database);
-            cachedsettings = JSON.stringify(settings);
+            cachedsettings = JSON.stringify(cloneObject(settings));
         }
     }
     self.settingsModified = function () {
-        return (cachedsettings !== JSON.stringify(self.settings));
+        return (cachedsettings !== JSON.stringify(cloneObject(self.settings)));
     }
     self.forgetSettings = function () {
         const domainname = self.domainname;

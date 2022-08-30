@@ -128,16 +128,16 @@ let SitePasswordWeb = ((function (self) {
             }
         }
         function saveSettingControls(settings) {
-            settings.pwlength = $pwlength.value;
+            settings.pwlength = + $pwlength.value;
             settings.startwithletter = $startwithletter.checked;
             settings.allowlower = $allowlowercheckbox.checked;
-            settings.minlower = $minlower.value;
+            settings.minlower = + $minlower.value;
             settings.allowupper = $allowuppercheckbox.checked;
-            settings.minupper = $minupper.value;
+            settings.minupper = + $minupper.value;
             settings.allownumber = $allownumbercheckbox.checked;
-            settings.minnumber = $minnumber.value;
+            settings.minnumber = + $minnumber.value;
             settings.allowspecial = $allowspecialcheckbox.checked;
-            settings.minspecial = $minspecial.value;
+            settings.minspecial = + $minspecial.value;
             settings.specials = $specials.value;
         }
         const $pwok = get("pwok");
@@ -159,6 +159,15 @@ let SitePasswordWeb = ((function (self) {
             const $element = get(id);
             SitePassword.settings[id] = $element.value;
             generatePassword();
+        }
+        function handleKeyupNumber(id) {
+            const value = get(id).value;
+            if (value && isNaN(value)) {
+                alert("Must be a number");
+            } else {
+                SitePassword.settings[id] = + value;
+                generatePassword();
+            }
         }
         function handleKeyup(id) {
             const $element = get(id);
@@ -391,7 +400,7 @@ let SitePasswordWeb = ((function (self) {
         }
 
         $pwlength.onkeyup = function () {
-            handleKeyup("pwlength");
+            handleKeyupNumber("pwlength");
         }
         $startwithletter.onclick = function () {
             SitePassword.settings.startwithletter = $startwithletter.checked;
@@ -402,26 +411,26 @@ let SitePasswordWeb = ((function (self) {
             handleCheck("lower");
         }
         $minlower.onkeyup = function () {
-            handleKeyup("minlower");
+            handleKeyupNumber("minlower");
         }
         $allowuppercheckbox.onclick = function () {
             handleCheck("upper");
         }
         $minupper.onkeyup = function () {
-            handleKeyup("minupper");
+            handleKeyupNumber("minupper");
         }
         $allownumbercheckbox.onclick = function () {
             handleCheck("number");
         }
         $minnumber.onkeyup = function () {
-            handleKeyup("minnumber");
+            handleKeyupNumber("minnumber");
         }
         $allowspecialcheckbox.onclick = function () {
             handleCheck("special");
             $specials.disabled = !($allowspecialcheckbox.checked);
         }
         $minspecial.onkeyup = function () {
-            handleKeyup("minspecial");
+            handleKeyupNumber("minspecial");
         }
         const alphanumerics = /[0-9A-Za-z]/g;
         $specials.onkeyup = function () {
