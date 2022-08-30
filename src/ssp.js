@@ -287,7 +287,7 @@ let SitePasswordWeb = ((function (self) {
                     console.log(e);
                 }
             }
-            console.log("Bookmark settings:", settings);
+            // console.log("Bookmark settings:", settings);
             return settings;
         }
         function enableBookmark() {
