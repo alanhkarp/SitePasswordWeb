@@ -158,6 +158,9 @@ button:enabled:active {
   right: 2em;
   top: 4px;
 }
+#sitepwcopy:active {
+  color: #aa0;
+}
 .accordian {
   float: left;
   padding-right: 1ex;

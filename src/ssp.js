@@ -367,7 +367,6 @@ let SitePasswordWeb = ((function (self) {
         get("sitepwcopy").onclick = function () {
             copyToClipboard($sitepw);
         }
-
         $remember.onclick = function () {
             SitePassword.storeSettings();
             //phishingWarningOff();
