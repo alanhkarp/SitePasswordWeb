@@ -128,16 +128,16 @@ let SitePasswordWeb = ((function (self) {
             }
         }
         function saveSettingControls(settings) {
-            settings.pwlength = + $pwlength.value;
+            settings.pwlength = +$pwlength.value;
             settings.startwithletter = $startwithletter.checked;
             settings.allowlower = $allowlowercheckbox.checked;
-            settings.minlower = + $minlower.value;
+            settings.minlower = +$minlower.value;
             settings.allowupper = $allowuppercheckbox.checked;
-            settings.minupper = + $minupper.value;
+            settings.minupper = +$minupper.value;
             settings.allownumber = $allownumbercheckbox.checked;
-            settings.minnumber = + $minnumber.value;
+            settings.minnumber = +$minnumber.value;
             settings.allowspecial = $allowspecialcheckbox.checked;
-            settings.minspecial = + $minspecial.value;
+            settings.minspecial = +$minspecial.value;
             settings.specials = $specials.value;
         }
         const $pwok = get("pwok");
@@ -165,7 +165,7 @@ let SitePasswordWeb = ((function (self) {
             if (value && isNaN(value)) {
                 alert("Must be a number");
             } else {
-                SitePassword.settings[id] = + value;
+                SitePassword.settings[id] = +value;
                 generatePassword();
             }
         }
