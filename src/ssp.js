@@ -280,8 +280,8 @@ let SitePasswordWeb = ((function (self) {
                 try {
                     let json = bookmark.substring(6)
                         .replace(/%22/g, '"')
-                        .replace(/%7B/, '{')
-                        .replace(/%7D/, '}');
+                        .replace(/%7B/g, '{')
+                        .replace(/%7D/g, '}');
                     settings = JSON.parse(json);
                 } catch {
                     console.log(e);
