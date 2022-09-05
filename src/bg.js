@@ -121,6 +121,7 @@ let SitePassword = ((function (self) {
             }
             pw = binl2b64(hswap, cset).substring(0, settings.pwlength);
             if (verifyPassword(pw, settings)) {
+                console.log("bg zxcvbn", zxcvbn(pw));
                 return pw;
             }
             iter++;
