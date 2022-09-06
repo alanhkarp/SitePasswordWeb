@@ -223,10 +223,10 @@ meter::-webkit-meter-bar {
 /* Webkit based browsers */
 meter[value="1"]::-webkit-meter-optimum-value { background: red; }
 meter[value="2"]::-webkit-meter-optimum-value { background: hotpink; }
-meter[value="3"]::-webkit-meter-optimum-value { background: orange; }
-meter[value="4"]::-webkit-meter-optimum-value { background: green; }
+meter[value="3"]::-webkit-meter-optimum-value { background: darkorange; }
+meter[value="4"]::-webkit-meter-optimum-value { background: mediumseagreen; }
 /* Gecko based browsers */
 meter[value="1"]::-moz-meter-bar { background: red; }
 meter[value="2"]::-moz-meter-bar { background: hotpink; }
-meter[value="3"]::-moz-meter-bar { background: orange; }
-meter[value="4"]::-moz-meter-bar { background: green; }
+meter[value="3"]::-moz-meter-bar { background: darkorange; }
+meter[value="4"]::-moz-meter-bar { background: mediumseagreen; }
