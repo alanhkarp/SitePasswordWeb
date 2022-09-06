@@ -185,7 +185,7 @@ let SitePasswordWeb = ((function (self) {
                 $instructionpanel.style.display = "none";
             }
         }
-        var strength = { 0: "Don't Use", 1: "     Bad", 2: "Weak", 3: "Good", 4: "Strong"}
+        var strength = { 0: "Don't Use", 1: "Bad", 2: "Weak", 3: "Good", 4: "Strong"}
         let $strength = get("strength");
         let $meter = get("password-strength-meter");
         let $meterText = get("password-strength-text");
@@ -195,7 +195,7 @@ let SitePasswordWeb = ((function (self) {
             let report = zxcvbn($masterpw.value);
             // This and related css from https://css-tricks.com/password-strength-meter/
             $meter.value = report.score;
-            $meterText.innerHTML = strength[report.score].padStart(8, ' ');
+            $meterText.innerHTML = strength[report.score];
         }
         $masterpw.onkeyup = function () {
             $masterpw.onblur();
