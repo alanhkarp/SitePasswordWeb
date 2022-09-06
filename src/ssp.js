@@ -199,7 +199,7 @@ let SitePasswordWeb = ((function (self) {
         }
         $masterpw.onkeyup = function () {
             $masterpw.onblur();
-            if (!$masterpw.value) {
+            if (!$masterpw.value || $masterpw.value.length > 20) {
                 $strength.style = "display:none";
             } else {
                 $strength.style = "display:inline";
