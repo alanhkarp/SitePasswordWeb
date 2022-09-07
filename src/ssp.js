@@ -193,13 +193,12 @@ let SitePasswordWeb = ((function (self) {
             SitePassword.setMasterPassword($masterpw.value);
             generatePassword();
             let report = zxcvbn($masterpw.value);
-            // This and related css from https://css-tricks.com/password-strength-meter/
             $meter.value = report.score;
             $meterText.innerHTML = strength[report.score];
         }
         $masterpw.onkeyup = function () {
             $masterpw.onblur();
-            if (!$masterpw.value || $masterpw.value.length > 20) {
+            if (!$masterpw.value || $masterpw.value.length > 19) {
                 $strength.style = "display:none";
             } else {
                 $strength.style = "display:inline";
