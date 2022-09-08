@@ -74,7 +74,10 @@ let SitePassword = ((function (self) {
     }
     function verifyPassword(pw, settings) {
         let report = zxcvbn(pw);
-        if (report.score < 4) return false;
+        if ((pw.length >= 12 && report.score < 4) ||
+            (pw.length >= 10 && pw.length < 12 && report.score < 3) ||
+            (pw.length >= 8 && pw.length < 10 && report.score < 2) ||
+            (pw.length < 8 && report.score < 1)) return false;
         var counts = { lower: 0, upper: 0, number: 0, special: 0 };
         for (var i = 0; i < pw.length; i++) {
             var c = pw.charAt(i);
@@ -248,7 +251,7 @@ let SitePassword = ((function (self) {
     version: "1.0",
     clearmasterpw: false,
     miniter: 100,
-    maxiter: 10000,
+    maxiter: 1000,
     digits: "0123456789",
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
