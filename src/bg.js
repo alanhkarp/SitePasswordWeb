@@ -73,6 +73,8 @@ let SitePassword = ((function (self) {
         return chars;
     }
     function verifyPassword(pw, settings) {
+        let report = zxcvbn(pw);
+        if (report.score < 4) return false;
         var counts = { lower: 0, upper: 0, number: 0, special: 0 };
         for (var i = 0; i < pw.length; i++) {
             var c = pw.charAt(i);
