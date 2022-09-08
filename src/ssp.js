@@ -153,6 +153,9 @@ let SitePasswordWeb = ((function (self) {
                 $pwfail.style.display = "flex";
             }
             $sitepw.value = pw;
+            const report = zxcvbn(pw);
+            $sitepw.style.color = strengthColor[report.score];
+            $sitepw.title = strengthText[report.score] + " Site Password";
             enableRemember();
         }
         function handleBlur(id) {
@@ -185,16 +188,19 @@ let SitePasswordWeb = ((function (self) {
                 $instructionpanel.style.display = "none";
             }
         }
-        var strength = { 0: "Don't Use", 1: "Bad", 2: "Weak", 3: "Good", 4: "Strong"}
-        let $strength = get("strength");
-        let $meter = get("password-strength-meter");
-        let $meterText = get("password-strength-text");
+
+        const strengthText = ["Don't Use", "Bad", "Weak", "Good", "Strong"];
+        const strengthColor = ["#bbb", "#f63", "#fc0", "#0c0", "#036"]; // 0,3,6,9,C,F
+        const $meter = get("password-strength-meter");
+        const $meterText = get("password-strength-text");
         $masterpw.onblur = function () {
             SitePassword.setMasterPassword($masterpw.value);
             generatePassword();
-            let report = zxcvbn($masterpw.value);
+            const report = zxcvbn($masterpw.value);
             $meter.value = report.score;
-            $meterText.innerHTML = strength[report.score];
+            $meterText.innerHTML = strengthText[report.score];
+            $masterpw.style.color = strengthColor[report.score];
+            $masterpw.title = strengthText[report.score] + " Master Password";
         }
         $masterpw.onkeyup = function () {
             $masterpw.onblur();
