@@ -204,11 +204,6 @@ let SitePasswordWeb = ((function (self) {
         }
         $masterpw.onkeyup = function () {
             $masterpw.onblur();
-            if (!$masterpw.value || $masterpw.value.length > 19) {
-                $strength.style = "display:none";
-            } else {
-                $strength.style = "display:inline";
-            }
             //$masterpw.focus();
         }
         const $masterpwhide = get("masterpwhide");
