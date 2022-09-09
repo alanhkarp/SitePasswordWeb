@@ -508,8 +508,7 @@ let SitePasswordWeb = ((function (self) {
             sd += "<th>Min Specials</th>";
             sd += "<th>Specials</th>";
             sd += "</tr>";
-            for (const i = 0; i < sorted.length; i++) {
-                const domainname = sorted[i];
+            for (const domainname of sorted) {
                 const sitename = domains[domainname];
                 const s = sites[sitename];
                 sd += "<tr>";
