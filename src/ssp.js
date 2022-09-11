@@ -153,6 +153,9 @@ let SitePasswordWeb = ((function (self) {
                 $pwfail.style.display = "flex";
             }
             $sitepw.value = pw;
+            const report = zxcvbn(pw);
+            $sitepw.style.color = strengthColor[report.score];
+            $sitepw.title = strengthText[report.score] + " Site Password";
             enableRemember();
         }
         function handleBlur(id) {
@@ -186,9 +189,18 @@ let SitePasswordWeb = ((function (self) {
             }
         }
 
+        const strengthText = ["Don't Use", "Bad", "Weak", "Good", "Strong"];
+        const strengthColor = ["#bbb", "#f63", "#fc0", "#0c0", "#036"]; // 0,3,6,9,C,F
+        const $meter = get("password-strength-meter");
+        const $meterText = get("password-strength-text");
         $masterpw.onblur = function () {
             SitePassword.setMasterPassword($masterpw.value);
             generatePassword();
+            const report = zxcvbn($masterpw.value);
+            $meter.value = report.score;
+            $meterText.innerHTML = strengthText[report.score];
+            $masterpw.style.color = strengthColor[report.score];
+            $masterpw.title = strengthText[report.score] + " Master Password";
         }
         $masterpw.onkeyup = function () {
             $masterpw.onblur();
@@ -496,8 +508,7 @@ let SitePasswordWeb = ((function (self) {
             sd += "<th>Min Specials</th>";
             sd += "<th>Specials</th>";
             sd += "</tr>";
-            for (const i = 0; i < sorted.length; i++) {
-                const domainname = sorted[i];
+            for (const domainname of sorted) {
                 const sitename = domains[domainname];
                 const s = sites[sitename];
                 sd += "<tr>";
