@@ -190,7 +190,7 @@ let SitePasswordWeb = ((function (self) {
         }
 
         const strengthText = ["Don't Use", "Bad", "Weak", "Good", "Strong"];
-        const strengthColor = ["#bbb", "#f63", "#fc0", "#0c0", "#036"]; // 0,3,6,9,C,F
+        const strengthColor = ["#bbb", "#f30", "#f90", "#0c0", "#036"]; // 0,3,6,9,C,F
         const $meter = get("password-strength-meter");
         const $meterText = get("password-strength-text");
         $masterpw.onblur = function () {
