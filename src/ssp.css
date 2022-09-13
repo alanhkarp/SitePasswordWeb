@@ -236,4 +236,5 @@ meter[value="4"]::-moz-meter-bar { background: #036; }
 #password-strength-text {
   font-size: 90%;
   padding-left: 1ex;
+  width: 10ex;
 }
