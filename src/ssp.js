@@ -240,6 +240,12 @@ let SitePasswordWeb = ((function (self) {
             enableBookmark();
         }
         function parseDomain(url) {
+            const protocol = url.split(":")[0].toLowerCase();
+            if (protocol !== "https") {
+                httpWarningOn();
+            } else {
+                httpWarningOff();
+            }
             const split = url.split("/");
             let domain = (split.length > 1 ? split[2] : split[0]);
             if (domain && !isValidDomain(normalize(domain))) {
@@ -341,6 +347,7 @@ let SitePasswordWeb = ((function (self) {
             updateSettings(settings);
         }
         function phishingWarningOn(settings) {
+            httpWarningOff();
             $phishing.style.display = "block";
             $results.style.display = "none";  // hide sitepw/remember/settings...
             $domainname.classList.add("bad-input");
@@ -360,6 +367,13 @@ let SitePasswordWeb = ((function (self) {
             $trustbutton.onclick = function () {
                 console.log("WARNING! trustbutton clicked while phishing warning off.");
             };
+        }
+        const $http = get("http");
+        function httpWarningOn() {
+            $http.style.display = "block";
+        }
+        function httpWarningOff() {
+            $http.style.display = "none";
         }
 
         const $sitepwhide = get("sitepwhide");
