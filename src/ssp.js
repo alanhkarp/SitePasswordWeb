@@ -264,6 +264,7 @@ let SitePasswordWeb = ((function (self) {
             $sitename.value = settings.sitename;
             $username.value = settings.username;
             loadSettingControls(settings);
+            if ($username.value) httpWarningOff();
             phishingWarningOff();
             generatePassword();
         }
