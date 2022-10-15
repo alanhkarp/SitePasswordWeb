@@ -233,6 +233,26 @@
       <div id="instructionpanel" style="display: none;">
         <h2 class="nodisplay">Instructions</h2>
         <div id="sections">
+          <section id="useinfo">
+            <svg id="openuse" class="accordian" style="display: block;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 11 3 3 3-3"/></svg>
+            <svg id="closeuse" class="accordian" style="display: none;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 13 3-3 3 3"/></svg>
+            <h3>Who Should Use This Web Page</h3>
+            <div id="usediv" style="display: none;">
+              <p>
+                This web page is a companion to the SitePassword browser extension.
+                In addition to remembering your settings, the extension synchronizes them 
+                across your machines.  You should use the extension if you are on a 
+                compatible browser and device, currently Chrome and Edge on computers.  
+                Unfortunately, those browsers don't allow extensions on mobile devices.
+              </p>
+              <p>
+                The SitePassword web page is also available at 
+                <a href="https://alanhkarp.github.io/SitePasswordWeb/">
+                  https://alanhkarp.github.io/SitePasswordWeb/
+                </a>.
+              </p>  
+            </div>
+          </section>
           <section id="overviewinfo">
             <svg id="openoverview" class="accordian" style="display: block;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 11 3 3 3-3"/></svg>
             <svg id="closeoverview" class="accordian" style="display: none;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 13 3-3 3 3"/></svg>
@@ -242,21 +262,17 @@
                 SitePassword is different from most password managers.  Instead of 
                 storing your passwords, it calculates them from a single master password 
                 and your nickname and user name 
-                for the site.  That means you can get your password if 
-                you remember those three things.  You can also save your settings, so 
+                for the site.  That means you can usually get your password if 
+                you remember those three things.  (Some web pages require additional
+                settings.) You can also save your settings, so 
                 you don't have to remember them.
               </p>  
-              <p>
+             <p>
                 Since SitePassword doesn't store your passwords, there's no way
                 you can use your existing passwords with it.  You will have to use 
                 the web site's <em>Change Password</em> or <em>Forgot Password</em>
                 feature on sites where you already have accounts.
               </p>
-              <p>
-                SitePassword.info is a companion to the SitePassword Chrome extension.
-                In addition to remembering your settings, the extension synchronizes them 
-                across your machines.  The SitePassword web page is also available at https://alanhkarp.github.io/SitePasswordWeb/.
-              </p>  
             </div>
           </section>
           <section id="masterinfo">
@@ -272,6 +288,10 @@
                 can start guessing master passwords.  You want to make that job 
                 has hard as you can.
               </p>
+              <p>
+                After you paste your password into the login form, you should remove
+                it from the clipboard.  The easiest way to do that is to copy some 
+                innocuous text, such as something on the login page.
               <p>
                 SitePassword cannot retrieve your master password. 
                 You should make sure it's something you won't easily forget.  You 
@@ -289,7 +309,10 @@
                 if it must contain upper case or lower case letters, numbers, or
                 special characters, including restrictions on which special
                 characters are allowed.  If you run into a site that doesn't 
-                accept the calculated password, click the <em>More</em>
+                accept the calculated password, click the 
+                <svg width="12px" height="12px" viewBox="2 1 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 21h-4l-.551-2.48a6.991 6.991 0 0 1-1.819-1.05l-2.424.763-2-3.464 1.872-1.718a7.055 7.055 0 0 1 0-2.1L3.206 9.232l2-3.464 2.424.763A6.992 6.992 0 0 1 9.45 5.48L10 3h4l.551 2.48a6.992 6.992 0 0 1 1.819 1.05l2.424-.763 2 3.464-1.872 1.718a7.05 7.05 0 0 1 0 2.1l1.872 1.718-2 3.464-2.424-.763a6.99 6.99 0 0 1-1.819 1.052L14 21z"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                </svg>
                 button and change the appropriate menu entries.  SitePassword 
                 was tested on hundreds of web sites to make sure it can always 
                 compute a valid password.
@@ -330,13 +353,13 @@
           <section id="extensioninfo">
             <svg id="openextension" class="accordian" style="display: block;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 11 3 3 3-3"/></svg>
             <svg id="closeextension" class="accordian" style="display: none;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 13 3-3 3 3"/></svg>
-            <h3>The Extension and SitePassword.info</h3>
+            <h3>The Extension and this Page</h3>
             <div id="extensiondiv" style="display: none;">
               <p>
-                The SitePassword Chrome extension plays well with SitePassword.info. 
+                The SitePassword extension plays well with this page. 
                 In particular, the extension uses bookmarks to synchronize your 
                 settings across machines.  Pasting the appropriate bookmark into 
-                SitePassword.info fills in the form for you.
+                the bookmark field on this page fills in the form for you.
               </p>
               <p>
                 If the domain name of the URL you pasted does not match that of the 
@@ -357,10 +380,11 @@
             <div id="appsdiv" style="display: none;">
               <p>
                 You can calculate your password without 
-                providing a domain name, say to get the password for an app on your smart 
-                phone.  Of course, you won't be able to remember the settings until you 
-                provide a domain name.  You can just make one up, <em>e.g., MyApp</em>, which 
-                you'll use the next time you need a password for that app.
+                providing a domain name, say to get the password for an app on your mobile 
+                device.  Of course, you won't be able to remember the settings until you 
+                provide a domain name.  You can just make one up, 
+                <em>e.g., http://MyApp.com</em>, which you'll use the next time you need 
+                a password for that app.
               </p>
             </div>
           </section>

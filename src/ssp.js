@@ -551,6 +551,7 @@ let SitePasswordWeb = ((function (self) {
             return sd;
         }
 
+        get("useinfo").onclick = function () { sectionClick("use") };
         get("overviewinfo").onclick = function () { sectionClick("overview"); };
         get("masterinfo").onclick = function () { sectionClick("master"); };
         get("acceptableinfo").onclick = function () { sectionClick("acceptable"); };
