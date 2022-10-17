@@ -9,6 +9,7 @@
   <script language="javascript" type="text/javascript" src="src/ssp.js"></script>
   <script language="javascript" type="text/javascript" src="src/zxcvbn.js"></script>
   <link type="text/css" href="src/ssp.css" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="src/ssp.png">
 <!--
 <style type="text/css" media="all">
 </style>
@@ -289,13 +290,34 @@
                 has hard as you can.
               </p>
               <p>
-                After you paste your password into the login form, you should remove
-                it from the clipboard.  The easiest way to do that is to copy some 
-                innocuous text, such as something on the login page.
+                SitePassword can't prevent you from using a weak master password,
+                but it does warn you.  There is a strength indicator directly below 
+                the master password field.  It uses a meter, words, and color to 
+                let you know how strong your master password is. 
+              </p> 
               <p>
                 SitePassword cannot retrieve your master password. 
                 You should make sure it's something you won't easily forget.  You 
                 might even want to write it down and keep the copy in a secure place.
+              </p>
+            </div>
+          </section>
+              <section id="siteinfo">
+                <svg id="opensite" class="accordian" style="display: block;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 11 3 3 3-3"/></svg>
+                <svg id="closesite" class="accordian" style="display: none;" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 13 3-3 3 3"/></svg>
+                <h3>Your Site Password</h3>
+                <div id="sitediv" style="display: none;">
+                  <p>
+                SitePassword uses the same colors that appear in the master password 
+                strength meter to tell you how strong your site password is.  That's needed
+                because it could generate a weak site password just by chance.  
+                So, if your site password is orange, then it is weak.  In that case,
+                just choose a different nickname for the site.
+              </p>
+              <p>
+                After you paste your password into the login form, you should remove
+                it from the clipboard.  The easiest way to do that is to copy some 
+                innocuous text, such as something on the login page.
               </p>
             </div>
           </section>

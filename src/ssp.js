@@ -554,6 +554,7 @@ let SitePasswordWeb = ((function (self) {
         get("useinfo").onclick = function () { sectionClick("use") };
         get("overviewinfo").onclick = function () { sectionClick("overview"); };
         get("masterinfo").onclick = function () { sectionClick("master"); };
+        get("siteinfo").onclick = function () { sectionClick("site"); };
         get("acceptableinfo").onclick = function () { sectionClick("acceptable"); };
         get("changeinfo").onclick = function () { sectionClick("change"); };
         get("phishinginfo").onclick = function () { sectionClick("phishing"); };
