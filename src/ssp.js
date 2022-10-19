@@ -59,6 +59,12 @@ let SitePasswordWeb = ((function (self) {
     function copyToClipboard(element) {
         element.focus();
         navigator.clipboard.writeText(element.value);
+        let icon = document.querySelector("link[rel*='icon']");
+        icon.href = "src/ssp-pw.png";
+        document.body.onclick = function () {
+            document.querySelector("link[rel*='icon']").href = "src/ssp.png";
+            document.body.onclick = undefined;
+        }
     }
 
     self.onload = function () {
