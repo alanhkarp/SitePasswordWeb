@@ -148,15 +148,7 @@ let SitePassword = ((function (self) {
         }
         return "";
     }
-    function getOwner(domainname) {
-        try {
-            // From beautysleep at https://stackoverflow.com/questions/569137/how-to-get-domain-name-from-url
-            return domainname.match(/(\w|-)+(?=(\.(com|net|org|info|coop|int|co|ac|ie|co|ai|eu|ca|icu|top|xyz|tk|cn|ga|cf|nl|us|eu|de|hk|am|tv|bingo|blackfriday|gov|edu|mil|arpa|au|ru)(\.|\/|$)))/g)[0];
-        } catch {
-            return "";
-        }
-    }
-    
+
     self.normalize = normalize;
     self.generatePassword = generatePassword;
     self.getMasterPassword = function () {
@@ -185,9 +177,6 @@ let SitePassword = ((function (self) {
     }
     self.validateDomain = function (domainname, sitename) {
         domainname = normalize(domainname);
-        // Special case for my demo
-        if (domainname === "allantheguru.alanhkarp.com") return false;
-        const owner = getOwner(domainname);
         sitename = normalize(sitename);
         if (!domainname || !sitename) return true;  // nothing to check...
         const db = self.database;
@@ -195,8 +184,7 @@ let SitePassword = ((function (self) {
         const ds = Object.keys(db.domains);
         for (const d of ds) {
             const s = db.domains[d];
-            if (((s === sitename) && (d === domainname)) ||
-                 owner === getOwner(d)) {
+            if ((s === sitename) && (d === domainname)) {
                 return true;  // found matching entry, domainname is valid.
             }
         }
