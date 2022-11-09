@@ -241,16 +241,15 @@ let SitePasswordWeb = ((function (self) {
         }
         function parseDomain(url) {
             const protocol = url.split(":")[0].toLowerCase();
-            if (protocol !== "https") {
-                httpWarningOn();
-            } else {
-                httpWarningOff();
-            }
             const split = url.split("/");
             let domain = (split.length > 1 ? split[2] : split[0]);
             if (domain && !isValidDomain(normalize(domain))) {
                 alert("Invalid domain.  Try again.");
                 domain = "";
+            } else if (domain && protocol !== "https") {
+                httpWarningOn();
+            } else {
+                httpWarningOff();
             }
             return domain;
         }
@@ -408,7 +407,7 @@ let SitePasswordWeb = ((function (self) {
             $remember.disabled =
                 !($domainname.value && $sitename.value && $username.value && SitePassword.settingsModified());
             $forget.disabled =
-                (!$domainname.value || SitePassword.settingsModified());
+                (!$domainname.value || SitePassword.settingsModified()) || !$sitename.value;
         }
 
         const $settingsshow = get("settingsshow");
