@@ -41,6 +41,12 @@
   width: 22em;
   background-color: #8CF;
 }
+.logo {
+  height: 40px;
+  width: 40px;
+  position: relative;
+  top: 10px;
+}
 #bookmarks {
   cursor: default;
 }
