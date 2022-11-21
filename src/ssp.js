@@ -390,6 +390,9 @@ let SitePasswordWeb = ((function (self) {
             $sitepwshow.style.display = "none";
             $sitepw.focus();
         }
+        get("useridcopy").onclick = function () {
+            copyToClipboard($username);
+        }
         get("sitepwcopy").onclick = function () {
             copyToClipboard($sitepw);
         }
