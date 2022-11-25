@@ -184,6 +184,9 @@ button:enabled:active {
 #sitepwcopy:active {
   color: #aa0;
 }
+#useridcopy:active {
+  color: #aa0;
+}
 .accordian {
   float: left;
   padding-right: 1ex;
