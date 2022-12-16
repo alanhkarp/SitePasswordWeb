@@ -8,10 +8,12 @@ SitePassword is different. It calculates your password for the site from a singl
 [Who Should Use The Web Page](#who)
 ---------------------
 
-The SitePassword web page is a companion to the SitePassword browser extension.
+The SitePassword web page is a companion to the SitePassword browser extension
+available from the Chrome Web Store.
 In addition to remembering your settings, the extension synchronizes them 
 across your machines.  You should use the extension if you are on a 
-compatible browser and device, currently Chrome and Edge on computers. Unfortunately, those browsers don't allow extensions on mobile devices.
+compatible browser and device, currently Chrome, Edge, Opera, and Brave on computers. 
+Unfortunately, those browsers don't allow extensions on mobile devices.
 
 
 [Your Master Password](#masterpassword)
@@ -41,10 +43,11 @@ type the login page's URL into the form, you are strongly encouraged
 to paste it from the address bar so SitePassword can warn you about 
 potential phishing.
 
-SitePassword could generate a weak site password just by chance.  
+SitePassword could generate a weak site password just by chance. 
 To let you know that has happened, it uses the same colors that 
 appear in the master password 
-strength meter to tell you how strong your site password is.  For example, if your site password is orange, then it is weak.  
+strength meter to tell you how strong your site password is.  For 
+example, if your site password is orange, then it is weak. 
 In that case, just choose a different nickname for the site.
 
 SitePassword can remember your settings for a site.  Just fill in 
