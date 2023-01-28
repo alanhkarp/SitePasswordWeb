@@ -178,17 +178,17 @@ let SitePassword = ((function (self) {
     self.validateDomain = function (domainname, sitename) {
         domainname = normalize(domainname);
         sitename = normalize(sitename);
-        if (!domainname || !sitename) return true;  // nothing to check...
+        if (!domainname || !sitename) return undefined;  // nothing to check...
         const db = self.database;
-        if (!db.sites[sitename]) return true;  // candidate site...
+        if (!db.sites[sitename]) return undefined;  // candidate site...
         const ds = Object.keys(db.domains);
         for (const d of ds) {
             const s = db.domains[d];
-            if ((s === sitename) && (d === domainname)) {
-                return true;  // found matching entry, domainname is valid.
+            if ((s === sitename) && !(d === domainname)) {
+                return d;  // found matching entry, domainname is valid.
             }
         }
-        return false;  // entry not found, could be a phishing attempt!
+        return undefined;  // entry not found, could be a phishing attempt!
     }
     self.domainname = "";
     self.siteForDomain = function (domainname) {

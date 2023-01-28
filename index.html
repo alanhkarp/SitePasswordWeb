@@ -112,19 +112,40 @@
           </div>
           <div class="form-row">
             <div id="phishing" class="warning nodisplay">
-              <h4>PHISHING WARNING!</h4>
-              <p>
-                The domain name does not match
-                the settings remembered for this site.
-                This may be a fake site
-                that is trying to steal your password.
-              </p>
-              <div class="form-row">
-                <button id="resetbutton" type="button">Clear form data</button>
+              <div id="phishingtext">
+                <h4>PHISHING WARNING!</h4>
+                <p>
+                  The domain name does not match
+                  the settings remembered for this site.
+                  This may be a fake site
+                  that is trying to steal your password.
+                </p>
               </div>
-              <div class="form-row">
-                <button id="trustbutton" type="button">New domain for this site</button>
-              </div>
+              <p></p>
+              <button
+                id="resetbutton"
+                type="button"
+                style="background-color: #00ff00; margin: auto; color: black; width:100%"
+                title="I don't recognize this domain name.">
+                Clear form data
+              </button>
+              <p></p>
+              <button
+                id="trustbutton"
+                type="button"
+                style="background-color: #ffff00; margin: auto; color:black; width:100%"
+                title="This domain is for the same account. Use the same settings for it.">
+                <b>This page is for the same account.</b>
+              </button>
+              <p></p>
+              <button
+                id="nicknamebutton"
+                type="button"
+                style="background-color: #000FF0; margin: auto; color:white; width:100%"
+                title="This domain is for a different account.  I'll select a new nickname.">
+                <b>Pick a new nickname.</b>
+              </button>
+              <p></p>
             </div>
           </div>
           <div id="http" class="warning nodisplay">

@@ -69,6 +69,7 @@ let SitePasswordWeb = ((function (self) {
         const $username = get("username");
         const $resetbutton = get("resetbutton");
         const $trustbutton = get("trustbutton");
+        const $nicknamebutton = get("nicknamebutton");
         const $results = get("results");
         const $sitepw = get("sitepw");
         const $remember = get("remember");
@@ -317,15 +318,25 @@ let SitePasswordWeb = ((function (self) {
             const domainname = $domainname.value;
             const settings = SitePassword.loadSettings($sitename.value);
             const sitename = settings.sitename;
+            let testDomain = SitePassword.validateDomain(domainname, sitename);
             if (!sitename) {
                 // retain sitename/username for unknown site
                 settings.sitename = $sitename.value;
                 settings.username = $username.value;
                 SitePassword.settings = settings;
                 phishingWarningOff();
-            } else if (SitePassword.validateDomain(domainname, sitename)) {
+            } else if (!SitePassword.validateDomain(domainname, sitename)) {
                 updateSettings(settings);
             } else {
+                let warnElement = get("phishingtext");
+                warnElement.innerHTML = "<strong>Warning:</strong> You may be at a fake site that is trying to steal your password. ";
+                warnElement.innerHTML += "You previously used this nickname for";
+                warnElement.innerHTML += "<pre style=\"margin-left:1em;\">" + testDomain + "</pre>";
+                warnElement.innerHTML += "but the domain name asking for your password is";
+                warnElement.innerHTML += "<pre style=\"margin-left:1em;\">" + $domainname.value + "</pre>";
+                warnElement.innerHTML += "It is common to see different domain names for the same account login. ";
+                warnElement.innerHTML += "Click the top (green) button if that's not the case or the middle (yellow) button if it is. ";
+                warnElement.innerHTML += "You can also pick a new nickname if this page is for a different account.";
                 phishingWarningOn(settings);
             }
         }
@@ -352,20 +363,29 @@ let SitePasswordWeb = ((function (self) {
             $results.style.display = "none";  // hide sitepw/remember/settings...
             $domainname.classList.add("bad-input");
             $domainname.disabled = true;
+            $username.disabled = true;
             $resetbutton.focus();
             $trustbutton.onclick = function () {
                 SitePassword.settings = settings;
                 SitePassword.storeSettings();
                 updateSettings(settings);
            };
+           $nicknamebutton.onclick = function () {
+                phishingWarningOff();
+                $sitename.focus();
+           }
         }
         function phishingWarningOff() {
             $phishing.style.display = "none";
             $results.style.display = "block";  // show sitepw/remember/settings...
             $domainname.classList.remove("bad-input");
             $domainname.disabled = false;
+            $username.disabled = false;
             $trustbutton.onclick = function () {
                 console.log("WARNING! trustbutton clicked while phishing warning off.");
+            };
+            $nicknamebutton.onclick = function () {
+                console.log("WARNING! nicknamebutton clicked while phishing warning off.");
             };
         }
         const $http = get("http");
