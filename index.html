@@ -57,7 +57,7 @@
           </div>
           <div class="form-row">
             <div style="flex: 1;"></div>
-            <meter max="4" id="password-strength-meter"></meter>
+            <meter max="4" id="password-strength-meter" title="Master password strength"></meter>
             <span id="password-strength-text"></span>
             <div style="flex: 1;"></div>
           </div>
@@ -70,7 +70,7 @@
               type="text"
               value=""
               placeholder="Paste the login page URL here"
-              title="Domain Name"
+              title="Login page URL"
             />
           </div>
           <div class="form-row">
@@ -92,8 +92,8 @@
               class="sans"
               type="text"
               value=""
-              placeholder="A unique nickname for this site"
-              title="Site Name"
+              placeholder="A unique nickname for this account"
+              title="A unique nickname you associate with this account.  For example, use the same nickname for www.example.com and login.example.com."
             />
           </div>
           <div class="form-row">
@@ -103,8 +103,8 @@
               class="sans"
               type="text"
               value=""
-              placeholder="Your user-id for this site"
-              title="User Name"
+              placeholder="Your user-id for this account"
+              title="Your user-id for this account"
             />
             <div id="useridcopy" class="icon inner-icon-1" title="Copy username to clipboard">
               <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5v0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v0M8 5v0a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v0"/></svg>
@@ -126,7 +126,7 @@
                 id="resetbutton"
                 type="button"
                 style="background-color: #00ff00; margin: auto; color: black; width:100%"
-                title="I don't recognize this domain name.">
+                title="I don't recognize this domain name. Take me away from this web site.">
                 Clear form data
               </button>
               <p></p>
@@ -184,8 +184,18 @@
               </span>
             </div>
             <div class="form-row">
-              <button id="remember" type="button" disabled="disabled">Remember Settings</button>
-              <button id="forget" type="button" disabled="disabled">Forget Settings</button>
+        <button id="remember" 
+                type="button" 
+                title="Remember on this machine the settings for this account."
+                disabled="disabled">
+                Remember Settings
+              </button>
+              <button id="forget" 
+                type="button" 
+                title="Forget the settings for this account that you previously stored on this machine."
+                disabled="disabled">
+                Forget Settings
+              </button>
               <div id="settingsshow" style="display: block; margin-top: 6px;" title="Open Settings">
                 <svg class="icon" width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 21h-4l-.551-2.48a6.991 6.991 0 0 1-1.819-1.05l-2.424.763-2-3.464 1.872-1.718a7.055 7.055 0 0 1 0-2.1L3.206 9.232l2-3.464 2.424.763A6.992 6.992 0 0 1 9.45 5.48L10 3h4l.551 2.48a6.992 6.992 0 0 1 1.819 1.05l2.424-.763 2 3.464-1.872 1.718a7.05 7.05 0 0 1 0 2.1l1.872 1.718-2 3.464-2.424-.763a6.99 6.99 0 0 1-1.819 1.052L14 21z"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
               </div>
@@ -250,7 +260,13 @@
               </div>
               <hr />
               <div class="form-row">
-                <button id="downloadbutton" type="button" style="display: inline" target="_blank" title="Download data stored on this machine">Download local data</button>
+                <button id="downloadbutton" 
+                  type="button" 
+                  style="display: 
+                  inline" target="_blank" 
+                title="Download the settings stored on this machine to a file that you can use to calculate your passwords when the SitePassword extension is not available.">
+                  Download Local Data
+                </button>
                 <a id="data" href="data:application/octet-stream," target="_blank" style="display: none" download="SiteData.html">SiteData.html</a>
               </div>
             </div>
@@ -269,7 +285,7 @@
                 This web page is a companion to the SitePassword browser extension.
                 In addition to remembering your settings, the extension synchronizes them 
                 across your machines.  You should use the extension if you are on a 
-                compatible browser and device, currently Chrome and Edge on computers.  
+                compatible browser and device, currently Brave, Chrome, Edge, and Opera on computers.  
                 Unfortunately, those browsers don't allow extensions on mobile devices.
               </p>
               <p>
@@ -289,7 +305,7 @@
                 SitePassword is different from most password managers.  Instead of 
                 storing your passwords, it calculates them from a single master password 
                 and your nickname and user name 
-                for the site.  That means you can usually get your site password if 
+                for the account.  That means you can usually get your site password if 
                 you remember those three things.  (Some web pages require additional
                 settings.) 
               </p>  
@@ -304,9 +320,15 @@
                 You should choose a strong master password, one with upper and 
                 lower case letters, numbers, and special characters.  The stronger
                 the better.  The reason is simple.  A bad guy who knows one site 
-                password and can guess your nickname and user name for that site
+                password and can figure out your nickname and user name for that site
                 can start guessing master passwords.  You want to make that job 
                 has hard as you can.
+              </p>
+              <p>
+                You can protect yourself further by using a different master password 
+                for different kinds of accounts.  You could have one that you use for 
+                banking, another for subscriptions, and a third for sites you find 
+                sketchy.
               </p>
               <p>
                 SitePassword doesn't prevent you from using a weak master password,
@@ -338,10 +360,10 @@
                   appear in the master password 
                   strength meter to tell you how strong your site password is.    
                   For example, if your site password is orange, then it is weak.  
-                  In that case, just choose a different nickname for the site.
+                  In that case, just choose a different nickname for the account.
                 </p>
                 <p>
-                  SitePassword can remember your settings for a site.  Just fill in 
+                  SitePassword can remember your settings for an account.  Just fill in 
                   the form and click the <em>Remember Settings</em> button.  These 
                   settings are only stored on the machine you are using.  They won't 
                   be available if you use another device.
@@ -386,9 +408,9 @@
               <p>
                 Some sites make you change your password periodically.  SitePassword
                 makes that easy.  Just change your nickname for the site.  For example, 
-                if your current nickname is <em>MyBank2021</em>, and they make you change 
-                your password once a year, you could change the nickname to 
-                <em>MyBank2022</em>.  Your new site password will be completely different 
+                if your current nickname is <em>MyBank1</em>, and they make you change 
+                your password, you could change the nickname to 
+                <em>MyBank2</em>.  Your new site password will be completely different 
                 from the old one.
               </p>
             </div>
@@ -400,7 +422,7 @@
             <div id="phishingdiv" style="display: none;">
               <p>
                 SitePassword includes an antiphishing feature.  If you try to use 
-                the nickname of a site that you previously had clicked 
+                the nickname of an account that you previously had clicked 
                 <em>Remember Settings</em> for another domain name, you will get a big, 
                 scary warning.  It's telling you that you may be at a site 
                 spoofing the one you think you are at.  
@@ -410,7 +432,7 @@
                 also see this warning when you are not being tricked.  Many 
                 websites have several different login pages with different domain 
                 names.  So, when you see the warning, check the URL of the page 
-                to make sure it's a login page for the site you think it is.
+                to make sure it's a login page for the account you think it is.
               </p>
             </div>
           </section>
@@ -440,7 +462,7 @@
               <p>
                 You can calculate your password without 
                 providing a domain name, say to get the password for an app on your mobile 
-                device.  Of course, you won't be able to remember the settings until you 
+                device, but you won't be able to remember the settings until you 
                 provide a domain name.  You can just make one up, 
                 <em>e.g., https://MyApp.com</em>, which you'll use the next time you need 
                 the password for that app.
@@ -460,7 +482,7 @@
                 </svg>.  
                 That button lets you save your settings in a file you 
                 can reference if you're at a machine that doesn't have your 
-                SitePassword settings. <b>Only settings for sites you've chosen
+                SitePassword settings. <b>Only settings for accounts you've chosen
                 to remember on this machine will be included.</b>
               </p>
               </div>

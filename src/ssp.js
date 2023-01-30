@@ -156,7 +156,7 @@ let SitePasswordWeb = ((function (self) {
             $sitepw.value = pw;
             const report = zxcvbn(pw);
             $sitepw.style.color = strengthColor[report.score];
-            $sitepw.title = strengthText[report.score] + " Site Password";
+            $sitepw.title = strengthText[report.score] + " site password";
             enableRemember();
         }
         function handleBlur(id) {
