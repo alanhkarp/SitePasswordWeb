@@ -5,6 +5,7 @@ let SitePassword = ((function (self) {
         sitename: "",
         username: "",
         pwlength: 12,
+        providesitepw: false,
         startwithletter: true,
         allowlower: true,
         minlower: 1,
@@ -126,6 +127,7 @@ let SitePassword = ((function (self) {
             }
             pw = binl2b64(hswap, cset).substring(0, settings.pwlength);
             if (verifyPassword(pw, settings)) {
+                if (settings.xo && settings.xor.length > 0) pw = stringXorArray(pw, settings.xor);
                 return pw;
             }
             iter++;
@@ -148,9 +150,51 @@ let SitePassword = ((function (self) {
         }
         return "";
     }
-
+    function xorStrings(provided, sitepw) {
+        let b = sitepw;
+        // Make the strings equal length
+        while (sitepw.length > 0 && provided.length > b.length) {
+            b += sitepw;
+        } // b.length >= a.length
+        b = b.substring(0, provided.length); // b.length === provided.length
+        let result = [];
+        for (let i = 0; i < provided.length; i++) {
+          result.push(provided.charCodeAt(i) ^ b.charCodeAt(i));
+        }
+        return result;
+    }
+    function stringXorArray(sitepw, array) {
+        if (!sitepw) return "";
+        let b = sitepw;
+        while (array.length > b.length) {
+            b += sitepw;
+        }
+        b = b.substring(0, array.length);
+        let a = string2array(b);
+        for (let i = 0; i < array.length; i++) {
+            a[i] = a[i] ^ array[i];
+        }
+        let result = array2string(a);
+        return result;
+    }
+    function string2array(str) {
+        let array = [];
+        for (let i = 0; i < str.length; i++) {
+            array.push(str[i].charCodeAt());
+        }
+        return array;
+    }
+    function array2string(array) {
+        let str = "";
+        for (let i = 0; i < array.length; i++) {
+            str += String.fromCharCode(array[i]);
+        }
+        return str;
+    }
     self.normalize = normalize;
     self.generatePassword = generatePassword;
+    self.xorStrings = xorStrings;
+    self.stringXorArray = stringXorArray;
     self.getMasterPassword = function () {
         return cloneObject(masterpassword);
     }
@@ -248,7 +292,7 @@ let SitePassword = ((function (self) {
     }
     return self;
 })({
-    version: "1.0",
+    version: "1.1",
     clearmasterpw: false,
     miniter: 100,
     maxiter: 1000,

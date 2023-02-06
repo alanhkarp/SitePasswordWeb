@@ -74,6 +74,7 @@ let SitePasswordWeb = ((function (self) {
         const $sitepw = get("sitepw");
         const $remember = get("remember");
         const $forget = get("forget");
+        const $providesitepw = get("providesitepw");
         const $pwlength = get("pwlength");
         const $startwithletter = get("startwithletter");
         const $allowlowercheckbox = get("allowlowercheckbox");
@@ -88,6 +89,11 @@ let SitePasswordWeb = ((function (self) {
         const $downloadbutton = get("downloadbutton");
 
         function loadSettingControls(settings) {
+            $providesitepw.checked = settings.providesitepw;
+            if ($providesitepw.checked) {
+                $sitepw.removeAttribute("readonly");
+                $sitepw.placeholder = "You provided a site password";
+        }
             $pwlength.value = settings.pwlength;
             $startwithletter.checked = settings.startwithletter;
             $allowlowercheckbox.checked = settings.allowlower;
@@ -129,7 +135,7 @@ let SitePasswordWeb = ((function (self) {
             }
         }
         function saveSettingControls(settings) {
-            settings.pwlength = +$pwlength.value;
+            settings.providesitepw = $providesitepw.checked;
             settings.startwithletter = $startwithletter.checked;
             settings.allowlower = $allowlowercheckbox.checked;
             settings.minlower = +$minlower.value;
@@ -153,11 +159,17 @@ let SitePasswordWeb = ((function (self) {
                 $pwok.style.display = "none";
                 $pwfail.style.display = "flex";
             }
-            $sitepw.value = pw;
-            const report = zxcvbn(pw);
+            if ($providesitepw.checked) {
+                $sitepw.value = SitePassword.stringXorArray(pw, SitePassword.settings.xor);
+            } else {
+                SitePassword.settings.xor = SitePassword.xorStrings($sitepw.value, $sitepw.value);
+                $sitepw.value = pw;
+            }
+            const report = zxcvbn($sitepw.value);
             $sitepw.style.color = strengthColor[report.score];
             $sitepw.title = strengthText[report.score] + " site password";
             enableRemember();
+            return pw;
         }
         function handleBlur(id) {
             const $element = get(id);
@@ -229,6 +241,7 @@ let SitePasswordWeb = ((function (self) {
             const sitename = SitePassword.siteForDomain(domainname);
             const settings = SitePassword.loadSettings(sitename);
             updateSettings(settings);
+            generatePassword();
         }
         $domainname.onpaste = function () {
             setTimeout(() => {
@@ -416,6 +429,16 @@ let SitePasswordWeb = ((function (self) {
         get("sitepwcopy").onclick = function () {
             copyToClipboard($sitepw);
         }
+        $sitepw.onblur = function () {
+            let saved = $sitepw.value;
+            let computed = generatePassword();
+            $sitepw.value = saved;
+            SitePassword.settings.xor = SitePassword.xorStrings($sitepw.value, computed);
+            enableRemember();
+         }
+         $sitepw.onkeyup = function () {
+            $sitepw.onblur();
+         }
         $remember.onclick = function () {
             SitePassword.storeSettings();
             //phishingWarningOff();
@@ -432,7 +455,23 @@ let SitePasswordWeb = ((function (self) {
             $forget.disabled =
                 (!$domainname.value || SitePassword.settingsModified()) || !$sitename.value;
         }
-
+        get("providesitepw").onclick = function () {
+            const settings = SitePassword.settings;
+            settings.providesitepw = $providesitepw.checked;
+            if ($providesitepw.checked) {
+                $sitepw.removeAttribute("readonly");
+                $sitepw.value = "";
+                $sitepw.placeholder = "Enter your site password";
+                $sitepw.ariaPlaceholder = $sitepw.placeholder;
+                $sitepw.focus();    
+            } else {
+                $sitepw.setAttribute("readonly", true);
+                $sitepw.placeholder = "Generated site password";
+                generatePassword();
+                $sitepw.ariaPlaceholder = $sitepw.placeholder;
+            }
+        }
+    
         const $settingsshow = get("settingsshow");
         const $settingssave = get("settingssave");
         const $settings = get("settings");
