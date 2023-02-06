@@ -475,8 +475,8 @@ let SitePasswordWeb = ((function (self) {
             } else {
                 $sitepw.setAttribute("readonly", true);
                 $sitepw.placeholder = "Generated site password";
-                generatePassword();
                 $sitepw.ariaPlaceholder = $sitepw.placeholder;
+                generatePassword();
             }
         }
     

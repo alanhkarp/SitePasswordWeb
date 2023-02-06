@@ -127,7 +127,6 @@ let SitePassword = ((function (self) {
             }
             pw = binl2b64(hswap, cset).substring(0, settings.pwlength);
             if (verifyPassword(pw, settings)) {
-                if (settings.xo && settings.xor.length > 0) pw = stringXorArray(pw, settings.xor);
                 return pw;
             }
             iter++;
