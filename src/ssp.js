@@ -93,6 +93,7 @@ let SitePasswordWeb = ((function (self) {
             if ($providesitepw.checked && $sitename && $username) {
                 $sitepw.removeAttribute("readonly");
                 $sitepw.placeholder = "Enter your master password";
+                $masterpw.focus();
         }
             $pwlength.value = settings.pwlength;
             $startwithletter.checked = settings.startwithletter;
