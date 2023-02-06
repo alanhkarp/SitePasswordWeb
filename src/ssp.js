@@ -90,9 +90,9 @@ let SitePasswordWeb = ((function (self) {
 
         function loadSettingControls(settings) {
             $providesitepw.checked = settings.providesitepw;
-            if ($providesitepw.checked) {
+            if ($providesitepw.checked && $sitename && $username) {
                 $sitepw.removeAttribute("readonly");
-                $sitepw.placeholder = "You provided a site password";
+                $sitepw.placeholder = "Enter your master password";
         }
             $pwlength.value = settings.pwlength;
             $startwithletter.checked = settings.startwithletter;
@@ -169,6 +169,11 @@ let SitePasswordWeb = ((function (self) {
             $sitepw.style.color = strengthColor[report.score];
             $sitepw.title = strengthText[report.score] + " site password";
             enableRemember();
+            if ($sitename.value && $username.value) {
+                get("providesitepw").disabled = false;
+            } else {
+                get("providesitepw").disabled = true;
+            }
             return pw;
         }
         function handleBlur(id) {
@@ -455,8 +460,11 @@ let SitePasswordWeb = ((function (self) {
             $forget.disabled =
                 (!$domainname.value || SitePassword.settingsModified()) || !$sitename.value;
         }
-        get("providesitepw").onclick = function () {
+        $providesitepw.onclick = function () {
             const settings = SitePassword.settings;
+            if (!($username.value && $sitename.value)) {
+                return;
+            }
             settings.providesitepw = $providesitepw.checked;
             if ($providesitepw.checked) {
                 $sitepw.removeAttribute("readonly");
