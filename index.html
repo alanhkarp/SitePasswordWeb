@@ -144,6 +144,13 @@
               to enter your password?
             </p>
           </div>
+          <div id="pwfail" class="warning nodisplay">
+            <p>
+              Can't compute a password with these settings!  You may need to enable some characters, increase the 
+              pasword length, or reduce the number of special characters you're asking for.  If 
+              that doesn't work, try another nickname for the site.
+            </p>
+          </div>
           <div id="results">
             <hr />
             <div id="pwok" class="form-row">
@@ -170,12 +177,6 @@
                     d="M7 6.362A9.707 9.707 0 0 1 12 5c6.307 0 9.367 5.683 9.91 6.808.06.123.06.261 0 .385-.352.728-1.756 3.362-4.41 5.131M14 18.8a9.93 9.93 0 0 1-2 .2c-6.307 0-9.367-5.683-9.91-6.808a.44.44 0 0 1 0-.386c.219-.452.84-1.632 1.91-2.885m6 .843A3 3 0 0 1 14.236 14M3 3l18 18" />
                 </svg>
               </div>
-            </div>
-            <div id="pwfail" class="form-row">
-              <span id="failedpw" class="sans"
-                title="You may need to enable some characters, increase the pasword length, or reduce the number of special characters you're asking for.">
-                Can't compute password with these settings!
-              </span>
             </div>
             <div class="form-row">
               <button id="remember" type="button" title="Remember on this machine the settings for this account."
