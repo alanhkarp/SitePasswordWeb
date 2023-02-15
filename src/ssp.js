@@ -91,10 +91,10 @@ let SitePasswordWeb = ((function (self) {
         function loadSettingControls(settings) {
             $providesitepw.checked = settings.providesitepw;
             if ($providesitepw.checked && $sitename && $username) {
-                $sitepw.removeAttribute("readonly");
+                $sitepw.readOnly = false;
                 $sitepw.placeholder = "Enter your master password";
                 $masterpw.focus();
-        }
+            }
             $pwlength.value = settings.pwlength;
             $startwithletter.checked = settings.startwithletter;
             $allowlowercheckbox.checked = settings.allowlower;
@@ -436,10 +436,11 @@ let SitePasswordWeb = ((function (self) {
             copyToClipboard($sitepw);
         }
         $sitepw.onblur = function () {
-            let saved = $sitepw.value;
+            if ($sitepw.readOnly) return;
+            let provided = $sitepw.value;
             let computed = generatePassword();
-            $sitepw.value = saved;
-            SitePassword.settings.xor = SitePassword.xorStrings($sitepw.value, computed);
+            SitePassword.settings.xor = SitePassword.xorStrings(provided, computed);
+            $sitepw.value = provided;
             enableRemember();
          }
          $sitepw.onkeyup = function () {
@@ -463,20 +464,15 @@ let SitePasswordWeb = ((function (self) {
         }
         $providesitepw.onclick = function () {
             const settings = SitePassword.settings;
-            if (!($username.value && $sitename.value)) {
-                return;
-            }
             settings.providesitepw = $providesitepw.checked;
-            if ($providesitepw.checked) {
-                $sitepw.removeAttribute("readonly");
+            if ($providesitepw.checked && $username.value && $sitename.value) {
+                $sitepw.readOnly = false;
                 $sitepw.value = "";
                 $sitepw.placeholder = "Enter your site password";
-                $sitepw.ariaPlaceholder = $sitepw.placeholder;
                 $sitepw.focus();    
             } else {
-                $sitepw.setAttribute("readonly", true);
+                $sitepw.readOnly = true;
                 $sitepw.placeholder = "Generated site password";
-                $sitepw.ariaPlaceholder = $sitepw.placeholder;
                 generatePassword();
             }
         }

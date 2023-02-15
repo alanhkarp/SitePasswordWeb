@@ -16,6 +16,7 @@ let SitePassword = ((function (self) {
         allowspecial: false,
         minspecial: 1,
         specials: (self.specials || "_"),
+        xor: new Array(12).fill(0),
     }
     let masterpassword = "";
 
