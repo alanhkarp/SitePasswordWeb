@@ -47,7 +47,13 @@
           </div>
           <div class="form-row">
             <label for="masterpw" class="sr-only">Master password:</label>
-            <input id="masterpw" class="fixed" type="password" value="" placeholder="Choose a strong master password"
+            <input 
+              id="masterpw" 
+              class="fixed" 
+              type="password" 
+              value="" 
+              autocomplete="off"
+              placeholder="Choose a strong master password"
               title="Master Password" />
             <div id="masterpwhide" class="icon inner-icon-1 nodisplay" title="Hide Master Password">
               <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
@@ -73,12 +79,21 @@
           <hr />
           <div class="form-row">
             <label for="domainname" class="sr-only">Domain name:</label>
-            <input id="domainname" class="fixed" type="text" value="" placeholder="Paste the login page URL here"
+            <input 
+              id="domainname" 
+              class="fixed" 
+              type="text" 
+              autocomplete="off"
+              value="" 
+              placeholder="Paste the login page URL here"
               title="Login page URL" />
           </div>
           <div class="form-row">
             <label for="bookmark" class="sr-only">SitePasswordData bookmark:</label>
-            <input id="bookmark" disabled="disabled"
+            <input 
+              id="bookmark" 
+              disabled="disabled"
+              autocomplete="off"
               title="Find the bookmark with your domain name in the SitePasswordData bookmark folder and paste it here."
               placeholder="...then, paste a SitePasswordData bookmark" />
             <svg id="bookmarks" class="icon nodisplay" width="24px" height="24px" viewBox="0 0 24 24"
@@ -91,12 +106,24 @@
           <hr />
           <div class="form-row">
             <label for="sitename" class="sr-only">Site name:</label>
-            <input id="sitename" class="sans" type="text" value="" placeholder="A unique nickname for this account"
+            <input 
+              id="sitename" 
+              class="sans" 
+              type="text" 
+              autocomplete="off"
+              value="" 
+              placeholder="A unique nickname for this account"
               title="A unique nickname you associate with this account.  For example, use the same nickname for www.example.com and login.example.com." />
           </div>
           <div class="form-row">
             <label for="username" class="sr-only">User name:</label>
-            <input id="username" class="sans" type="text" value="" placeholder="Your user-id for this account"
+            <input 
+              id="username" 
+              class="sans" 
+              type="text" 
+              autocomplete="off"
+              value="" 
+              placeholder="Your user-id for this account"
               title="Your user-id for this account" />
             <div id="useridcopy" class="icon inner-icon-1" title="Copy username to clipboard">
               <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
@@ -212,10 +239,10 @@
               title="You must fill in the SitePassword form before you can provide your own site password.">
               <hr />
               <input id="providesitepw" 
-                        type="checkbox"
-                        disabled
-                        aria-disabled="true"
-                        title="Check to type your own site password.  You must fill in the SitePassword form first." 
+                type="checkbox"
+                disabled
+                aria-disabled="true"
+                title="Check to type your own site password.  You must fill in the SitePassword form first." 
               />
               <span>Provide your own site password.</span>
             </div>
