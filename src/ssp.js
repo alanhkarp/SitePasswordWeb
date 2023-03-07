@@ -208,7 +208,7 @@ let SitePasswordWeb = ((function (self) {
             }
         }
 
-        const strengthText = ["Don't Use", "Bad", "Weak", "Good", "Strong"];
+        const strengthText = ["Too Weak", "Very Weak", "Weak", "Good", "Strong"];
         const strengthColor = ["#bbb", "#f06", "#f90", "#093", "#036"]; // 0,3,6,9,C,F
         const $meter = get("password-strength-meter");
         const $meterText = get("password-strength-text");
