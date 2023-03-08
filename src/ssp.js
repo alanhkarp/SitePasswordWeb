@@ -486,20 +486,6 @@ let SitePasswordWeb = ((function (self) {
             generatePassword();
         }
     
-        const $settingsshow = get("settingsshow");
-        const $settingssave = get("settingssave");
-        const $settings = get("settings");
-        $settingsshow.onclick = function () {
-            $settingsshow.style.display = "none";
-            $settingssave.style.display = "inline";
-            $settings.style.display = "block";
-        }
-        $settingssave.onclick = function () {
-            $settingsshow.style.display = "inline";
-            $settingssave.style.display = "none";
-            $settings.style.display = "none";
-        }
-
         $pwlength.onkeyup = function () {
             handleKeyupNumber("pwlength");
         }
