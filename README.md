@@ -12,7 +12,7 @@ The SitePassword web page is a companion to the SitePassword browser extension
 available from the Chrome Web Store.
 In addition to remembering your settings, the extension synchronizes them 
 across your machines.  You should use the extension if you are on a 
-compatible browser and device, currently Chrome, Edge, Opera, and Brave on computers. 
+compatible browser and device, currently Brave, Chrome, Edge, Opera, and Vivaldi on computers. 
 Unfortunately, those browsers don't allow extensions on mobile devices.
 
 
@@ -59,11 +59,11 @@ After you paste your password into the login form, you should remove
 it from the clipboard.  The easiest way to do that is to copy some 
 innocuous text, such as something on the login page.
 
-Since SitePassword doesn't store your passwords, there's no way
-you can use your existing passwords with it.  You will have to use 
-the web site's <em>Change Password</em> or <em>Forgot Password</em>
-feature on sites where you already have accounts.
-
+When SitePassword can't generate a password acceptable to the site, it can remember a password 
+you provide.  It is stored in your settings encrypted with the computed
+password for the site as a key.  That means you must fill in the form before entering 
+your password. After you fill in the form, click the <em>Provide your own site password</em> 
+check box.  You can then enter your password into the site password field. 
 
 [Computing an Acceptable Password](#acceptable)
 --------------------------
@@ -73,10 +73,7 @@ if it must contain upper case or lower case letters, numbers, or
 special characters, including restrictions on which special
 characters are allowed.  If you run into a site that doesn't 
 accept the calculated password, 
-click  <svg width="12px" height="12px" viewBox="2 1 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
-    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 21h-4l-.551-2.48a6.991 6.991 0 0 1-1.819-1.05l-2.424.763-2-3.464 1.872-1.718a7.055 7.055 0 0 1 0-2.1L3.206 9.232l2-3.464 2.424.763A6.992 6.992 0 0 1 9.45 5.48L10 3h4l.551 2.48a6.992 6.992 0 0 1 1.819 1.05l2.424-.763 2 3.464-1.872 1.718a7.05 7.05 0 0 1 0 2.1l1.872 1.718-2 3.464-2.424-.763a6.99 6.99 0 0 1-1.819 1.052L14 21z"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-</svg>
-and change the appropriate menu entries.  SitePassword 
+change the appropriate menu entries.  SitePassword 
 was tested on hundreds of web sites to make sure it can always 
 compute a valid password.
 
@@ -131,10 +128,7 @@ the password for that app.
 ----------------------
 
 There is a <em>Download Local Data</em> button at the bottom of 
-the page after you 
-click <svg width="12px" height="12px" viewBox="2 1 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
-    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 21h-4l-.551-2.48a6.991 6.991 0 0 1-1.819-1.05l-2.424.763-2-3.464 1.872-1.718a7.055 7.055 0 0 1 0-2.1L3.206 9.232l2-3.464 2.424.763A6.992 6.992 0 0 1 9.45 5.48L10 3h4l.551 2.48a6.992 6.992 0 0 1 1.819 1.05l2.424-.763 2 3.464-1.872 1.718a7.05 7.05 0 0 1 0 2.1l1.872 1.718-2 3.464-2.424-.763a6.99 6.99 0 0 1-1.819 1.052L14 21z"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
-</svg>.  That button lets you save your settings in a file you 
+the page.  That button lets you save your settings in a file you 
 can reference if you're at a machine that doesn't have your 
 SitePassword settings. <b>Only settings for sites you've chosen
 to remember on this machine will be included.</b>
