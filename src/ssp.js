@@ -75,6 +75,7 @@ let SitePasswordWeb = ((function (self) {
         const $remember = get("remember");
         const $forget = get("forget");
         const $providesitepw = get("providesitepw");
+        const $providecode = get("providecode");
         const $pwlength = get("pwlength");
         const $startwithletter = get("startwithletter");
         const $allowlowercheckbox = get("allowlowercheckbox");
@@ -444,6 +445,7 @@ let SitePasswordWeb = ((function (self) {
             enableRemember();
          }
          $sitepw.onkeyup = function () {
+            $providecode.disabled = true;
             $sitepw.onblur();
          }
         $remember.onclick = function () {
@@ -469,12 +471,19 @@ let SitePasswordWeb = ((function (self) {
                 $sitepw.readOnly = false;
                 $sitepw.value = "";
                 $sitepw.placeholder = "Enter your site password";
-                $sitepw.focus();    
+                $sitepw.focus();   
+                $providecode.disabled = false; 
             } else {
                 $sitepw.readOnly = true;
                 $sitepw.placeholder = "Generated site password";
+                $providecode.disabled = true;
                 generatePassword();
             }
+        }
+        $providecode.onblur = function() {
+            let settings = SitePassword.settings;
+            settings.xor = JSON.parse("[" + $providecode.value + "]");
+            generatePassword();
         }
     
         const $settingsshow = get("settingsshow");
@@ -588,6 +597,7 @@ let SitePasswordWeb = ((function (self) {
             sd += "<th>Allow Specials</th>";
             sd += "<th>Min Specials</th>";
             sd += "<th>Specials</th>";
+            sd += "<th>Code for User Provided Password</th>";
             sd += "</tr>";
             for (const domainname of sorted) {
                 const sitename = domains[domainname];
@@ -607,6 +617,7 @@ let SitePasswordWeb = ((function (self) {
                 sd += "<td><pre>" + s.allowspecial + "</pre></td>";
                 sd += "<td><pre>" + s.minspecial + "</pre></td>";
                 sd += "<td><pre>" + s.specials + "</pre></td>";
+                sd += "<td><pre>" + (s.xor || "") + "<pre></td>";
                 sd += "</tr>";
             }
             sd += "</table></body></html>";
