@@ -60,7 +60,7 @@ it from the clipboard.  The easiest way to do that is to copy some
 innocuous text, such as something on the login page.
 
 When SitePassword can't generate a password acceptable to the site, it can remember a password 
-you provide.  It is stored in your settings encrypted with the computed
+you provide.  This password is stored in your settings encrypted with the computed
 password for the site as a key.  That means you must fill in the form before entering 
 your password. After you fill in the form, click the <em>Provide your own site password</em> 
 check box.  You can then enter your password into the site password field. 
