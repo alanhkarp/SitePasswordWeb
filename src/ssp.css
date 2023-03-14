@@ -42,10 +42,10 @@
   background-color: #8CF;
 }
 .logo {
-  height: 40px;
-  width: 40px;
+  height: 30px;
+  width: 30px;
   position: relative;
-  top: 10px;
+  top: 20px;
 }
 #bookmarks {
   cursor: default;
