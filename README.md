@@ -142,4 +142,4 @@ If you are worried that SitePassword might go away, you can download the source 
 [Voluntary Payment](#payment)
 -----------------------------
 
-If you like SitePassword, please make a contribution to the [Internet Archive](https://archive.org/donate?origin=iawww-TopNavDonateButton) or your favorite charity.
+If you like SitePassword, please make a contribution to the [Nancy Lee Hurtt '70 Maryland Promise Scholarship](https://giving.umd.edu/giving/fund.php?name=nancy-lee-hurtt-70-maryland-promise-scholarship) or your favorite charity.
