@@ -315,16 +315,20 @@ let SitePasswordWeb = ((function (self) {
         }
         function parseBookmark(bookmark) {
             let settings = undefined;
-            if (bookmark.startsWith("ssp://")) {
-                try {
-                    let json = bookmark.substring(6)
-                        .replace(/%22/g, '"')
-                        .replace(/%7B/g, '{')
-                        .replace(/%7D/g, '}');
-                    settings = JSON.parse(json);
-                } catch {
-                    console.log(e);
-                }
+            let bkmkstr = "";
+            if (bookmark.substr(0, 6) === "ssp://") {
+                bkmkstr = bookmark.substr(6);
+            } else {
+                bkmkstr = bookmark.split("/").splice(3).join();
+            }
+            try {
+                let json = bkmkstr
+                    .replace(/%22/g, '"')
+                    .replace(/%7B/g, '{')
+                    .replace(/%7D/g, '}');
+                settings = JSON.parse(json);
+            } catch (e) {
+                console.log(e);
             }
             // console.log("Bookmark settings:", settings);
             return settings;
