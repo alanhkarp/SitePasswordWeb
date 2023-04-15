@@ -325,7 +325,9 @@ let SitePasswordWeb = ((function (self) {
                 let json = bkmkstr
                     .replace(/%22/g, '"')
                     .replace(/%7B/g, '{')
-                    .replace(/%7D/g, '}');
+                    .replace(/%7D/g, '}')
+                    .replace(/%5B/g, '[')
+                    .replace(/%5D/g, ']');
                 settings = JSON.parse(json);
             } catch (e) {
                 console.log(e);
