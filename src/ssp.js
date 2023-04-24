@@ -47,6 +47,15 @@ if (typeof SitePassword !== 'object') {
     if remember
         domainname/sitename/username/settings saved to database
 */
+
+let query = window.location.search;
+let bkmkSettings;
+if (query) {
+    let params = new URLSearchParams(query);
+    let bkmk = params.get("bkmk");
+    bkmkSettings = JSON.parse(bkmk.substring(6));
+}
+
 let SitePasswordWeb = ((function (self) {
     let normalize = SitePassword.normalize;
 
@@ -88,6 +97,14 @@ let SitePasswordWeb = ((function (self) {
         const $minspecial = get("minspecial");
         const $specials = get("specials");
         const $downloadbutton = get("downloadbutton");
+
+        if (bkmkSettings) {
+            SitePassword.settings = bkmkSettings;
+            $domainname.value = bkmkSettings.domainname;
+            $sitename.value = bkmkSettings.sitename;
+            $username.value = bkmkSettings.username;
+            $masterpw.focus();
+        }
 
         function loadSettingControls(settings) {
             $providesitepw.checked = settings.providesitepw;
@@ -316,11 +333,7 @@ let SitePasswordWeb = ((function (self) {
         function parseBookmark(bookmark) {
             let settings = undefined;
             let bkmkstr = "";
-            if (bookmark.substr(0, 6) === "ssp://") {
-                bkmkstr = bookmark.substr(6);
-            } else {
-                bkmkstr = bookmark.split("/").splice(3).join();
-            }
+            bkmkstr = bookmark.split("ssp://")[1];
             try {
                 let json = bkmkstr
                     .replace(/%22/g, '"')
@@ -593,10 +606,12 @@ let SitePasswordWeb = ((function (self) {
             sd += "</tr>";
             for (const domainname of sorted) {
                 const sitename = domains[domainname];
-                const s = sites[sitename];
+                let s = sites[sitename];
+                s.domainname = domainname;
+                let bkmk = JSON.stringify(s);
                 sd += "<tr>";
-                sd += "<td><pre>" + domainname + "</pre></td>";
                 sd += "<td><pre>" + s.sitename + "</pre></td>";
+                sd += "<td><a title='Right click to copy bookmark' href=https://sitepassword.info/index.html?bkmk=ssp://" + bkmk + ">" + domainname + "</a></td>";
                 sd += "<td><pre>" + s.username + "</pre></td>";
                 sd += "<td><pre>" + s.pwlength + "</pre></td>";
                 sd += "<td><pre>" + s.startwithletter + "</pre></td>";
