@@ -588,6 +588,8 @@ let SitePasswordWeb = ((function (self) {
                 return 1;
             });
             let sd = "<html><body><table>";
+            sd += "<caption>You can use these settings at <a href='https://sitepassword.info'>https://sitepassword.info.</a>";
+            sd += "<br />Click on the domain name to open sitepassword.info or right click on the domain name and copy the link address to paste into the bookmark field.</caption>";
             sd += "<th>Site Name</th>";
             sd += "<th>Domain Name</th>";
             sd += "<th>User Name</th>";
