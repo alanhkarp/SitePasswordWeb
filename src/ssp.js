@@ -378,15 +378,7 @@ let SitePasswordWeb = ((function (self) {
             } else if (!SitePassword.validateDomain(domainname, sitename)) {
                 updateSettings(settings);
             } else {
-                let warnElement = get("phishingtext");
-                warnElement.innerHTML = "<strong>Warning:</strong> You may be at a fake site that is trying to steal your password. ";
-                warnElement.innerHTML += "You previously used this nickname for";
-                warnElement.innerHTML += "<pre style=\"margin-left:1em;\">" + testDomain + "</pre>";
-                warnElement.innerHTML += "but the domain name asking for your password is";
-                warnElement.innerHTML += "<pre style=\"margin-left:1em;\">" + $domainname.value + "</pre>";
-                warnElement.innerHTML += "It is common to see different domain names for the same account login. ";
-                warnElement.innerHTML += "Click the top (green) button if that's not the case or the middle (yellow) button if it is. ";
-                warnElement.innerHTML += "You can also pick a new nickname if this page is for a different account.";
+                phishingWarningMsg(testDomain);
                 phishingWarningOn(settings);
             }
             clearDatalist("sitename");
@@ -428,6 +420,7 @@ let SitePasswordWeb = ((function (self) {
                     phishingWarningOff();
                 } else {
                     const settings = SitePassword.loadSettings($sitename.value);
+                    phishingWarningMsg($bkmkDomain.value);
                     phishingWarningOn(settings);
                 }                    
                 get("bkmk").style.display = "none";
@@ -474,6 +467,18 @@ let SitePasswordWeb = ((function (self) {
                 console.log("WARNING! nicknamebutton clicked while phishing warning off.");
             };
         }
+        function phishingWarningMsg(testDomain) {
+            let warnElement = get("phishingtext");
+            warnElement.innerHTML = "<strong>Warning:</strong> You may be at a fake site that is trying to steal your password. ";
+            warnElement.innerHTML += "You previously used this nickname for";
+            warnElement.innerHTML += "<pre style=\"margin-left:1em;\">" + $domainname.value + "</pre>";
+            warnElement.innerHTML += "but the domain name asking for your password is";
+            warnElement.innerHTML += "<pre style=\"margin-left:1em;\">" + parseDomain(normalize(testDomain)) + "</pre>";
+            warnElement.innerHTML += "It is common to see different domain names for the same account login. ";
+            warnElement.innerHTML += "Click the top (green) button if that's not the case or the middle (yellow) button if it is. ";
+            warnElement.innerHTML += "You can also pick a new nickname if this page is for a different account.";
+        }
+
         const $http = get("http");
         function httpWarningOn() {
             $http.style.display = "block";
