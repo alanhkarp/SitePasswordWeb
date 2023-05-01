@@ -620,17 +620,15 @@ let SitePasswordWeb = ((function (self) {
             const domains = SitePassword.database.domains;
             const sites = SitePassword.database.sites;
             const sorted = Object.keys(domains).sort(function (x, y) {
-                var a = x.toLowerCase();
-                var b = y.toLowerCase();
-                if (domains[a].toLowerCase() < domains[b].toLowerCase()) return -1;
-                if (domains[a].toLowerCase() == domains[b].toLowerCase()) return 0;
+                if (x.toLowerCase() < y.toLowerCase()) return -1;
+                if (x.toLowerCase() == y.toLowerCase()) return 0;
                 return 1;
             });
             let sd = "<html><body><table>";
             sd += "<caption>You can use these settings at <a href='https://sitepassword.info'>https://sitepassword.info.</a>";
             sd += "<br />Click on the domain name to open sitepassword.info or right click on the domain name and copy the link address to paste into the bookmark field.</caption>";
-            sd += "<th>Site Name</th>";
             sd += "<th>Domain Name</th>";
+            sd += "<th>Site Name</th>";
             sd += "<th>User Name</th>";
             sd += "<th>Password Length</th>";
             sd += "<th>Start with Letter</th>";
@@ -651,8 +649,8 @@ let SitePasswordWeb = ((function (self) {
                 s.domainname = domainname;
                 let bkmk = JSON.stringify(s);
                 sd += "<tr>";
-                sd += "<td><pre>" + s.sitename + "</pre></td>";
                 sd += "<td><a title='Right click to copy bookmark' href=https://sitepassword.info/index.html?bkmk=ssp://" + bkmk + ">" + domainname + "</a></td>";
+                sd += "<td><pre>" + s.sitename + "</pre></td>";
                 sd += "<td><pre>" + s.username + "</pre></td>";
                 sd += "<td><pre>" + s.pwlength + "</pre></td>";
                 sd += "<td><pre>" + s.startwithletter + "</pre></td>";
