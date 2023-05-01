@@ -69,7 +69,16 @@ let SitePasswordWeb = ((function (self) {
         element.focus();
         navigator.clipboard.writeText(element.value);
     }
-
+    function setupdatalist(element, list) {
+        let datalist = get(element.id + "s");
+        list.forEach((data) => {
+            let option = document.createElement("option");
+            option.value = data;
+            option.innerText = data;
+            datalist.appendChild(option);
+        });
+    }
+    
     self.onload = function () {
         const $masterpw = get("masterpw");
         const $domainname = get("domainname");
@@ -378,6 +387,18 @@ let SitePasswordWeb = ((function (self) {
                 warnElement.innerHTML += "You can also pick a new nickname if this page is for a different account.";
                 phishingWarningOn(settings);
             }
+            clearDatalist("sitename");
+        }
+        $sitename.onkeyup = function () {
+            handleKeyup("sitename");
+        }
+        $sitename.onfocus = function () {
+            let set = new Set();
+            Object.keys(SitePassword.database.sites).forEach((sitename) => {
+                set.add(SitePassword.database.sites[normalize(sitename)].sitename);
+            })
+            let list = [... set].sort();
+            setupdatalist(this, list);
         }
         $sitename.onkeyup = function () {
             handleKeyup("sitename");
@@ -386,7 +407,18 @@ let SitePasswordWeb = ((function (self) {
         $username.onkeyup = function () {
             handleKeyup("username");
         }
-
+        $username.onblur = function() {
+            clearDatalist("username");
+        }
+        $username.onfocus = function () {
+            let set = new Set();
+            Object.keys(SitePassword.database.sites).forEach((sitename) => {
+                set.add(SitePassword.database.sites[normalize(sitename)].username);
+            })
+            let list = [... set].sort();
+            setupdatalist(this, list);
+        }
+    
         const $phishing = get("phishing");
         $resetbutton.onclick = function () {
             $domainname.value = "";
@@ -576,7 +608,14 @@ let SitePasswordWeb = ((function (self) {
                 $startwithletter.checked = false;
             }
         }
-
+        function clearDatalist(listid) {
+            let datalist = get(listid);
+            if (datalist.hasChildNodes) {
+                const newDatalist = datalist.cloneNode(false);
+                datalist.replaceWith(newDatalist);
+            }
+        }
+        
         $downloadbutton.onclick = function siteDataHTML() {
             const domains = SitePassword.database.domains;
             const sites = SitePassword.database.sites;
