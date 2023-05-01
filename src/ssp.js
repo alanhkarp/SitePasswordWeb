@@ -112,6 +112,7 @@ let SitePasswordWeb = ((function (self) {
             $domainname.value = bkmkSettings.domainname;
             $sitename.value = bkmkSettings.sitename;
             $username.value = bkmkSettings.username;
+            get("bkmk").style.display = "block";
             $masterpw.focus();
         }
 
@@ -269,6 +270,7 @@ let SitePasswordWeb = ((function (self) {
 
         $domainname.onblur = function () {
             const domainname = parseDomain(normalize($domainname.value));
+            get("bkmk").style.display = "none";
             $domainname.value = domainname;
             SitePassword.domainname = domainname;
             const sitename = SitePassword.siteForDomain(domainname);
@@ -417,6 +419,19 @@ let SitePasswordWeb = ((function (self) {
             })
             let list = [... set].sort();
             setupdatalist(this, list);
+        }
+
+        let $bkmkDomain = get("bkmkDomain");
+        $bkmkDomain.onpaste = function () {
+            setTimeout(() => {
+                if (parseDomain($bkmkDomain.value) === $domainname.value) {
+                    phishingWarningOff();
+                } else {
+                    const settings = SitePassword.loadSettings($sitename.value);
+                    phishingWarningOn(settings);
+                }                    
+                get("bkmk").style.display = "none";
+            }, 0);
         }
     
         const $phishing = get("phishing");
