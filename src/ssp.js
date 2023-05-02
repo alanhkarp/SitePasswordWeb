@@ -719,6 +719,16 @@ let SitePasswordWeb = ((function (self) {
             }
         }
 
+        if (bkmkSettings) {
+            SitePassword.loadSettings(bkmkSettings.sitename);
+            SitePassword.storeSettings();
+            get("bkmk").style.display = "block";
+            SitePassword.settings = bkmkSettings;
+            SitePassword.domainname = bkmkSettings.domainname;
+            $domainname.value = bkmkSettings.domainname;
+            updateSettings(bkmkSettings);
+            enableRemember();
+        }
         $masterpw.focus();
     }
     return self;
