@@ -468,16 +468,17 @@ let SitePasswordWeb = ((function (self) {
             };
         }
         function phishingWarningMsg(testDomain) {
-            let warnElement = get("phishingtext");
-            warnElement.innerHTML = "<strong>Warning:</strong> You may be at a fake site that is trying to steal your password. ";
-            warnElement.innerHTML += "You previously used this nickname for";
-            warnElement.innerHTML += "<pre style=\"margin-left:1em;\">" + $domainname.value + "</pre>";
-            warnElement.innerHTML += "but the domain name asking for your password is";
-            warnElement.innerHTML += "<pre style=\"margin-left:1em;\">" + parseDomain(normalize(testDomain)) + "</pre>";
-            warnElement.innerHTML += "It is common to see different domain names for the same account login. ";
-            warnElement.innerHTML += "Click the top (green) button if that's not the case or the middle (yellow) button if it is. ";
-            warnElement.innerHTML += "You can also pick a new nickname if this page is for a different account.";
-        }
+            let warnElement1 = get("phishingtext1");
+            warnElement1.innerText  = "Warning: You may be at a fake site that is trying to steal your password. ";
+            warnElement1.innerText += "You previously used this nickname for";
+            get("phishingtext2").innerText = testDomain;
+            get("phishingtext3").innerText = "The domain name asking for your password is";
+            get("phishingtext4").innerText = get("domainname").value;
+            let warnElement5 = get("phishingtext5");
+            warnElement5.innerText  = "It is common to see different domain names for the same account login. ";
+            warnElement5.innerText += "Click the top (green) button if that's not the case or the middle (red) button if it is. ";
+            warnElement5.innerText += "You can also pick a new nickname if this page is for a different account.";
+       }
 
         const $http = get("http");
         function httpWarningOn() {

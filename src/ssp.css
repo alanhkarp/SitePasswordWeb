@@ -19,6 +19,18 @@
 .column {
   flex: 1;
 }
+.warning {
+  padding : 1ex;
+  border : 4pt solid red;
+  background-color : white;
+  width: 92%;
+}
+.phishing {
+  font-family: monospace; 
+  font-size: 10pt;
+  width: 20pt;
+  word-wrap: break-word;
+}
 #root {
   display: block;
 }
