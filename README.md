@@ -3,7 +3,7 @@
 
 It's too hard for you to remember a strong password for every site you use. Password managers take care of this problem for you. Most of them store your passwords in encrypted form, either on your machine or in the cloud.
 
-SitePassword is different. It calculates your password for the site from a single master password and your nickname and user name for the site. That means you can usually get your password if you remember those three things. (Some sites require more settings.) Just go to [SitePassword.info](https://sitepassword.info) or [the page on Github](https://alanhkarp.github.io/SitePasswordWeb) and fill in the form. 
+SitePassword is different. It calculates your password for the site from a single super password and your nickname and user name for the site. That means you can usually get your password if you remember those three things. (Some sites require more settings.) Just go to [SitePassword.info](https://sitepassword.info) or [the page on Github](https://alanhkarp.github.io/SitePasswordWeb) and fill in the form. 
 
 [Who Should Use The Web Page](#who)
 ---------------------
@@ -16,22 +16,22 @@ compatible browser and device, currently Brave, Chrome, Edge, Opera, and Vivaldi
 Unfortunately, those browsers don't allow extensions on mobile devices.
 
 
-[Your Master Password](#masterpassword)
+[Your Super Password](#superpassword)
 ---------------------------------------
 
-You should choose a strong master password, one with upper and 
+You should choose a strong super password, one with upper and 
 lower case letters, numbers, and special characters.  The stronger
 the better.  The reason is simple.  A bad guy who knows one site 
 password and can guess your nickname and user name for that site
-can start guessing master passwords.  You want to make that job 
+can start guessing super passwords.  You want to make that job 
 has hard as you can.
 
-SitePassword doesn't prevent you from using a weak master password,
+SitePassword doesn't prevent you from using a weak super password,
 but it does warn you.  There is a strength indicator directly below 
-the master password field.  It uses a meter, words, and color to 
-let you know how strong your master password is. 
+the super password field.  It uses a meter, words, and color to 
+let you know how strong your super password is. 
 
-SitePassword cannot retrieve your master password. 
+SitePassword cannot retrieve your super password. 
 You should make sure it's something you won't easily forget.  You 
 might even want to write it down and keep the copy in a secure place.
 
@@ -45,7 +45,7 @@ potential phishing.
 
 SitePassword could generate a weak site password just by chance. 
 To let you know that has happened, it uses the same colors that 
-appear in the master password 
+appear in the super password 
 strength meter to tell you how strong your site password is.  For 
 example, if your site password is orange, then it is weak. 
 In that case, just choose a different nickname for the site.

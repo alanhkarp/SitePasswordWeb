@@ -19,7 +19,7 @@ if (typeof SitePassword !== 'object') {
         if pasted bookmark does not match domainname
             phishing warning!
             if resetbutton
-                clear all fields except masterpassword
+                clear all fields except superpassword
             if trustbutton
                 sitename/username/settings loaded from bookmark
                 remember enabled
@@ -34,7 +34,7 @@ if (typeof SitePassword !== 'object') {
         if domainname does not designate sitename
             phishing warning!
             if resetbutton
-                clear all fields except masterpassword
+                clear all fields except superpassword
             if trustbutton
                 username/settings loaded from database
                 remember enabled
@@ -80,7 +80,7 @@ let SitePasswordWeb = ((function (self) {
     }
     
     self.onload = function () {
-        const $masterpw = get("masterpw");
+        const $superpw = get("superpw");
         const $domainname = get("domainname");
         const $bookmark = get("bookmark");
         const $sitename = get("sitename");
@@ -113,15 +113,15 @@ let SitePasswordWeb = ((function (self) {
             $sitename.value = bkmkSettings.sitename;
             $username.value = bkmkSettings.username;
             get("bkmk").style.display = "block";
-            $masterpw.focus();
+            $superpw.focus();
         }
 
         function loadSettingControls(settings) {
             $providesitepw.checked = settings.providesitepw;
             if ($providesitepw.checked && $sitename && $username) {
                 $sitepw.readOnly = false;
-                $sitepw.placeholder = "Enter your master password";
-                $masterpw.focus();
+                $sitepw.placeholder = "Enter your super password";
+                $superpw.focus();
             }
             $pwlength.value = settings.pwlength;
             $startwithletter.checked = settings.startwithletter;
@@ -181,7 +181,7 @@ let SitePasswordWeb = ((function (self) {
         function generatePassword() {
             saveSettingControls(SitePassword.settings);
             const pw = SitePassword.generatePassword();
-            if (pw || !$masterpw.value) {
+            if (pw || !$superpw.value) {
                 $pwok.style.display = "flex";
                 $pwfail.style.display = "none";
             } else {
@@ -240,32 +240,32 @@ let SitePasswordWeb = ((function (self) {
         const strengthColor = ["#bbb", "#f06", "#f90", "#093", "#036"]; // 0,3,6,9,C,F
         const $meter = get("password-strength-meter");
         const $meterText = get("password-strength-text");
-        $masterpw.onblur = function () {
-            SitePassword.setMasterPassword($masterpw.value);
+        $superpw.onblur = function () {
+            SitePassword.setSuperPassword($superpw.value);
             generatePassword();
-            const report = zxcvbn($masterpw.value);
+            const report = zxcvbn($superpw.value);
             $meter.value = report.score;
             $meterText.innerHTML = strengthText[report.score];
-            $masterpw.style.color = strengthColor[report.score];
-            $masterpw.title = strengthText[report.score] + " Master Password";
+            $superpw.style.color = strengthColor[report.score];
+            $superpw.title = strengthText[report.score] + " Super Password";
         }
-        $masterpw.onkeyup = function () {
-            $masterpw.onblur();
-            //$masterpw.focus();
+        $superpw.onkeyup = function () {
+            $superpw.onblur();
+            //$superpw.focus();
         }
-        const $masterpwhide = get("masterpwhide");
-        const $masterpwshow = get("masterpwshow");
-        $masterpwhide.onclick = function () {
-            $masterpw.type = "password";
-            $masterpwhide.style.display = "none";
-            $masterpwshow.style.display = "block";
-            $masterpw.focus();
+        const $superpwhide = get("superpwhide");
+        const $superpwshow = get("superpwshow");
+        $superpwhide.onclick = function () {
+            $superpw.type = "password";
+            $superpwhide.style.display = "none";
+            $superpwshow.style.display = "block";
+            $superpw.focus();
         }
-        $masterpwshow.onclick = function () {
-            $masterpw.type = "text";
-            $masterpwhide.style.display = "block";
-            $masterpwshow.style.display = "none";
-            $masterpw.focus();
+        $superpwshow.onclick = function () {
+            $superpw.type = "text";
+            $superpwhide.style.display = "block";
+            $superpwshow.style.display = "none";
+            $superpw.focus();
         }
 
         $domainname.onblur = function () {
@@ -697,7 +697,7 @@ let SitePasswordWeb = ((function (self) {
 
         get("useinfo").onclick = function () { sectionClick("use") };
         get("overviewinfo").onclick = function () { sectionClick("overview"); };
-        get("masterinfo").onclick = function () { sectionClick("master"); };
+        get("superinfo").onclick = function () { sectionClick("super"); };
         get("siteinfo").onclick = function () { sectionClick("site"); };
         get("acceptableinfo").onclick = function () { sectionClick("acceptable"); };
         get("changeinfo").onclick = function () { sectionClick("change"); };
@@ -729,7 +729,7 @@ let SitePasswordWeb = ((function (self) {
             updateSettings(bkmkSettings);
             enableRemember();
         }
-        $masterpw.focus();
+        $superpw.focus();
     }
     return self;
 })({

@@ -18,7 +18,7 @@ let SitePassword = ((function (self) {
         specials: (self.specials || "_"),
         xor: new Array(12).fill(0),
     }
-    let masterpassword = "";
+    let superpassword = "";
 
     function normalize(name) {
         if (name) {
@@ -139,7 +139,7 @@ let SitePassword = ((function (self) {
         if (settings.allowupper || settings.allowlower || settings.allownumber) {
             const n = normalize(settings.sitename);
             const u = normalize(settings.username);
-            const m = self.getMasterPassword();
+            const m = self.getSuperPassword();
             if (!m) {
                 return "";
             }
@@ -195,12 +195,12 @@ let SitePassword = ((function (self) {
     self.generatePassword = generatePassword;
     self.xorStrings = xorStrings;
     self.stringXorArray = stringXorArray;
-    self.getMasterPassword = function () {
-        return cloneObject(masterpassword);
+    self.getSuperPassword = function () {
+        return cloneObject(superpassword);
     }
-    self.setMasterPassword = function (pw) {
+    self.setSuperPassword = function (pw) {
         if (typeof pw === 'string') {
-            masterpassword = cloneObject(pw);
+            superpassword = cloneObject(pw);
             return pw;
         }
         return undefined;
@@ -293,7 +293,7 @@ let SitePassword = ((function (self) {
     return self;
 })({
     version: "1.1",
-    clearmasterpw: false,
+    clearsuperpw: false,
     miniter: 100,
     maxiter: 1000,
     digits: "0123456789",
