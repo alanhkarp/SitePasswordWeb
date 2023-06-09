@@ -1,7 +1,8 @@
 "use strict";
 let SitePassword = ((function (self) {
     const storagekey = "SitePasswordData";
-    const defaultsettings = {
+    self.defaultskey = "SitePasswordDefaults";
+    self.defaultsettings = {
         sitename: "",
         username: "",
         pwlength: 12,
@@ -38,6 +39,7 @@ let SitePassword = ((function (self) {
         try {
             if (typeof database === 'object') {
                 localStorage[storagekey] = JSON.stringify(database);
+                localStorage[self.defaultskey] = JSON.stringify(self.defaultsettings);
             } else {
                 console.log("can't persist database:", database);
             }
@@ -206,7 +208,9 @@ let SitePassword = ((function (self) {
         return undefined;
     }
     self.getDefaultSettings = function () {
-        return cloneObject(defaultsettings);
+        let newdefaultsstr = localStorage[self.defaultskey];
+        if (newdefaultsstr) self.defaultsettings = JSON.parse(newdefaultsstr);
+        return cloneObject(self.defaultsettings);
     }
     self.settings = self.getDefaultSettings();
     if (typeof self.database !== 'object') {
@@ -244,7 +248,7 @@ let SitePassword = ((function (self) {
         sitename = normalize(sitename);
         let settings = (sitename ? self.database.sites[sitename] : undefined);
         if (!settings) {
-            settings = defaultsettings;
+            settings = self.defaultsettings;
         }
         self.settings = cloneObject(settings);
         cachedsettings = JSON.stringify(self.settings);
@@ -254,6 +258,7 @@ let SitePassword = ((function (self) {
         const domainname = self.domainname;
         const settings = self.settings;
         const sitename = normalize(settings.sitename);
+        localStorage.setItem(self.defaultskey, JSON.stringify(self.defaultsettings));
         if (domainname && sitename) {
             let oldsitename = self.database.domains[domainname];
             if ((!oldsitename) || sitename === oldsitename) {

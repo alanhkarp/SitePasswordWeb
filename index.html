@@ -124,7 +124,7 @@
               title="A unique nickname you associate with this account.  For example, use the same nickname for www.example.com and login.example.com." 
               />
               <datalist id="sitenames"></datalist>
-            </div>
+          </div>
           <div class="form-row">
             <label for="username" class="sr-only">User name:</label>
             <input 
@@ -242,12 +242,12 @@
                 disabled="disabled">
                 Forget Settings
               </button>
-           </div>
+            </div>
+          </div>
           <div id="settings">
             <div class="setting-row" 
               id="providesitepwdiv"
               title="You must fill in the SitePassword form before you can provide your own site password.">
-              <hr />
               <input id="providesitepw" 
                 type="checkbox"
                 disabled
@@ -268,18 +268,19 @@
                 placeholder="Code from your settings"
                 title="Paste or type the code from your settings here." />
             </div>
-            <hr />
-              <div class="nodisplay">
-                <div class="setting-row">
-                  <input id="clearsuperpw" type="checkbox" />
-                  <span>Clear super password on use.</span>
-                </div>
-                <hr />
-              </div>
+            <div class="nodisplay">
               <div class="setting-row">
-                <span>Password is</span>
-                <input id="pwlength" type="text" value="12" size="2" />
-                <span>characters long</span>
+                <input id="clearsuperpw" type="checkbox" />
+                <span>Clear super password on use.</span>
+              </div>
+            </div>
+            <div id="defaultsettings" class="boxed">
+              <div class="setting-row">
+                <center>
+                  <span>Site password is</span>
+                  <input id="pwlength" type="text" value="12" size="2" />
+                  <span>characters long</span>
+                </center>
               </div>
               <div class="setting-row">
                 <input id="startwithletter" type="checkbox" checked="checked" />
@@ -322,19 +323,27 @@
                   <input id="specials" class="fixed" type="text" value="$/!=@?._-" size="12" maxlength="12" />
                 </span>
               </div>
-              <hr />
               <div class="form-row">
-                <button id="downloadbutton" type="button" style="display: 
-                  inline" target="_blank"
-                  title="Download the settings stored on this machine to a file that you can use to calculate your passwords when the SitePassword extension is not available.">
-                  Download Local Data
-                </button>
-                <a id="data" href="data:application/octet-stream," target="_blank" style="display: none"
-                  download="SiteData.html">SiteData.html</a>
+                <button id="makedefaultbutton"
+                  type="button"
+                  style="display: inline; margin-left: 40px; margin-right: 40px;"
+                  target="_blank"
+                  title="Make the settings in the box your default"
+                  >
+                  Save as Default 
+                </button>                  
               </div>
-            </div>
           </div>
+          <div class="form-row">
+            <button id="downloadbutton" type="button" style="display: 
+              inline" target="_blank"
+              title="Download the settings stored on this machine to a file that you can use to calculate your passwords when the SitePassword extension is not available.">
+              Download Local Data
+            </button>
+            <a id="data" href="data:application/octet-stream," target="_blank" style="display: none"
+              download="SiteData.html">SiteData.html</a>
         </div>
+    </div>
       </div>
       <div id="instructionpanel" style="display: none;">
         <h2 class="nodisplay">Instructions</h2>

@@ -105,7 +105,11 @@ let SitePasswordWeb = ((function (self) {
         const $allowspecialcheckbox = get("allowspecialcheckbox");
         const $minspecial = get("minspecial");
         const $specials = get("specials");
+        const $makedefaultbutton = get("makedefaultbutton")
         const $downloadbutton = get("downloadbutton");
+        // Fill in default values in case the user has changed them
+        let defaultsettings = SitePassword.getDefaultSettings();
+        loadSettingControls(defaultsettings);
 
         if (bkmkSettings) {
             SitePassword.settings = bkmkSettings;
@@ -516,10 +520,10 @@ let SitePasswordWeb = ((function (self) {
             $sitepw.value = provided;
             enableRemember();
          }
-         $sitepw.onkeyup = function () {
+        $sitepw.onkeyup = function () {
             $providecode.disabled = true;
             $sitepw.onblur();
-         }
+        }
         $remember.onclick = function () {
             SitePassword.storeSettings();
             //phishingWarningOff();
@@ -636,7 +640,30 @@ let SitePasswordWeb = ((function (self) {
                 datalist.replaceWith(newDatalist);
             }
         }
-        
+        $makedefaultbutton.onclick = function () {
+            let newDefaults = {
+                sitename: "",
+                username: "",
+                providesitepw: false,
+                xor: new Array(12).fill(0),
+                domainname: "",
+                pwdomainname: "",
+                pwlength: $pwlength.value,
+                startwithletter: $startwithletter.checked,
+                allowlower: $allowlowercheckbox.checked,
+                allowupper: $allowuppercheckbox.checked,
+                allownumber: $allownumbercheckbox.checked,
+                allowspecial: $allowspecialcheckbox.checked,
+                minlower: $minlower.value,
+                minupper: $minupper.value,
+                minnumber: $minnumber.value,
+                minspecial: $minspecial.value,
+                specials: $specials.value,
+            }
+            SitePassword.defaultsettings = newDefaults;
+            SitePassword.storeSettings();
+        }
+            
         $downloadbutton.onclick = function siteDataHTML() {
             const domains = SitePassword.database.domains;
             const sites = SitePassword.database.sites;
