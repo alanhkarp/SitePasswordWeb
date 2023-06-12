@@ -193,6 +193,7 @@ let SitePassword = ((function (self) {
         }
         return str;
     }
+    self.array2string = array2string;
     self.normalize = normalize;
     self.generatePassword = generatePassword;
     self.xorStrings = xorStrings;
@@ -250,6 +251,10 @@ let SitePassword = ((function (self) {
         if (!settings) {
             settings = self.defaultsettings;
         }
+        if ('string' !== typeof settings.specials) {
+            let specials = array2string(settings.specials);
+            settings.specials = specials;
+        }
         self.settings = cloneObject(settings);
         cachedsettings = JSON.stringify(self.settings);
         return self.settings;
@@ -257,6 +262,10 @@ let SitePassword = ((function (self) {
     self.storeSettings = function () {
         const domainname = self.domainname;
         const settings = self.settings;
+        if ("string" === typeof settings.specials) {
+            let array = string2array(settings.specials);
+            settings.specials = array;
+        }
         const sitename = normalize(settings.sitename);
         localStorage.setItem(self.defaultskey, JSON.stringify(self.defaultsettings));
         if (domainname && sitename) {

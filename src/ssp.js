@@ -54,6 +54,11 @@ if (query) {
     let params = new URLSearchParams(query);
     let bkmk = params.get("bkmk");
     bkmkSettings = JSON.parse(bkmk.substring(6));
+    if ('string' !== typeof bkmkSettings.specials) {
+        let specials = SitePassword.array2string(bkmkSettings.specials);
+        bkmkSettings.specials = specials;
+        SitePassword.settings = bkmkSettings;
+    }
 }
 
 let SitePasswordWeb = ((function (self) {
@@ -112,7 +117,6 @@ let SitePasswordWeb = ((function (self) {
         loadSettingControls(defaultsettings);
 
         if (bkmkSettings) {
-            SitePassword.settings = bkmkSettings;
             $domainname.value = bkmkSettings.domainname;
             $sitename.value = bkmkSettings.sitename;
             $username.value = bkmkSettings.username;
