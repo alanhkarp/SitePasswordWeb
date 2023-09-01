@@ -53,7 +53,11 @@
             </div>
           </div>
           <div class="form-row">
-            <label for="superpw" class="sr-only">Super password:</label>
+            <label for="superpw" class="label">
+              Super password
+              <meter max="4" id="password-strength-meter" title="Super password strength"></meter>
+              Strength
+            </label>
             <input 
               id="superpw" 
               class="fixed" 
@@ -78,14 +82,7 @@
             </div>
           </div>
           <div class="form-row">
-            <div style="flex: 1;"></div>
-            <meter max="4" id="password-strength-meter" title="Super password strength"></meter>
-            <span id="password-strength-text">Too Weak</span>
-            <div style="flex: 1;"></div>
-          </div>
-          <hr />
-          <div class="form-row">
-            <label for="domainname" class="sr-only">Domain name:</label>
+            <label for="domainname" class="label">Domain name</label>
             <input 
               id="domainname" 
               class="fixed" 
@@ -96,7 +93,7 @@
               title="Login page URL" />
           </div>
           <div class="form-row">
-            <label for="bookmark" class="sr-only">SitePasswordData bookmark:</label>
+            <label for="bookmark" class="label">SitePasswordData bookmark</label>
             <input 
               id="bookmark" 
               disabled="disabled"
@@ -110,9 +107,8 @@
             </svg>
           </div>
           <p>...or fill in the form below.</p>
-          <hr />
           <div class="form-row">
-            <label for="sitename" class="sr-only">Site name:</label>
+            <label for="sitename" class="label">Site name</label>
             <input 
               id="sitename" 
               class="sans" 
@@ -126,7 +122,7 @@
               <datalist id="sitenames"></datalist>
           </div>
           <div class="form-row">
-            <label for="username" class="sr-only">User name:</label>
+            <label for="username" class="label">User name</label>
             <input 
               id="username" 
               class="sans" 
@@ -178,7 +174,7 @@
             </div>
           </div>
           <div id="http" class="warning nodisplay">
-            <h4>HTTP WARNING!</h4>
+            <h3>HTTP WARNING!</h3>
             <p>
               The connection to this page is not secure. Are you sure you want
               to enter your password?
@@ -206,9 +202,8 @@
             />
           </div>
           <div id="results">
-            <hr />
             <div id="pwok" class="form-row">
-              <label for="sitepw" class="sr-only">Site password:</label>
+              <label for="sitepw" class="label">Site password</label>
               <input id="sitepw" class="fixed" readonly="readonly" type="text" value=""
                 placeholder="Generated site password" title="Site Password" />
               <div id="sitepwcopy" class="icon inner-icon-1" title="Copy site password to clipboard">
@@ -257,7 +252,7 @@
               <span>Provide your own site password.</span>
             </div>
             <div class="form-row">
-              <label for="providecode" class="sr-only">Code:</label>
+              <label for="providecode" class="sr-only">Code</label>
               <input 
                 id="providecode" 
                 class="sans" 

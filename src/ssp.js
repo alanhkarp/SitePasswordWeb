@@ -253,7 +253,7 @@ let SitePasswordWeb = ((function (self) {
             generatePassword();
             const report = zxcvbn($superpw.value);
             $meter.value = report.score;
-            $meterText.innerHTML = strengthText[report.score];
+            $meter.title = strengthText[report.score];
             $superpw.style.color = strengthColor[report.score];
             $superpw.title = strengthText[report.score] + " Super Password";
         }
