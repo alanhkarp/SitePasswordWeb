@@ -96,7 +96,6 @@ let SitePasswordWeb = ((function (self) {
         const $results = get("results");
         const $sitepw = get("sitepw");
         const $remember = get("remember");
-        const $forget = get("forget");
         const $providesitepw = get("providesitepw");
         const $providecode = get("providecode");
         const $pwlength = get("pwlength");
@@ -235,12 +234,18 @@ let SitePasswordWeb = ((function (self) {
         }
 
         const $instructionpanel = get("instructionpanel");
+        const $instructionopen = get("instructionopen");
+        const $instructionclose = get("instructionclose");
         const $maininfo = get("maininfo");
         $maininfo.onclick = function () {
             if ($instructionpanel.style.display === "none") {
                 $instructionpanel.style.display = "block";
+                $instructionopen.style.display = "none";
+                $instructionclose.style.display = "block";
             } else {
                 $instructionpanel.style.display = "none";
+                $instructionopen.style.display = "block";
+                $instructionclose.style.display = "none";
             }
         }
 
@@ -533,16 +538,9 @@ let SitePasswordWeb = ((function (self) {
             //phishingWarningOff();
             enableRemember();
         }
-        $forget.onclick = function () {
-            const settings = SitePassword.forgetSettings();
-            $domainname.value = "";
-            updateSettings(settings);
-        }
         function enableRemember() {
             $remember.disabled =
                 !($domainname.value && $sitename.value && $username.value && SitePassword.settingsModified());
-            $forget.disabled =
-                (!$domainname.value || SitePassword.settingsModified()) || !$sitename.value;
         }
         $providesitepw.onclick = function () {
             const settings = SitePassword.settings;
