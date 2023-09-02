@@ -254,7 +254,8 @@ input::placeholder {
   margin: 1px;
 }
 .setting-row {
-  margin: 10px 0;
+  position: relative;
+  margin: 10px 5px;
   height: 1.5em;
 }
 .icon {
