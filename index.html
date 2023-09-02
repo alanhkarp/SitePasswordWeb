@@ -71,21 +71,30 @@
               autocomplete="off"
               placeholder="Choose a strong super password"
               title="Super Password" />
-            <div id="superpwhide" class="icon inner-icon-1 nodisplay" title="Hide Super Password">
-              <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M12 5c-6.307 0-9.367 5.683-9.91 6.808a.435.435 0 0 0 0 .384C2.632 13.317 5.692 19 12 19s9.367-5.683 9.91-6.808a.435.435 0 0 0 0-.384C21.368 10.683 18.308 5 12 5z" />
-                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2" />
-              </svg>
+            <div id="superpw3bluedots" class="icon inner-icon-1" 
+              title=" Click for menu" style="display: block">
+              <img src="src/3bluedots.png" class="dots">
             </div>
-            <div id="superpwshow" class="icon inner-icon-1" title="Show Super Password">
-              <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M7 6.362A9.707 9.707 0 0 1 12 5c6.307 0 9.367 5.683 9.91 6.808.06.123.06.261 0 .385-.352.728-1.756 3.362-4.41 5.131M14 18.8a9.93 9.93 0 0 1-2 .2c-6.307 0-9.367-5.683-9.91-6.808a.44.44 0 0 1 0-.386c.219-.452.84-1.632 1.91-2.885m6 .843A3 3 0 0 1 14.236 14M3 3l18 18" />
-              </svg>
+            <div id="superpwmenu" class="nodisplay menu inner-icon-1">
+              <div id="superpwmenushow" title="Show your super password">
+                <svg class="icon menu-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M7 6.362A9.707 9.707 0 0 1 12 5c6.307 0 9.367 5.683 9.91 6.808.06.123.06.261 0 .385-.352.728-1.756 3.362-4.41 5.131M14 18.8a9.93 9.93 0 0 1-2 .2c-6.307 0-9.367-5.683-9.91-6.808a.44.44 0 0 1 0-.386c.219-.452.84-1.632 1.91-2.885m6 .843A3 3 0 0 1 14.236 14M3 3l18 18" />
+                </svg>
+              </div>
+              <div id="superpwmenuhide" class="nodisplay" title="Hide your super password">
+                <svg class="icon menu-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 5c-6.307 0-9.367 5.683-9.91 6.808a.435.435 0 0 0 0 .384C2.632 13.317 5.692 19 12 19s9.367-5.683 9.91-6.808a.435.435 0 0 0 0-.384C21.368 10.683 18.308 5 12 5z" />
+                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2" />
+                </svg>
+              </div>
+              <div id="superpwmenuhelp" title="Find out more about choosing a strong super password.">
+                <img src="src/help.png" class="icon menu-icon">
+              </div>
             </div>
-          </div>
+            </div>
           <div class="form-row">
             <label for="domainname" class="label">Domain name</label>
             <input 
@@ -96,7 +105,23 @@
               value="" 
               placeholder="Paste the login page URL here"
               title="Login page URL" />
-          </div>
+              <div id="domainname3bluedots" class="icon inner-icon-1" 
+              title=" Click for menu" style="display: block">
+              <img src="src/3bluedots.png" class="dots">
+            </div>
+            <div id="domainnamemenu" class="nodisplay menu inner-icon-1">
+              <div id="domainnamemenuforget"
+                title="Click to enable forgetting the settings associated with this domain name.">
+                <img src="src/forget.png" class="icon menu-icon menu-icon-blue";"
+                >
+              </div>
+              <div
+                id="domainnamemenuhelp"
+                title="Learn more about how SitePassword uses the domain name.">
+                <img src="src/help.png" class="icon menu-icon menu-icon-blue">
+              </div>
+            </div>
+            </div>
           <div class="form-row">
             <label for="bookmark" class="label">SitePasswordData bookmark</label>
             <input 
@@ -123,9 +148,23 @@
               value="" 
               placeholder="A unique nickname for this account"
               title="A unique nickname you associate with this account.  For example, use the same nickname for www.example.com and login.example.com." 
-              />
-              <datalist id="sitenames"></datalist>
-          </div>
+            />
+            <div id="sitename3bluedots" class="icon inner-icon-1" 
+              title=" Click for menu" style="display: block">
+              <img src="src/3bluedots.png" class="dots">
+            </div>
+            <div id="sitenamemenu" class="nodisplay menu inner-icon-1">
+              <div id="sitenamemenuforget"
+                title="Click to enable forgetting all domain names associated with this nickname.">
+                <img src="src/forget.png" class="icon menu-icon">
+              </div>
+              <div id="sitenamemenuhelp"
+                title="Find out more about how your nickname for a site is used to compute your site password.">
+                <img src="src/help.png" class="icon menu-icon">
+              </div>
+            </div>
+            <datalist id="sitenames"></datalist>
+            </div>
           <div class="form-row">
             <label for="username" class="label">User name</label>
             <input 
@@ -139,13 +178,28 @@
               title="Your user-id for this account" 
             />
             <datalist id="usernames"></datalist>
-            <div id="useridcopy" class="icon inner-icon-1" title="Copy username to clipboard">
-              <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5v0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v0M8 5v0a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v0" />
-              </svg>
+            <div id="usernamecopied" class="inner-icon-2 copied nodisplay">copied!</div>
+            <div id="username3bluedots" class="icon inner-icon-1" 
+              title=" Click for menu" style="display: block">
+              <img src="src/3bluedots.png" class="dots">
             </div>
-          </div>
+            <div id="usernamemenu" class="nodisplay menu inner-icon-2">
+              <div id="usernamemenuforget" display="block"
+                title="Click to enable forgetting all domain names associated with this userid.">
+                <img src="src/forget.png" class="icon menu-icon">
+              </div>
+              <div id="usernamemenucopy" display="block" title="Copy your user name to the clipboard.">
+                <svg class="icon menu-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5v0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v0M8 5v0a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v0" />
+                </svg>
+              </div>
+              <div id="usernamemenuhelp" title="Find out more about how SitePassword uses your user name for this account.">
+                <img src="src/help.png" class="icon menu-icon">
+              </div>
+            </div>
+            <datalist id="usernames"></datalist>
+            </div>
           <div class="form-row">
             <div id="phishing" class="warning nodisplay">
               <span id="phishingtext1"></span>
@@ -211,25 +265,35 @@
               <label for="sitepw" class="label">Site password</label>
               <input id="sitepw" class="fixed" disabled type="text" value=""
                 placeholder="Generated site password" title="Site Password" />
-              <div id="sitepwcopy" class="icon inner-icon-1" title="Copy site password to clipboard">
-                <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5v0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v0M8 5v0a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v0" />
-                </svg>
+              <div id="sitepwcopied" class="inner-icon-2 copied nodisplay">copied!</div>
+              <div id="sitepw3bluedots" class="icon inner-icon-1" 
+                  title=" Click for menu" style="display: block">
+                <img src="src/3bluedots.png" class="dots">
               </div>
-              <div id="sitepwhide" class="icon inner-icon-2" title="Hide Site Password">
-                <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 5c-6.307 0-9.367 5.683-9.91 6.808a.435.435 0 0 0 0 .384C2.632 13.317 5.692 19 12 19s9.367-5.683 9.91-6.808a.435.435 0 0 0 0-.384C21.368 10.683 18.308 5 12 5z" />
-                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" />
-                </svg>
-              </div>
-              <div id="sitepwshow" class="icon inner-icon-2 nodisplay" title="Show Site Password">
-                <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M7 6.362A9.707 9.707 0 0 1 12 5c6.307 0 9.367 5.683 9.91 6.808.06.123.06.261 0 .385-.352.728-1.756 3.362-4.41 5.131M14 18.8a9.93 9.93 0 0 1-2 .2c-6.307 0-9.367-5.683-9.91-6.808a.44.44 0 0 1 0-.386c.219-.452.84-1.632 1.91-2.885m6 .843A3 3 0 0 1 14.236 14M3 3l18 18" />
-                </svg>
+              <div id="sitepwmenu" class="nodisplay menu inner-icon-2">
+                <div id="sitepwmenushow" class="nodisplay" title="Show your site password">
+                  <svg class="icon menu-icon menu-icon-blue" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M7 6.362A9.707 9.707 0 0 1 12 5c6.307 0 9.367 5.683 9.91 6.808.06.123.06.261 0 .385-.352.728-1.756 3.362-4.41 5.131M14 18.8a9.93 9.93 0 0 1-2 .2c-6.307 0-9.367-5.683-9.91-6.808a.44.44 0 0 1 0-.386c.219-.452.84-1.632 1.91-2.885m6 .843A3 3 0 0 1 14.236 14M3 3l18 18" />
+                  </svg>
+                </div>
+                <div id="sitepwmenuhide" title="Hide your site password">
+                  <svg class="icon menu-icon menu-icon-blue" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 5c-6.307 0-9.367 5.683-9.91 6.808a.435.435 0 0 0 0 .384C2.632 13.317 5.692 19 12 19s9.367-5.683 9.91-6.808a.435.435 0 0 0 0-.384C21.368 10.683 18.308 5 12 5z" />
+                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="2" />
+                  </svg>
+                </div>
+                <div id="sitepwmenucopy" title="Copy your site password to the clipboard">
+                  <svg class="icon menu-icon menu-icon-blue" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5v0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v0M8 5v0a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v0" />
+                  </svg>
+                </div>
+                <div id="sitepwmenuhelp" title="Find out more about how SitePassword calculates your site password.">
+                  <img src="src/help.png" class="icon menu-icon menu-icon-blue">
+                </div>
               </div>
             </div>
             <div class="form-row">
