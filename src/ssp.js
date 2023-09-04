@@ -314,7 +314,7 @@ let SitePasswordWeb = ((function (self) {
         }
         get("superpwhelptextmore").onclick = function (e) {
             helpAllOff;
-            //sectionClick("superpw");
+            sectionClick("superpw");
         }
     
         $domainname.onblur = function () {
@@ -443,6 +443,30 @@ let SitePasswordWeb = ((function (self) {
         }
         function enableBookmark() {
             $bookmark.disabled = !($domainname.value);
+        }
+        get("bookmarkmenu").onmouseleave = function (e) {
+            menuOff("bookmark", e);
+        }
+        let $bookmark3bluedots = get("bookmark3bluedots");
+        let $bookmarkmenuhelp = get("bookmarkmenuhelp");
+        let $bookmarkhelptextclose = get("bookmarkhelptextclose");
+        let $bookmarkhelptextmore = get("bookmarkhelptextmore");
+        $bookmark3bluedots.onmouseover = function (e) {
+            menuOn("bookmark", e);
+        }
+        $bookmark3bluedots.onclick = get("bookmark3bluedots").onmouseover;
+        get("bookmarkmenu").onmouseleave = function (e) {
+            menuOff("bookmark", e);
+        } 
+        $bookmarkmenuhelp.onclick = function (e) {
+            helpItemOn("bookmark");
+        }
+        $bookmarkhelptextclose.onclick = function (e) {
+            helpAllOff();
+        }
+        $bookmarkhelptextmore.onclick = function (e) {
+            helpAllOff();
+            sectionClick("bookmark");
         }
 
         $sitename.onblur = function () {
@@ -940,6 +964,7 @@ let SitePasswordWeb = ((function (self) {
         }
         function allMenusOff() {
             get("domainnamemenu").style.display = "none";
+            get("bookmarkmenu").style.display = "none";
             get("superpwmenu").style.display = "none";
             get("sitenamemenu").style.display = "none";
             get("usernamemenu").style.display = "none";
@@ -947,6 +972,7 @@ let SitePasswordWeb = ((function (self) {
         }
         function dotsAllOn() {
             get("domainname3bluedots").style.display = "block";
+            get("bookmark3bluedots").style.display = "block";
             get("superpw3bluedots").style.display = "block";
             get("sitename3bluedots").style.display = "block";
             get("username3bluedots").style.display = "block";
@@ -955,7 +981,7 @@ let SitePasswordWeb = ((function (self) {
         function helpItemOn(which) {
             let $input = get(which);
             let top = $input.getBoundingClientRect().top - 15;
-        let $element = get(which + "helptext");
+            let $element = get(which + "helptext");
             if (!$element.style.display || $element.style.display === "none") {
                 helpAllOff();
                 $element.style.display = "block";
@@ -977,13 +1003,6 @@ let SitePasswordWeb = ((function (self) {
             for (let help of helps) {
                 helpItemOff(help.id); 
             } 
-        }
-        function dotsAllOn() {
-            get("domainname3bluedots").style.display = "block";
-            get("superpw3bluedots").style.display = "block";
-            get("sitename3bluedots").style.display = "block";
-            get("username3bluedots").style.display = "block";
-            get("sitepw3bluedots").style.display = "block";
         }
         
         get("useinfo").onclick = function () { sectionClick("use") };

@@ -288,6 +288,11 @@ input::placeholder {
 .menu-icon:active {
   background-color: rgb(136, 204, 255, 80%);
 }
+.inner-icon-0 {
+  position: absolute;
+  right: -10px;
+  top: 14px;
+}
 .inner-icon-1 {
   position: absolute;
   right: 10px;

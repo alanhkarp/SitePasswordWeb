@@ -105,7 +105,7 @@
               value="" 
               placeholder="Paste the login page URL here"
               title="Login page URL" />
-              <div id="domainname3bluedots" class="icon inner-icon-1" 
+            <div id="domainname3bluedots" class="icon inner-icon-1" 
               title=" Click for menu" style="display: block">
               <img src="src/3bluedots.png" class="dots">
             </div>
@@ -130,12 +130,18 @@
               autocomplete="off"
               title="Find the bookmark with your domain name in the SitePasswordData bookmark folder and paste it here."
               placeholder="...then, paste a SitePasswordData bookmark" />
-            <svg id="bookmarks" class="icon nodisplay" width="24px" height="24px" viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg" fill="none">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-4M8 3v9l3-3 3 3V3M8 3h6" />
-            </svg>
-          </div>
+              <div id="bookmark3bluedots" class="icon inner-icon-1" 
+              title=" Click for menu" style="display: block">
+              <img src="src/3bluedots.png" class="dots">
+            </div>
+             <div id="bookmarkmenu" class="nodisplay menu inner-icon-0">
+              <div
+                id="bookmarkmenuhelp"
+                title="Learn more about how you can get your settings from a bookmark.">
+                <img src="src/help.png" class="icon menu-icon menu-icon-blue">
+              </div>
+            </div>
+           </div>
           <p>...or fill in the form below.</p>
           <div class="form-row">
             <label for="sitename" class="label">Site name</label>
@@ -448,6 +454,29 @@
             </button>
           </div>
         </div>
+        <div id="bookmarkhelptext" name="help" class="helptext nodisplay">
+          <h3>Bookmark Help</h3>
+          <p>
+            Each domain name has a bookmark in the SitePasswordData bookmark folder.
+            That's the bookmark you can use to get your settings when you're on a machine
+            that doesn't have the SitePassword extension installed.
+          </p>
+          <p>
+            You don't have to remember your settings if you synchonize your 
+            bookmarks to this machine.  You can either click on the bookmark 
+            for the domain name to open this page with the form filled in, or
+            you can paste the bookmark into the form.
+          </p>
+          <div class="form-row">
+            <button id="bookmarkhelptextclose" class="button" title="Close this help text">
+              <span class="btn-text">Close</span>
+            </button>
+            &nbsp;&nbsp;
+            <button id="bookmarkhelptextmore" title="Learn more about how SitePassword uses domain names.">
+              <span class="btn-text">Learn more</span>
+            </button>
+          </div>
+       </div>
         <div id="sitenamehelptext" name="help" class="helptext nodisplay">
          <h3>Nickname Help</h3>
           <p>
