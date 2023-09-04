@@ -266,21 +266,57 @@ let SitePasswordWeb = ((function (self) {
             $superpw.onblur();
             //$superpw.focus();
         }
-        const $superpwhide = get("superpwhide");
-        const $superpwshow = get("superpwshow");
-        $superpwhide.onclick = function () {
+        const $superpwmenuhide = get("superpwmenuhide");
+        const $superpwmenushow = get("superpwmenushow");
+        $superpwmenuhide.onclick = function () {
             $superpw.type = "password";
-            $superpwhide.style.display = "none";
-            $superpwshow.style.display = "block";
+            $superpwmenuhide.style.display = "none";
+            $superpwmenushow.style.display = "block";
             $superpw.focus();
         }
-        $superpwshow.onclick = function () {
+        $superpwmenushow.onclick = function () {
             $superpw.type = "text";
-            $superpwhide.style.display = "block";
-            $superpwshow.style.display = "none";
+            $superpwmenuhide.style.display = "block";
+            $superpwmenushow.style.display = "none";
             $superpw.focus();
         }
-
+        get("superpwmenu").onmouseleave = function (e) {
+            menuOff("superpw", e);
+        }
+        get("superpw3bluedots").onmouseover = function (e) {
+            if (get("superpw").value) {
+                get("superpwmenushow").style.opacity = "1";
+                get("superpwmenuhide").style.opacity = "1";
+            } else {
+                get("superpwmenushow").style.opacity = "0.5";
+                get("superpwmenuhide").style.opacity = "0.5";
+            }
+            menuOn("superpw", e);      
+        }
+        get("superpw3bluedots").onclick = get("superpw3bluedots").onmouseover;
+        $superpwmenushow.onclick = function(e) {
+            if (!get("superpw").value) return;
+            get("superpw").type = "text";
+            $superpwmenuhide.classList.toggle("nodisplay");
+            $superpwmenushow.classList.toggle("nodisplay")    ;
+        }
+        get("superpwmenuhide").onclick = function(e) {
+            if (!get("superpw").value) return;
+            get("superpw").type = "password";
+            $superpwmenuhide.classList.toggle("nodisplay");
+            $superpwmenushow.classList.toggle("nodisplay")    ;
+        }
+        get("superpwmenuhelp").onclick = function (e) {
+            helpItemOn("superpw");
+        }
+        get("superpwhelptextclose").onclick = function (e) {
+            helpAllOff();
+        }
+        get("superpwhelptextmore").onclick = function (e) {
+            helpAllOff;
+            //sectionClick("superpw");
+        }
+    
         $domainname.onblur = function () {
             const domainname = parseDomain(normalize($domainname.value));
             get("bkmk").style.display = "none";
@@ -300,6 +336,39 @@ let SitePasswordWeb = ((function (self) {
         }
         $domainname.onkeyup = function () {
             enableBookmark();
+        }
+        get("domainnamemenu").onmouseleave = function (e) {
+            menuOff("domainname", e);
+        }
+        let $domainname3bluedots = get("domainname3bluedots");
+        let $domainnamemenuforget = get("domainnamemenuforget");
+        let $domainnamemenuhelp = get("domainnamemenuhelp");
+        let $domainnamehelptextclose = get("domainnamehelptextclose");
+        let $domainnamehelptextmore = get("domainnamehelptextmore");
+        $domainname3bluedots.onmouseover = function (e) {
+            let domainname = $domainname.value;
+            if (domainname && database.domains[domainname]) {
+                $domainnamemenuforget.style.opacity = "1";
+            } else {
+                $domainnamemenuforget.style.opacity = "0.5";
+            }
+            menuOn("domainname", e);
+        }
+        $domainname3bluedots.onclick = get("domainname3bluedots").onmouseover;
+        $domainnamemenuforget.onclick = function (e) {
+            msgon("forget");
+            let toforget = normalize(get("domainname").value);
+            addForgetItem(toforget);
+        }
+        $domainnamemenuhelp.onclick = function (e) {
+            helpItemOn("domainname");
+        }
+        $domainnamehelptextclose .onclick = function (e) {
+            helpAllOff();
+        }
+        $domainnamehelptextmore.onclick = function (e) {
+            helpAllOff();
+            sectionClick("domainname");
         }
         function parseDomain(url) {
             const protocol = url.split(":")[0].toLowerCase();
@@ -410,7 +479,44 @@ let SitePasswordWeb = ((function (self) {
         $sitename.onkeyup = function () {
             handleKeyup("sitename");
         }
-
+        get("sitenamemenu").onmouseleave = function (e) {
+            menuOff("sitename", e);
+        }
+        let $sitename3bluedots = get("sitename3bluedots");
+        $sitename3bluedots.onmouseover = function (e) {
+            let sitename = get("sitename").value;
+            if (sitename) {
+                get("sitenamemenuforget").style.opacity = "1";
+            } else {
+                get("sitenamemenuforget").style.opacity = "0.5";
+            }
+             menuOn("sitename", e);
+        }
+        $sitename3bluedots.onclick = $sitename3bluedots.onmouseover;
+        get("sitenamemenu").onmouseleave = function (e) {
+            menuOff("sitename", e);
+        }
+        get("sitenamemenuforget").onclick = function (e) {
+            msgon("forget");
+            let toforget = normalize(get("sitename").value);
+            let $list = get("toforgetlist");
+            for (let domain in database.domains) {
+                if (normalize(database.domains[domain]) === toforget) {
+                    addForgetItem(domain);
+                }
+            }
+        }
+        get("sitenamemenuhelp").onclick = function (e) {
+            helpItemOn("sitename");
+        }
+        get("sitenamehelptextclose").onclick = function (e) {
+            helpAllOff();
+        }
+        get("sitenamehelptextmore").onclick = function (e) {
+            helpAllOff();
+            sectionClick("sitename");
+        }
+    
         $username.onkeyup = function () {
             handleKeyup("username");
         }
@@ -425,7 +531,132 @@ let SitePasswordWeb = ((function (self) {
             let list = [... set].sort();
             setupdatalist(this, list);
         }
+        get("usernamemenu").onmouseleave = function (e) {
+            menuOff("username", e);
+        }
+        let $username3bluedots = get("username3bluedots");
+        get("username3bluedots").onmouseover = function (e) {
+            let username = get("username").value;
+            if (username) {
+                get("usernamemenuforget").style.opacity = "1";
+                get("usernamemenucopy").style.opacity = "1";
+            } else {
+                get("usernamemenuforget").style.opacity = "0.5";
+                get("usernamemenucopy").style.opacity = "0.5";
+            }
+             menuOn("username", e);
+        }
+        $username3bluedots.onclick = $username3bluedots.onmouseover;
+        get("usernamemenuforget").onclick = function (e) {
+            msgon("forget");
+            let toforget = normalize(get("username").value);
+            let $list = get("toforgetlist");
+            for (let domain in database.domains) {
+                let sitename = database.domains[domain];
+                if (normalize(database.sites[sitename].username) === toforget) {
+                    addForgetItem(domain);
+                }
+            }
+        }
+        get("usernamemenucopy").onclick = function(e) {
+            let username = get("username").value;
+            if (!username) return;
+            navigator.clipboard.writeText(username).then(() => {
+                if (logging) console.log("popup wrote to clipboard", username);
+                copied("username");
+            }).catch((e) => {
+                if (logging) console.log("popup username clipboard write failed", e);
+            });
+            menuOff("username", e);
+        }
+        get("usernamemenuhelp").onclick = function (e) {
+            helpItemOn("username");
+        }
+        get("usernamehelptextclose").onclick = function (e) {
+            helpAllOff();
+        }
+        get("usernamehelptextmore").onclick = function (e) {
+            helpAllOff();
+            sectionClick("username");
+        }    
+        get("usernamemenucopy").onclick = function () {
+            copyToClipboard($username);
+        }
+        get("sitepwmenucopy").onclick = function () {
+            copyToClipboard($sitepw);
+        }
 
+        $sitepw.onblur = function () {
+            if ($sitepw.readOnly) return;
+            let provided = $sitepw.value;
+            let computed = generatePassword();
+            SitePassword.settings.xor = SitePassword.xorStrings(provided, computed);
+            $sitepw.value = provided;
+            enableRemember();
+         }
+        $sitepw.onkeyup = function () {
+            $providecode.disabled = true;
+            $sitepw.onblur();
+        }
+        get("sitepwmenu").onmouseleave = function (e) {
+            menuOff("sitepw", e);
+        }
+        const $sitepw3bluedots = get("sitepw3bluedots");
+        const $sitepwmenucopy = get("sitepwmenucopy");
+        $sitepw3bluedots.onmouseover = function (e) {
+            let sitepw = get("sitepw").value;
+            if (sitepw) {
+                $sitepwmenucopy.style.opacity = "1";
+                $sitepwmenushow.style.opacity = "1";
+                $sitepwmenuhide.style.opacity = "1";
+            } else {
+                $sitepwmenucopy.style.opacity = "0.5";
+                $sitepwmenushow.style.opacity = "0.5";
+                $sitepwmenuhide.style.opacity = "0.5";
+            }
+            menuOn("sitepw", e);
+        }
+        $sitepw3bluedots.onclick = $sitepw3bluedots.onmouseover;
+        $sitepwmenucopy.onclick = function(e) {
+            let sitepw = get("sitepw").value;
+            if (!sitepw) return;
+            navigator.clipboard.writeText(sitepw).then(() => {
+                if (logging) console.log("popup wrote to clipboard", sitepw);
+                chrome.action.setTitle({title: "A site password may be on the clipboard."});
+                get("logopw").title = "A site password may be on the clipboard."
+                get("logo").style.display = "none";
+                get("logopw").style.display = "block";
+                chrome.action.setIcon({"path": "icon128pw.png"});
+                chrome.storage.local.set({"onClipboard": true})
+                copied("sitepw");
+            }).catch((e) => {
+                if (logging) console.log("popup sitepw clipboard write failed", e);
+            });
+            menuOff("sitepw", e);
+        }
+        get("sitepwmenuhelp").onclick = function (e) {
+            helpItemOn("sitepw");
+        }
+        get("sitepwhelptextclose").onclick = function (e) {
+            helpAllOff();
+        }
+        get("sitepwhelptextmore").onclick = function (e) {
+            helpAllOff();
+            sectionClick("sitepw");
+        }
+        const $sitepwmenuhide = get("sitepwmenuhide");
+        const $sitepwmenushow = get("sitepwmenushow");
+        $sitepwmenushow.onclick = function () {
+            get("sitepw").type = "text";
+            $sitepwmenushow.classList.toggle("nodisplay");
+            $sitepwmenuhide.classList.toggle("nodisplay")    ;
+        };
+        $sitepwmenuhide.onclick = function () {
+            get("sitepw").type = "password";
+            $sitepwmenushow.classList.toggle("nodisplay");
+            $sitepwmenuhide.classList.toggle("nodisplay");
+        }
+        
         let $bkmkDomain = get("bkmkDomain");
         $bkmkDomain.onpaste = function () {
             setTimeout(() => {
@@ -501,38 +732,6 @@ let SitePasswordWeb = ((function (self) {
             $http.style.display = "none";
         }
 
-        const $sitepwhide = get("sitepwhide");
-        const $sitepwshow = get("sitepwshow");
-        $sitepwhide.onclick = function () {
-            $sitepw.type = "password";
-            $sitepwhide.style.display = "none";
-            $sitepwshow.style.display = "block";
-            //$sitepw.focus();
-        }
-        $sitepwshow.onclick = function () {
-            $sitepw.type = "text";
-            $sitepwhide.style.display = "block";
-            $sitepwshow.style.display = "none";
-            $sitepw.focus();
-        }
-        get("useridcopy").onclick = function () {
-            copyToClipboard($username);
-        }
-        get("sitepwcopy").onclick = function () {
-            copyToClipboard($sitepw);
-        }
-        $sitepw.onblur = function () {
-            if ($sitepw.readOnly) return;
-            let provided = $sitepw.value;
-            let computed = generatePassword();
-            SitePassword.settings.xor = SitePassword.xorStrings(provided, computed);
-            $sitepw.value = provided;
-            enableRemember();
-         }
-        $sitepw.onkeyup = function () {
-            $providecode.disabled = true;
-            $sitepw.onblur();
-        }
         $remember.onclick = function () {
             SitePassword.storeSettings();
             //phishingWarningOff();
@@ -723,7 +922,70 @@ let SitePasswordWeb = ((function (self) {
             $data.click();
             return sd;
         }
-
+        // Generic code for menus
+        function copied(which) {
+            get(which + "copied").classList.remove("nodisplay");
+            setTimeout(() => {
+                get(which + "copied").classList.add("nodisplay");
+            }, 900);
+        }
+        function menuOn(which, e) {
+            allMenusOff();
+            get(which + "3bluedots").style.display = "none";
+            get(which + "menu").style.display = "flex";
+        }
+        function menuOff(which, e) {
+            dotsAllOn();
+            get(which + "menu").style.display = "none";
+        }
+        function allMenusOff() {
+            get("domainnamemenu").style.display = "none";
+            get("superpwmenu").style.display = "none";
+            get("sitenamemenu").style.display = "none";
+            get("usernamemenu").style.display = "none";
+            get("sitepwmenu").style.display = "none";
+        }
+        function dotsAllOn() {
+            get("domainname3bluedots").style.display = "block";
+            get("superpw3bluedots").style.display = "block";
+            get("sitename3bluedots").style.display = "block";
+            get("username3bluedots").style.display = "block";
+            get("sitepw3bluedots").style.display = "block";
+        }
+        function helpItemOn(which) {
+            let $input = get(which);
+            let top = $input.getBoundingClientRect().top - 15;
+        let $element = get(which + "helptext");
+            if (!$element.style.display || $element.style.display === "none") {
+                helpAllOff();
+                $element.style.display = "block";
+                $element.style.top = top + "px";
+                let $buttons = get(which + "helptextclose");
+                let bottom = $buttons.getBoundingClientRect().bottom + 10;
+                $element.style.height = bottom - top + "px";
+                // hideInstructions();
+                // hidesettings();
+            } else {
+                helpAllOff();
+            }
+        }
+        function helpItemOff(which) {
+            get(which).style.display = "none";
+        }
+        function helpAllOff() {
+            let helps = document.getElementsByName("help");
+            for (let help of helps) {
+                helpItemOff(help.id); 
+            } 
+        }
+        function dotsAllOn() {
+            get("domainname3bluedots").style.display = "block";
+            get("superpw3bluedots").style.display = "block";
+            get("sitename3bluedots").style.display = "block";
+            get("username3bluedots").style.display = "block";
+            get("sitepw3bluedots").style.display = "block";
+        }
+        
         get("useinfo").onclick = function () { sectionClick("use") };
         get("overviewinfo").onclick = function () { sectionClick("overview"); };
         get("superinfo").onclick = function () { sectionClick("super"); };
