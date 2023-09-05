@@ -1,4 +1,5 @@
 "use strict";
+let logging = false;
 if (typeof SitePassword !== 'object') {
     console.log("ERROR! `SitePassword` must be defined (include `bg.js`)");
 }
@@ -1016,7 +1017,7 @@ let SitePasswordWeb = ((function (self) {
                 let $buttons = get(which + "helptextclose");
                 let bottom = $buttons.getBoundingClientRect().bottom + 10;
                 $element.style.height = bottom - top + "px";
-                // hideInstructions();
+                hideInstructions();
                 // hidesettings();
             } else {
                 helpAllOff();
@@ -1032,31 +1033,60 @@ let SitePasswordWeb = ((function (self) {
             } 
         }
         
-        get("useinfo").onclick = function () { sectionClick("use") };
-        get("overviewinfo").onclick = function () { sectionClick("overview"); };
-        get("superinfo").onclick = function () { sectionClick("super"); };
-        get("siteinfo").onclick = function () { sectionClick("site"); };
-        get("acceptableinfo").onclick = function () { sectionClick("acceptable"); };
-        get("changeinfo").onclick = function () { sectionClick("change"); };
-        get("phishinginfo").onclick = function () { sectionClick("phishing"); };
-        get("extensioninfo").onclick = function () { sectionClick("extension"); };
-        get("appsinfo").onclick = function () { sectionClick("apps"); };
-        get("downloadinfo").onclick = function () { sectionClick("download"); };
-        get("sourceinfo").onclick = function () { sectionClick("source"); };
-        get("paymentinfo").onclick = function () { sectionClick("payment"); };
-        function sectionClick(id) {
-            const element = get(id + "div");
-            if (element.style.display === "none") {
-                element.style.display = "block";
-                get("open" + id).style.display = "none";
-                get("close" + id).style.display = "block";
-            } else {
-                element.style.display = "none";
-                get("open" + id).style.display = "block";
-                get("close" + id).style.display = "none";
+        self.instructionSetup = function() {
+            let instructions = document.getElementsByName("instructions");
+            if (logging) console.log("popup instructions", instructions);
+            for (let instruction of instructions) {
+                let section = instruction.id.replace("info", "");
+                instruction.onclick = function () { sectionClick(section); }
             }
         }
-
+        function sectionClick(which) {
+            if (logging) console.log("popup sectionClick", which);
+            const element = get(which + "div");
+            if (element.style.display === "none") {
+                closeAllInstructions();
+                showInstructions();
+                element.style.display = "block";
+                get("open" + which).style.display = "none";
+                get("close" + which).style.display = "block";
+            } else {
+                element.style.display = "none";
+                get("open" + which).style.display = "block";
+                get("close" + which).style.display = "none";
+            }
+        }
+        function closeInstructionSection(which) {
+            const element = get(which + "div");
+            element.style.display = "none";
+            get("open" + which).style.display = "block";
+            get("close" + which).style.display = "none";
+        }
+        function closeAllInstructions() {
+            let instructions = document.getElementsByName("instructions");
+            for (let instruction of instructions) {
+                let section = instruction.id.replace("info", "");
+                closeInstructionSection(section);
+            }
+        }
+        function showInstructions() {
+            helpAllOff();
+            get("instructionpanel").style.display = "block";
+            get("maininfo").title = "Close Instructions";
+            get("instructionopen").classList.add("nodisplay");
+            get("instructionclose").classList.remove("nodisplay");
+            // I need to adjust the width of the main panel when the scrollbar appears.
+        }
+        function hideInstructions() {
+            closeAllInstructions();
+            get("instructionpanel").style.display = "none";
+            get("maininfo").title = "Open Instructions";
+            get("instructionopen").classList.remove("nodisplay");
+            get("instructionclose").classList.add("nodisplay");
+            // I need to adjust the width of the main panel when the scrollbar disappears.
+            get("main").style.padding = "6px " + scrollbarWidth() + "px 9px 12px";
+        }
+                
         if (bkmkSettings) {
             SitePassword.loadSettings(bkmkSettings.sitename);
             get("bkmk").style.display = "block";
@@ -1074,6 +1104,7 @@ let SitePasswordWeb = ((function (self) {
 }));
 window.onload = function () {
     SitePasswordWeb.onload();
+    SitePasswordWeb.instructionSetup();
 }
 
 /* 
