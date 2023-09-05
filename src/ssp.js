@@ -97,7 +97,7 @@ let SitePasswordWeb = ((function (self) {
         const $sitepw = get("sitepw");
         const $remember = get("remember");
         const $providesitepw = get("providesitepw");
-        const $providecode = get("providecode");
+        const $code = get("code");
         const $pwlength = get("pwlength");
         const $startwithletter = get("startwithletter");
         const $allowlowercheckbox = get("allowlowercheckbox");
@@ -619,7 +619,7 @@ let SitePasswordWeb = ((function (self) {
             enableRemember();
          }
         $sitepw.onkeyup = function () {
-            $providecode.disabled = true;
+            $code.disabled = true;
             $sitepw.onblur();
         }
         get("sitepwmenu").onmouseleave = function (e) {
@@ -773,18 +773,43 @@ let SitePasswordWeb = ((function (self) {
                 $sitepw.value = "";
                 $sitepw.placeholder = "Enter your site password";
                 $sitepw.focus();   
-                $providecode.disabled = false; 
+                $code.disabled = false; 
             } else {
                 $sitepw.readOnly = true;
                 $sitepw.placeholder = "Generated site password";
-                $providecode.disabled = true;
+                $code.disabled = true;
                 generatePassword();
             }
         }
-        $providecode.onblur = function() {
+        $code.onblur = function() {
             let settings = SitePassword.settings;
-            settings.xor = JSON.parse("[" + $providecode.value + "]");
+            settings.xor = JSON.parse("[" + $code.value + "]");
             generatePassword();
+        }
+
+        get("codemenu").onmouseleave = function (e) {
+            menuOff("code", e);
+        }
+        let $code3bluedots = get("code3bluedots");
+        let $codemenuhelp = get("codemenuhelp");
+        let $codehelptextclose = get("codehelptextclose");
+        let $codehelptextmore = get("codehelptextmore");
+        $code3bluedots.onmouseover = function (e) {
+            menuOn("code", e);
+        }
+        $code3bluedots.onclick = get("code3bluedots").onmouseover;
+        get("codemenu").onmouseleave = function (e) {
+            menuOff("code", e);
+        } 
+        $codemenuhelp.onclick = function (e) {
+            helpItemOn("code");
+        }
+        $codehelptextclose.onclick = function (e) {
+            helpAllOff();
+        }
+        $codehelptextmore.onclick = function (e) {
+            helpAllOff();
+            sectionClick("code");
         }
     
         $pwlength.onkeyup = function () {
@@ -969,6 +994,7 @@ let SitePasswordWeb = ((function (self) {
             get("sitenamemenu").style.display = "none";
             get("usernamemenu").style.display = "none";
             get("sitepwmenu").style.display = "none";
+            get("codemenu").style.display = "none";
         }
         function dotsAllOn() {
             get("domainname3bluedots").style.display = "block";
@@ -977,6 +1003,7 @@ let SitePasswordWeb = ((function (self) {
             get("sitename3bluedots").style.display = "block";
             get("username3bluedots").style.display = "block";
             get("sitepw3bluedots").style.display = "block";
+            get("code3bluedots").style.display = "block";
         }
         function helpItemOn(which) {
             let $input = get(which);
