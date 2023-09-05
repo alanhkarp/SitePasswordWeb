@@ -240,13 +240,10 @@ let SitePasswordWeb = ((function (self) {
         const $maininfo = get("maininfo");
         $maininfo.onclick = function () {
             if ($instructionpanel.style.display === "none") {
-                $instructionpanel.style.display = "block";
-                $instructionopen.style.display = "none";
-                $instructionclose.style.display = "block";
+                showInstructions();
+                helpAllOff();
             } else {
-                $instructionpanel.style.display = "none";
-                $instructionopen.style.display = "block";
-                $instructionclose.style.display = "none";
+                hideInstructions();
             }
         }
 
@@ -1075,7 +1072,6 @@ let SitePasswordWeb = ((function (self) {
             get("maininfo").title = "Close Instructions";
             get("instructionopen").classList.add("nodisplay");
             get("instructionclose").classList.remove("nodisplay");
-            // I need to adjust the width of the main panel when the scrollbar appears.
         }
         function hideInstructions() {
             closeAllInstructions();
@@ -1083,8 +1079,6 @@ let SitePasswordWeb = ((function (self) {
             get("maininfo").title = "Open Instructions";
             get("instructionopen").classList.remove("nodisplay");
             get("instructionclose").classList.add("nodisplay");
-            // I need to adjust the width of the main panel when the scrollbar disappears.
-            get("main").style.padding = "6px " + scrollbarWidth() + "px 9px 12px";
         }
                 
         if (bkmkSettings) {
