@@ -584,10 +584,10 @@ let SitePasswordWeb = ((function (self) {
             let username = get("username").value;
             if (!username) return;
             navigator.clipboard.writeText(username).then(() => {
-                if (logging) console.log("popup wrote to clipboard", username);
+                if (logging) console.log("wrote to clipboard", username);
                 copied("username");
             }).catch((e) => {
-                if (logging) console.log("popup username clipboard write failed", e);
+                if (logging) console.log("username clipboard write failed", e);
             });
             menuOff("username", e);
         }
@@ -643,7 +643,7 @@ let SitePasswordWeb = ((function (self) {
             let sitepw = get("sitepw").value;
             if (!sitepw) return;
             navigator.clipboard.writeText(sitepw).then(() => {
-                if (logging) console.log("popup wrote to clipboard", sitepw);
+                if (logging) console.log("wrote to clipboard", sitepw);
                 chrome.action.setTitle({title: "A site password may be on the clipboard."});
                 get("logopw").title = "A site password may be on the clipboard."
                 get("logo").style.display = "none";
@@ -652,7 +652,7 @@ let SitePasswordWeb = ((function (self) {
                 chrome.storage.local.set({"onClipboard": true})
                 copied("sitepw");
             }).catch((e) => {
-                if (logging) console.log("popup sitepw clipboard write failed", e);
+                if (logging) console.log("sitepw clipboard write failed", e);
             });
             menuOff("sitepw", e);
         }
@@ -1004,18 +1004,19 @@ let SitePasswordWeb = ((function (self) {
             get("code3bluedots").style.display = "block";
         }
         function helpItemOn(which) {
+            let $main = get("main");
+            let mainTop = $main.getBoundingClientRect().top;
             let $input = get(which);
             let top = $input.getBoundingClientRect().top - 15;
             let $element = get(which + "helptext");
             if (!$element.style.display || $element.style.display === "none") {
                 helpAllOff();
                 $element.style.display = "block";
-                $element.style.top = top + "px";
+                $element.style.top = top - mainTop + "px";
                 let $buttons = get(which + "helptextclose");
                 let bottom = $buttons.getBoundingClientRect().bottom + 10;
                 $element.style.height = bottom - top + "px";
                 hideInstructions();
-                // hidesettings();
             } else {
                 helpAllOff();
             }
@@ -1032,14 +1033,14 @@ let SitePasswordWeb = ((function (self) {
         
         self.instructionSetup = function() {
             let instructions = document.getElementsByName("instructions");
-            if (logging) console.log("popup instructions", instructions);
+            if (logging) console.log("instructions", instructions);
             for (let instruction of instructions) {
                 let section = instruction.id.replace("info", "");
                 instruction.onclick = function () { sectionClick(section); }
             }
         }
         function sectionClick(which) {
-            if (logging) console.log("popup sectionClick", which);
+            if (logging) console.log("sectionClick", which);
             const element = get(which + "div");
             if (element.style.display === "none") {
                 closeAllInstructions();
@@ -1080,7 +1081,15 @@ let SitePasswordWeb = ((function (self) {
             get("instructionopen").classList.remove("nodisplay");
             get("instructionclose").classList.add("nodisplay");
         }
-                
+        function hidesitepw() {
+            if (logging) console.log("checking hidesitepw", get("hidesitepw").checked, database.hidesitepw);
+            if (get("hidesitepw").checked || (database && database.hidesitepw)) {
+                get("sitepw").type = "password";
+            } else {
+                get("sitepw").type = "text";
+            }
+        }
+                        
         if (bkmkSettings) {
             SitePassword.loadSettings(bkmkSettings.sitename);
             get("bkmk").style.display = "block";
