@@ -208,36 +208,59 @@
           </div>
           <div class="form-row">
             <div id="phishing" class="warning nodisplay">
-              <span id="phishingtext1"></span>
-              <br/><br/>
+              <img src="src/warning.png" class="icon warning-icon">
+              <span class="warningtext">Warning: Possible Phishing</span>
+              <p>
+                <!-- https://www.ipqualityscore.com/threat-feeds/malicious-url-scanner 
+                     https://www.abuseipdb.com/
+                     https://www.malwareurl.com/listing-urls.php
+                     https://www.scamadviser.com/
+                -->
+                You may be at a fake site that is trying to steal your password.
+                You previously used the nickname
+                <span id="phishingtext0" class="phishing" style="padding-left: 5px"></span>
+                for
+              </p>
+              <span id="phishingtext1" class="phishing"></span>
+              <br /><br />
+              <p>The domain asking for your password is</p>
               <span id="phishingtext2" class="phishing"></span>
-              <br/><br/>
-              <span id="phishingtext3"></span>
-              <br/><br/>
-              <span id="phishingtext4" class="phishing"></span>
-              <br/><br/>
-              <span id="phishingtext5"></span>
-              <br/><br/>
-              <button id="resetbutton" type="button"
-                style="background-color: #00ff00; margin: auto; color: black; width:100%"
-                title="I don't recognize this domain name. Take me away from this web site.">
-                Clear form data
+              <br /><br />
+              <p>
+                Check the domain name carefully; it may not be for your account.
+                You can check for known bad web pages at 
+                <a id="phishingcheck" href="https://www.scamadviser.com/">ScamAdvisor</a>
+                or other sites that check for phishing.
+              </p>
+              <button id="cancelwarning" type="button"
+                style="background-color: #21973f; margin: auto; color: white; width:100%"
+                title="I don't recognize this domain name. Take me away from this web page.">
+                <span class="btn-text" style="color: white">Ths domain name looks suspicious</span>
               </button>
-              <p></p>
-              <button id="trustbutton" type="button"
-                style="background-color: #ffff00; margin: auto; color:black; width:100%"
-                title="This domain is for the same account. Use the same settings for it.">
-                <b>This page is for the same account.</b>
+              <br /><br />
+              <p>
+                It is common to see different domain names for the same account login. 
+                You may see <span class="example">login.example.com</span> and 
+                <span class="example">www.example.com</span> for the same account at example.com.
+                Just make sure you recognize the domain name.
+              </p>
+              <button id="warningbutton" type="button"
+                style="background-color: #D51c24; margin: auto; color:white; width:100%"
+                title="This page is for the same account. Use the same settings for it.">
+                <span class="btn-text" style="color: white">This page is for the same account</span>
               </button>
-              <p></p>
+              <br /><br />
+              <p>
+                You may have accidentally reused a nickname. In that case, you can just pick a different one.
+              </p>
               <button id="nicknamebutton" type="button"
-                style="background-color: #000FF0; margin: auto; color:white; width:100%"
-                title="This domain is for a different account.  I'll select a new nickname.">
-                <b>Pick a new nickname.</b>
+                style="background-color: #1964dc; margin: auto; color:white; width:100%"
+                title="This page is for a different account.  I'll select a new nickname.">
+                <span class="btn-text" style="color: white">Pick a new nickname</span>
               </button>
-              <p></p>
+              <br /><br />
             </div>
-          </div>
+            </div>
           <div id="http" class="warning nodisplay">
             <h3>HTTP WARNING!</h3>
             <p>

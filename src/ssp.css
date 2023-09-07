@@ -53,9 +53,17 @@ body {
   background-color : white;
   width: 92%;
 }
+.warningtext {
+  position: relative;
+  font-size: 12pt;
+  font-weight: normal;
+  top: -9px;
+}
 .phishing {
   font-family: monospace; 
   font-size: 10pt;
+  font-weight: 600;
+  padding-left: 9px;
   width: 20pt;
   word-wrap: break-word;
 }
@@ -335,16 +343,6 @@ input::placeholder {
   border: 2px solid #F00 !important;
   padding: 4px !important;
   color: #C00 !important;
-}
-.warning {
-  margin: 1ex;
-/*
-  border : 4pt solid red;
-  background-color : white;
-*/
-  padding : 1ex;
-  background-color : #C00;
-  color: #FFF;
 }
 .nodisplay {
   display: none;

@@ -91,8 +91,8 @@ let SitePasswordWeb = ((function (self) {
         const $bookmark = get("bookmark");
         const $sitename = get("sitename");
         const $username = get("username");
-        const $resetbutton = get("resetbutton");
-        const $trustbutton = get("trustbutton");
+        const $cancelwarning = get("cancelwarning");
+        const $warningbutton = get("warningbutton");
         const $nicknamebutton = get("nicknamebutton");
         const $results = get("results");
         const $sitepw = get("sitepw");
@@ -694,7 +694,7 @@ let SitePasswordWeb = ((function (self) {
         }
     
         const $phishing = get("phishing");
-        $resetbutton.onclick = function () {
+        $cancelwarning.onclick = function () {
             $domainname.value = "";
             enableBookmark();
             SitePassword.domainname = "";
@@ -709,8 +709,8 @@ let SitePasswordWeb = ((function (self) {
             $domainname.classList.add("bad-input");
             $domainname.disabled = true;
             $username.disabled = true;
-            $resetbutton.focus();
-            $trustbutton.onclick = function () {
+            $cancelwarning.focus();
+            $warningbutton.onclick = function () {
                 SitePassword.settings = settings;
                 SitePassword.storeSettings();
                 updateSettings(settings);
@@ -726,7 +726,7 @@ let SitePasswordWeb = ((function (self) {
             $domainname.classList.remove("bad-input");
             $domainname.disabled = false;
             $username.disabled = false;
-            $trustbutton.onclick = function () {
+            $warningbutton.onclick = function () {
                 console.log("WARNING! trustbutton clicked while phishing warning off.");
             };
             $nicknamebutton.onclick = function () {
@@ -734,16 +734,11 @@ let SitePasswordWeb = ((function (self) {
             };
         }
         function phishingWarningMsg(testDomain) {
-            let warnElement1 = get("phishingtext1");
-            warnElement1.innerText  = "Warning: You may be at a fake site that is trying to steal your password. ";
-            warnElement1.innerText += "You previously used this nickname for";
-            get("phishingtext2").innerText = testDomain;
-            get("phishingtext3").innerText = "The domain name asking for your password is";
-            get("phishingtext4").innerText = get("domainname").value;
-            let warnElement5 = get("phishingtext5");
-            warnElement5.innerText  = "It is common to see different domain names for the same account login. ";
-            warnElement5.innerText += "Click the top (green) button if that's not the case or the middle (red) button if it is. ";
-            warnElement5.innerText += "You can also pick a new nickname if this page is for a different account.";
+            let sitename = $sitename.value;
+            let previous = SitePassword.database.sites[sitename].domainname;
+            get("phishingtext0").innerText = get("sitename").value;
+            get("phishingtext1").innerText = previous;
+            get("phishingtext2").innerText = get("domainname").value;
        }
 
         const $http = get("http");
@@ -784,7 +779,6 @@ let SitePasswordWeb = ((function (self) {
             settings.xor = JSON.parse("[" + $code.value + "]");
             generatePassword();
         }
-
         get("codemenu").onmouseleave = function (e) {
             menuOff("code", e);
         }
