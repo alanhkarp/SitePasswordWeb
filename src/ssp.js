@@ -262,7 +262,6 @@ let SitePasswordWeb = ((function (self) {
         }
         $superpw.onkeyup = function () {
             $superpw.onblur();
-            //$superpw.focus();
         }
         const $superpwmenuhide = get("superpwmenuhide");
         const $superpwmenushow = get("superpwmenushow");
@@ -282,24 +281,15 @@ let SitePasswordWeb = ((function (self) {
             menuOff("superpw", e);
         }
         get("superpw3bluedots").onmouseover = function (e) {
-            if (get("superpw").value) {
-                get("superpwmenushow").style.opacity = "1";
-                get("superpwmenuhide").style.opacity = "1";
-            } else {
-                get("superpwmenushow").style.opacity = "0.5";
-                get("superpwmenuhide").style.opacity = "0.5";
-            }
             menuOn("superpw", e);      
         }
         get("superpw3bluedots").onclick = get("superpw3bluedots").onmouseover;
         $superpwmenushow.onclick = function(e) {
-            if (!get("superpw").value) return;
             get("superpw").type = "text";
             $superpwmenuhide.classList.toggle("nodisplay");
             $superpwmenushow.classList.toggle("nodisplay")    ;
         }
         get("superpwmenuhide").onclick = function(e) {
-            if (!get("superpw").value) return;
             get("superpw").type = "password";
             $superpwmenuhide.classList.toggle("nodisplay");
             $superpwmenushow.classList.toggle("nodisplay")    ;
@@ -326,6 +316,7 @@ let SitePasswordWeb = ((function (self) {
             generatePassword();
         }
         $domainname.onpaste = function () {
+            $domainnamemenuforget.style.opacity = "1";
             setTimeout(() => {
                 enableBookmark();
                 //$domainname.onblur();
@@ -354,6 +345,7 @@ let SitePasswordWeb = ((function (self) {
         }
         $domainname3bluedots.onclick = get("domainname3bluedots").onmouseover;
         $domainnamemenuforget.onclick = function (e) {
+            if (!get("domainname").value) return;
             let toforget = normalize(get("domainname").value);
             addForgetItem(toforget);
             get("forget").classList.remove("nodisplay");
@@ -520,6 +512,7 @@ let SitePasswordWeb = ((function (self) {
             menuOff("sitename", e);
         }
         get("sitenamemenuforget").onclick = function (e) {
+            if (!get("sitename").value) return;
             get("forget").classList.toggle("nodisplay");
             let toforget = normalize(get("sitename").value);
             for (let domain in SitePassword.database.domains) {
@@ -571,6 +564,7 @@ let SitePasswordWeb = ((function (self) {
         }
         $username3bluedots.onclick = $username3bluedots.onmouseover;
         get("usernamemenuforget").onclick = function (e) {
+            if (!get("username").value) return;
             get("forget").classList.toggle("nodisplay");
             let toforget = normalize(get("username").value);
              for (let domain in SitePassword.database.domains) {
@@ -581,6 +575,7 @@ let SitePasswordWeb = ((function (self) {
             }
         }
         get("usernamemenucopy").onclick = function(e) {
+            if (!get("username").value) return;
             let username = get("username").value;
             if (!username) return;
             navigator.clipboard.writeText(username).then(() => {
@@ -629,17 +624,14 @@ let SitePasswordWeb = ((function (self) {
             let sitepw = get("sitepw").value;
             if (sitepw) {
                 $sitepwmenucopy.style.opacity = "1";
-                $sitepwmenushow.style.opacity = "1";
-                $sitepwmenuhide.style.opacity = "1";
             } else {
                 $sitepwmenucopy.style.opacity = "0.5";
-                $sitepwmenushow.style.opacity = "0.5";
-                $sitepwmenuhide.style.opacity = "0.5";
             }
             menuOn("sitepw", e);
         }
         $sitepw3bluedots.onclick = $sitepw3bluedots.onmouseover;
         $sitepwmenucopy.onclick = function(e) {
+            if (!get("sitepw").value) return;
             let sitepw = get("sitepw").value;
             if (!sitepw) return;
             navigator.clipboard.writeText(sitepw).then(() => {
