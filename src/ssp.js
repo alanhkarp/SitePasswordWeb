@@ -485,10 +485,11 @@ let SitePasswordWeb = ((function (self) {
                 phishingWarningMsg(testDomain);
                 phishingWarningOn(settings);
             }
-            clearDatalist("sitename");
+            clearDatalist("sitenames");
         }
         $sitename.onkeyup = function () {
             handleKeyup("sitename");
+            clearDatalist("sitenames");
         }
         $sitename.onfocus = function () {
             let set = new Set();
@@ -519,11 +520,10 @@ let SitePasswordWeb = ((function (self) {
             menuOff("sitename", e);
         }
         get("sitenamemenuforget").onclick = function (e) {
-            msgon("forget");
+            get("forget").classList.toggle("nodisplay");
             let toforget = normalize(get("sitename").value);
-            let $list = get("toforgetlist");
             for (let domain in SitePassword.database.domains) {
-                if (normalize(database.domains[domain]) === toforget) {
+                if (normalize(SitePassword.database.domains[domain]) === toforget) {
                     addForgetItem(domain);
                 }
             }
@@ -540,10 +540,11 @@ let SitePasswordWeb = ((function (self) {
         }
     
         $username.onkeyup = function () {
-            handleKeyup("username");
+            handleKeyup("usernames");
+            clearDatalist("usernames");
         }
         $username.onblur = function() {
-            clearDatalist("username");
+            clearDatalist("usernames");
         }
         $username.onfocus = function () {
             let set = new Set();
@@ -570,12 +571,11 @@ let SitePasswordWeb = ((function (self) {
         }
         $username3bluedots.onclick = $username3bluedots.onmouseover;
         get("usernamemenuforget").onclick = function (e) {
-            msgon("forget");
+            get("forget").classList.toggle("nodisplay");
             let toforget = normalize(get("username").value);
-            let $list = get("toforgetlist");
-            for (let domain in SitePassword.domains) {
+             for (let domain in SitePassword.database.domains) {
                 let sitename = SitePassword.database.domains[domain];
-                if (normalize(database.sites[sitename].username) === toforget) {
+                if (normalize(SitePassword.database.sites[sitename].username) === toforget) {
                     addForgetItem(domain);
                 }
             }
