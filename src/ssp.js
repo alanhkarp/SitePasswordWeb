@@ -345,7 +345,7 @@ let SitePasswordWeb = ((function (self) {
         let $domainnamehelptextmore = get("domainnamehelptextmore");
         $domainname3bluedots.onmouseover = function (e) {
             let domainname = $domainname.value;
-            if (domainname && database.domains[domainname]) {
+            if (domainname && SitePassword.database.domains[domainname]) {
                 $domainnamemenuforget.style.opacity = "1";
             } else {
                 $domainnamemenuforget.style.opacity = "0.5";
@@ -354,9 +354,9 @@ let SitePasswordWeb = ((function (self) {
         }
         $domainname3bluedots.onclick = get("domainname3bluedots").onmouseover;
         $domainnamemenuforget.onclick = function (e) {
-            msgon("forget");
             let toforget = normalize(get("domainname").value);
             addForgetItem(toforget);
+            get("forget").classList.remove("nodisplay");
         }
         $domainnamemenuhelp.onclick = function (e) {
             helpItemOn("domainname");
@@ -522,7 +522,7 @@ let SitePasswordWeb = ((function (self) {
             msgon("forget");
             let toforget = normalize(get("sitename").value);
             let $list = get("toforgetlist");
-            for (let domain in database.domains) {
+            for (let domain in SitePassword.database.domains) {
                 if (normalize(database.domains[domain]) === toforget) {
                     addForgetItem(domain);
                 }
@@ -573,8 +573,8 @@ let SitePasswordWeb = ((function (self) {
             msgon("forget");
             let toforget = normalize(get("username").value);
             let $list = get("toforgetlist");
-            for (let domain in database.domains) {
-                let sitename = database.domains[domain];
+            for (let domain in SitePassword.domains) {
+                let sitename = SitePassword.database.domains[domain];
                 if (normalize(database.sites[sitename].username) === toforget) {
                     addForgetItem(domain);
                 }
@@ -740,6 +740,19 @@ let SitePasswordWeb = ((function (self) {
             get("phishingtext1").innerText = previous;
             get("phishingtext2").innerText = get("domainname").value;
        }
+       get("forgetbutton").onclick = function () {
+        let children = get("toforgetlist").children;
+        for (let child of children) {
+            forgetDomainname(child.innerText);
+        }
+        get("cancelbutton").click();
+    }
+    get("cancelbutton").onclick = function () {
+        while ( get("toforgetlist").firstChild ) {
+            get("toforgetlist").removeChild(get("toforgetlist").firstChild);
+        }
+        get("forget").classList.toggle("nodisplay");
+    }
 
         const $http = get("http");
         function httpWarningOn() {
@@ -1076,8 +1089,8 @@ let SitePasswordWeb = ((function (self) {
             get("instructionclose").classList.add("nodisplay");
         }
         function hidesitepw() {
-            if (logging) console.log("checking hidesitepw", get("hidesitepw").checked, database.hidesitepw);
-            if (get("hidesitepw").checked || (database && database.hidesitepw)) {
+            if (logging) console.log("checking hidesitepw", get("hidesitepw").checked, SitePassword.database.hidesitepw);
+            if (get("hidesitepw").checked || (database && SitePassword.database.hidesitepw)) {
                 get("sitepw").type = "password";
             } else {
                 get("sitepw").type = "text";
@@ -1095,6 +1108,19 @@ let SitePasswordWeb = ((function (self) {
         }
         $superpw.focus();
     }
+    function addForgetItem(domainname) {
+        let $list = get("toforgetlist");
+        let $item = document.createElement("li");
+        $item.innerText = domainname;
+        $list.appendChild($item);
+    }
+    function forgetDomainname(toforget) {
+        delete SitePassword.database.domains[toforget];
+        get("sitename").value = "";
+        get("username").value = "";
+        SitePassword.forgetSettings();
+    }
+
     return self;
 })({
     version: "1.0",

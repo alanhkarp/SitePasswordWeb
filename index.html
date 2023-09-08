@@ -268,7 +268,33 @@
               to enter your password?
             </p>
           </div>
-          <div id="pwfail" class="warning nodisplay">
+          <div id="forget" class="warning nodisplay"
+          title="You can change your mind or permanently forget the settings for the listed domain names.">
+          <span id="forgettext">
+            <img src="src/warning.png" class="icon warning-icon">
+            <span class="warningtext">Forget Enabled</span>
+            <p>
+              Are you sure you want to delete the settings for these domain names?
+            </p>
+            <ul id="toforgetlist"></ul>
+            <div>
+              <p>You can change your mind,</p>
+              <button id="cancelbutton" type="button" style="background-color: #21973f; color: white; width:100%"
+                title="Click to cancel forgetting the settings for the listed domain names.">
+                <span class="btn-text" style="color: white">Cancel</span>
+              </button>
+              <p>
+                or permanently forget the settings for the listed domain names.
+                <b>This action cannot be undone.</b>
+              </p>
+              <button id="forgetbutton" type="button" style="background-color: #D51c24; color:white; width:100%"
+                title="Click to delete the settings for the listed domain names.">
+                <span class="btn-text" style="color: white">Permanently forget</span>
+              </button>
+            </div>
+          </span>
+        </div>
+     <div id="pwfail" class="warning nodisplay">
             <p>
               Can't compute a password with these settings!  You may need to enable some characters, increase the 
               pasword length, or reduce the number of special characters you're asking for.  If 
