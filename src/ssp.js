@@ -225,6 +225,7 @@ let SitePasswordWeb = ((function (self) {
             } else {
                 SitePassword.settings[id] = +value;
                 generatePassword();
+                setMeter("sitepw");
             }
         }
         function handleKeyup(id) {
@@ -249,16 +250,21 @@ let SitePasswordWeb = ((function (self) {
 
         const strengthText = ["Too Weak", "Very Weak", "Weak", "Good", "Strong"];
         const strengthColor = ["#bbb", "#f06", "#f90", "#093", "#036"]; // 0,3,6,9,C,F
-        const $meter = get("password-strength-meter");
-        const $meterText = get("password-strength-text");
+        const $superpwMeter = get("superpw-strength-meter");
+        const $sitepwMeter = get("sitepw-strength-meter");
         $superpw.onblur = function () {
             SitePassword.setSuperPassword($superpw.value);
             generatePassword();
-            const report = zxcvbn($superpw.value);
+            setMeter("superpw");
+            setMeter("sitepw");
+        }
+        function setMeter(which) {
+            const $meter = get(which + "-strength-meter");
+            const $input = get(which);
+            const report = zxcvbn($input.value);
             $meter.value = report.score;
             $meter.title = strengthText[report.score];
-            $superpw.style.color = strengthColor[report.score];
-            $superpw.title = strengthText[report.score] + " Super Password";
+            $input.style.color = strengthColor[report.score];
         }
         $superpw.onkeyup = function () {
             $superpw.onblur();
@@ -967,6 +973,15 @@ let SitePasswordWeb = ((function (self) {
             $data.href = mimetype + encodeURIComponent(sd);
             $data.click();
             return sd;
+        }
+        // I need to handle the case where the user clicks on the link in the instructions or help
+        get("sharedref").onclick = function (e) {
+            e.stopPropagation();
+            sectionClick("shared");
+        }
+        get("changeref").onclick = function (e) {
+            e.stopPropagation();
+            sectionClick("change");
         }
         // Generic code for menus
         function copied(which) {

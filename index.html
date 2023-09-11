@@ -60,7 +60,7 @@
           <div class="form-row">
             <label for="superpw" class="label">
               Super password
-              <meter max="4" id="password-strength-meter" title="Super password strength"></meter>
+              <meter max="4" id="superpw-strength-meter" title="Super password strength"></meter>
               Strength
             </label>
             <input 
@@ -214,10 +214,14 @@
           </div>
           <div id="results">
             <div id="pwok" class="form-row">
-              <label for="sitepw" class="label">Site password</label>
               <input id="sitepw" class="fixed" disabled type="text" value=""
                 placeholder="Generated site password" title="Site Password" />
-              <div id="sitepwcopied" class="inner-icon-2 copied nodisplay">copied!</div>
+                <label for="sitepw" class="label">
+                  Site password
+                  <meter max="4" id="sitepw-strength-meter" title="Site password strength"></meter>
+                  Strength
+                </label>
+                 <div id="sitepwcopied" class="inner-icon-2 copied nodisplay">copied!</div>
               <div id="sitepw3bluedots" class="icon inner-icon-1" 
                   title=" Click for menu" style="display: block">
                 <img src="src/3bluedots.png" class="dots">
@@ -544,8 +548,8 @@
         <div id="sitenamehelptext" name="help" class="helptext nodisplay">
          <h3>Site Name Help</h3>
           <p style="width: 270px">
-            Your nickname is the way you refer to this account. It should be easy to remember,
-            such as 'amazon' for amazon.com, but it doesn't have to be that simple.  You can 
+            Your nickname is the way you refer to this account. It can be easy to remember,
+            such as <em>amazon</em> for amazon.com, but it doesn't have to be that simple.  You can 
             change the password for an account by changing the nickname.  That's useful if you
             have to change your password periodically.
           </p>
@@ -648,10 +652,9 @@
                 <p>
                   This web page is a companion to the SitePassword browser extension.
                   In addition to remembering your settings, the extension synchronizes them
-                  across your machines. You should use the extension if you are on a
-                  compatible browser and device, currently Brave, Chrome, Edge, Opera, Vivaldi,
-                  Firefox, and Safari on computers.
-                  Unfortunately, those browsers don't allow extensions on mobile devices.
+                  across your machines. You should use the extension if you are using a
+                  compatible browser on a computer.
+                  Unfortunately, browsers on mobile devices don't allow extensions.
                 </p>
                 <p>
                   The SitePassword web page is also available at
@@ -722,9 +725,11 @@
                 </p>
                 <p>
                   SitePassword doesn't prevent you from using a weak super password,
-                  but it does warn you. There is a strength indicator directly below
-                  the super password field. It uses a meter, words, and color to
-                  let you know how strong your super password is.
+                  but it does warn you. There is a strength indicator directly above
+                  the super password field. The color of your super password corresponds
+                  to the level shown on the meter.  For example, if your super password is green,
+                  it is strong.  If it's orange, your super password is
+                  weak.  Mouse over the meter to see the strength of your super password.
                 </p>
                 <p>
                   SitePassword cannot retrieve your super password.
@@ -757,9 +762,14 @@
                   that doesn't have the SitePassword extension installed.
                 </p>
                 <p>
-                  You may have more than one domain name for a given account because some web sites
-                  use more than one domain name for the same login page. You'll get the same password
-                  for all of the domain names as long as they are all associated with the same nickname.
+                  You can type the login page URL into this field, but you are strongly encouraged
+                  to paste it from the address bar of the login page so SitePassword can warn you about
+                  potential phishing.  
+                </p>
+                <p>
+                  Some web sites use multiple URLs for logging into the same account.  As a result,
+                  you may have more than one domain name for a given account. You'll get the same password
+                  for all of the domain names because they are all associated with the same nickname.
                 </p>
                 <p>
                   You can forget this domain name
@@ -786,15 +796,11 @@
               <div id="bookmarkdiv" style="display:none">
                 <p>
                   SitePassword stores your settings in a bookmark in the SitePasswordData 
-                  bookmark folder.  That's the bookmark you can use to get your settings when you're on a machine
-                  that doesn't have the SitePassword extension installed.
-                </p>
-                <p>
+                  bookmark folder.  
                   You don't have to remember your settings if you synchonize your
                   bookmarks to this machine.  You can click on the bookmark
                   for the domain name to open this page with the form filled in, 
-                  fill in the form manually, or
-                  you can paste the bookmark into the form.
+                  or you can paste the bookmark into the form.
                 </p>
               </div>
             </section>
@@ -813,42 +819,24 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Your Site Nickname</h3>
+              <h3>Your Site Name</h3>
               <div id="sitenamediv" style="display: none;">
                 <p>
-                  Fill in the form to compute your site password. Although you can
-                  type the login page's URL into the form, you are strongly encouraged
-                  to paste it from the address bar so SitePassword can warn you about
-                  potential phishing.  Pull down menus let you select a site and user name 
-                  that was previously remembered on this page.
+                  The site name is the nickname you use refer to this account. It can be easy to remember,
+                  such as <em>amazon</em> for amazon.com, but it doesn't have to be that simple.
+                  It is one of the things use to compute your site password.
                 </p>
                 <p>
-                  SitePassword could generate a weak site password just by chance.
-                  To let you know that has happened, it uses the same colors that
-                  appear in the super password
-                  strength meter to tell you how strong your site password is.
-                  For example, if your site password is orange, then it is weak.
-                  In that case, just choose a different nickname for the account.
+                  Your settings,
+                  such as your user name, the site password length, and whether your
+                  site password contains special characters are associated with this nickname.
+                  All domain names for this account are associated with this nickname.
                 </p>
                 <p>
-                  SitePassword can remember your settings for an account. Just fill in
-                  the form and click the <em>Remember settings</em> button. These
-                  settings are only stored on the machine you are using. They won't
-                  be available if you use another device.
+                  <span id="changeref"><a href="#changeinfo">Changing a Site Password</a></span> 
+                  tells you how to do that.
                 </p>
-                <p>
-                  After you paste your password into the login form, you should remove
-                  it from the clipboard. The easiest way to do that is to copy some
-                  innocuous text, such as something on the login page.
-                </p>
-                <p>
-                  When SitePassword can't generate a password acceptable to the site, it can remember a password 
-                  you provide.  It is stored in your settings encrypted with the computed
-                  password for the site as a key.  That means you must fill in the form before entering 
-                  your password. After you fill in the form, click the <em>Provide your own site password</em> 
-                  check box.  You can then enter your password into the site password field. 
-                </p>
-              </div>
+                </div>
             </section>
             <section id="usernameinfo" name="instructions" class="instructionpaneltext">
               <svg id="openusername" class="accordian" style="display: block;" width="24px" height="24px"
@@ -873,7 +861,7 @@
                 </p>
                 <p>
                   SitePassword will attempt to fill in the userid field of a login form. If you
-                  don't see it, one of a few things happened.
+                  don't see it when you think you should, one of a few things happened.
                 </p>
                 <ol>
                   <li>You never provided your settings for this domain name.</li>
@@ -910,16 +898,9 @@
               <h3>Your Site Password</h3>
               <div id="sitepwdiv" style="display: none;">
                 <p>
-                  You only need to open SitePassword to enter your super password, to
-                  set up a new site, or when you have to paste your site password. Most
-                  of the time, you can just click on the login
-                  form's password field. You'll know which to do because the password field will
-                  say either <em>Click SitePassword</em> or <em>Click here for password</em>. If
-                  the password field says neither, just click on the password field and see if
-                  your password gets filled in. If it wasn't, you should see an alert telling
-                  you to open SitePassword. If neither of those happens, SitePassword could
-                  not find the password field. In that case, open SitePassword and copy your
-                  site password to the clipboard.
+                  SitePassword combines you super password, site name, and user name to 
+                  compute your password for the site.  It also uses the additional settings you
+                  provide to generate a password the site will accept.
                 </p>
                 <p>
                   SitePassword could generate a weak site password just by chance.
@@ -934,19 +915,8 @@
                   you're not allowed to change, SitePassword can remember a password
                   you provide. It is stored in your settings encrypted with the computed
                   password for the site as a key. That means you must fill in the form before entering
-                  your password. After you fill in the form, open the settings by clicking
-                  <svg width="12px" height="12px" viewBox="2 1 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M14 21h-4l-.551-2.48a6.991 6.991 0 0 1-1.819-1.05l-2.424.763-2-3.464 1.872-1.718a7.055 7.055 0 0 1 0-2.1L3.206 9.232l2-3.464 2.424.763A6.992 6.992 0 0 1 9.45 5.48L10 3h4l.551 2.48a6.992 6.992 0 0 1 1.819 1.05l2.424-.763 2 3.464-1.872 1.718a7.05 7.05 0 0 1 0 2.1l1.872 1.718-2 3.464-2.424-.763a6.99 6.99 0 0 1-1.819 1.052L14 21z" />
-                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
-                  </svg>
-                  and click the <em>Provide your own site password</em>
+                  your own password. After you fill in the form, click the <em>Provide your own site password</em>
                   check box. You can then enter your password into the site password field.
-                </p>
-                <p>
-                  You can also get your passwords without the extension. Go to
-                  <a href="https://sitepassword.info">SitePassword.info</a> and fill
-                  in the form.
                 </p>
               </div>
             </section>
@@ -1151,7 +1121,39 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>The Extension and this Page</h3>
+              <section id="sharedinfo" name="instructions" class="instructionpaneltext">
+                <svg id="openshared" class="accordian" style="display: block;" width="24px" height="24px"
+                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2" />
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m9 11 3 3 3-3" />
+                </svg>
+                <svg id="closeshared" class="accordian" style="display: none;" width="24px" height="24px"
+                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2" />
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m9 13 3-3 3 3" />
+                </svg>
+                <h3>Shared Machines</h3>
+                <div id="shareddiv" style="display: none">
+                  <p>
+                    Many households have one machine shared by everybody. It's likely
+                    that everyone uses the same user name and password for certain
+                    accounts, such as streaming services. It's also likely that those
+                    people use their individual user names and passwords for other
+                    accounts, such as social media.
+                  </p>
+                  <p>
+                    SitePassword accomodates those uses with a feature provided by
+                    your browser called <em>profiles</em>. Each profile gets its own
+                    bookmarks. Simply create one profile for the
+                    shared account and one for each individual.
+                  </p>
+                </div>
+              </section>
+                  <h3>The Extension and this Page</h3>
               <div id="extensiondiv" style="display: none;">
                 <p>
                   The SitePassword extension plays well with this page.
