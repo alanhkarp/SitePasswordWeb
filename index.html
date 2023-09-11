@@ -904,21 +904,13 @@
                 </p>
                 <p>
                   SitePassword could generate a weak site password just by chance.
-                  To let you know that has happened, it uses the same colors that
-                  appear in the super password
+                  To let you know that has happened, it uses the same kind of
                   strength meter to tell you how strong your site password is.
                   For example, if your site password is orange, then it is weak. In
-                  that case, just choose a different nickname for the account.
+                  that case, just choose a different nickname for the account.  You'll 
+                  almost certainly get a strong site password.
                 </p>
-                <p>
-                  When the generated password can't be used, say if you've been given one that
-                  you're not allowed to change, SitePassword can remember a password
-                  you provide. It is stored in your settings encrypted with the computed
-                  password for the site as a key. That means you must fill in the form before entering
-                  your own password. After you fill in the form, click the <em>Provide your own site password</em>
-                  check box. You can then enter your password into the site password field.
-                </p>
-              </div>
+             </div>
             </section>
             <section id="codeinfo" name="instructions" class="instructionpaneltext">
               <svg id="opencode" class="accordian" style="display: block;" width="24px" height="24px"
@@ -938,11 +930,12 @@
               <h3>Provided Password Code</h3>
               <div id="codediv" style="display: none;">
                 <p>
-                  SitePassword allows you to provide your own passwords.
-                  These passwords are stored in the bookmarks for the domain
-                  encrypted with the calculated password for this account.
-                  That means you must fill out the form before providing
-                  your password.
+                  When the generated password can't be used, say if you've been given one that
+                  you're not allowed to change, SitePassword can remember a password
+                  you provide. It is stored in your settings encrypted with the computed
+                  password for the site as a key. That means you must fill in the form before entering
+                  your own password. After you fill in the form, click the <em>Provide your own site password</em>
+                  check box. You can then enter your password into the site password field.
                 </p>
                 <p>
                   The code in the bookmark is a list of integers represnting
@@ -979,14 +972,14 @@
                   Each of the input fields has a menu that shows up when you mouse over 
                   (or tap on a touchscreen) the 3 dots in the right side of the field.  Each field has a 
                   particular set of menu items.  
-                  If an icon is grayed out, it is not available for that field.  For example, you can't show  
-                  your super password if the field is empty.
+                  If an icon is grayed out, it is not available for that field.  For example, you can't 
+                  forget a domain name if that field is empty.
                 </p>
                 <br />
                 <p>
                   <img src="src/help.png" alt="help" style="width: 16px; height: 16px; vertical-align: middle;"/> &nbsp; 
                   Every field has a help option, 
-                  which provides a brief summary of the information provided in these Instructions.
+                  which provides a brief summary of the information contained in these Instructions.
                 </p>
                 <p>
                   <img src="src/forget.png" alt="forget" style="width: 16px; height: 16px; vertical-align: middle;"/> &nbsp;
@@ -999,7 +992,7 @@
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5v0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v0M8 5v0a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v0" />
                   </svg>
-                    The username and site password fields have a Copy option, which copies the contents of the field to the clipboard.
+                    The user name and site password fields have a Copy option, which copies the contents of the field to the clipboard.
                 </p>
                 <p style="position: relative; top: -21px">
                   <svg class="icon menu-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none" style="top: 7px">
@@ -1019,7 +1012,7 @@
                 </p>
               </div>
             </section>
-              <section id="acceptableinfo" name="instructions">
+            <section id="acceptableinfo" name="instructions">
               <svg id="openacceptable" class="accordian" style="display: block;" width="24px" height="24px"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
                 <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
@@ -1034,7 +1027,7 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Computing an Acceptable Password</h3>
+              <h3>Finding an Acceptable Password</h3>
               <div id="acceptablediv" style="display: none;">
                 <p>
                   Some web sites have strict password rules, how long it must be,
@@ -1044,6 +1037,13 @@
                   accept the calculated password, change the appropriate menu entries. SitePassword
                   was tested on hundreds of web sites to make sure it can always
                   compute a valid password.
+                </p>
+                <p>
+                  You can also change the default values that SitePassword uses.
+                  For example, SitePassword defaults to a password length of 12 
+                  and no special characters.  You can change these defaults by clicking the
+                  <em>Change default settings</em> option in the settings panel.
+                </p>
               </div>
             </section>
             <section id="changeinfo" name="instructions">
@@ -1106,6 +1106,38 @@
                 </p>
               </div>
             </section>
+            <section id="sharedinfo" name="instructions" class="instructionpaneltext">
+              <svg id="openshared" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closeshared" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Shared Machines</h3>
+              <div id="shareddiv" style="display: none">
+                <p>
+                  Many households have one machine shared by everybody. It's likely
+                  that everyone uses the same user name and password for certain
+                  accounts, such as streaming services. It's also likely that those
+                  people use their individual user names and passwords for other
+                  accounts, such as social media.
+                </p>
+                <p>
+                  SitePassword accomodates those uses with a feature provided by
+                  your browser called <em>profiles</em>. Each profile gets its own
+                  bookmarks. Simply create one profile for the
+                  shared account and one for each individual.
+                </p>
+              </div>
+            </section>
             <section id="extensioninfo" name="instructions">
               <svg id="openextension" class="accordian" style="display: block;" width="24px" height="24px"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
@@ -1121,38 +1153,6 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <section id="sharedinfo" name="instructions" class="instructionpaneltext">
-                <svg id="openshared" class="accordian" style="display: block;" width="24px" height="24px"
-                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
-                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" />
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="m9 11 3 3 3-3" />
-                </svg>
-                <svg id="closeshared" class="accordian" style="display: none;" width="24px" height="24px"
-                  viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
-                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                    stroke-width="2" />
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="m9 13 3-3 3 3" />
-                </svg>
-                <h3>Shared Machines</h3>
-                <div id="shareddiv" style="display: none">
-                  <p>
-                    Many households have one machine shared by everybody. It's likely
-                    that everyone uses the same user name and password for certain
-                    accounts, such as streaming services. It's also likely that those
-                    people use their individual user names and passwords for other
-                    accounts, such as social media.
-                  </p>
-                  <p>
-                    SitePassword accomodates those uses with a feature provided by
-                    your browser called <em>profiles</em>. Each profile gets its own
-                    bookmarks. Simply create one profile for the
-                    shared account and one for each individual.
-                  </p>
-                </div>
-              </section>
                   <h3>The Extension and this Page</h3>
               <div id="extensiondiv" style="display: none;">
                 <p>
