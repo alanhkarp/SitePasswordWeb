@@ -1,7 +1,24 @@
 "use strict";
 let SitePassword = ((function (self) {
-    const storagekey = "SitePasswordData";
+    self.test = true;
+    if (self.test) {
+        console.log("SitePasswordWeb.onload");
+        let script = document.createElement("script");
+        script.src = "src/test.js";
+        document.head.appendChild(script);
+    }
+    self.storagekey = "SitePasswordData";
     self.defaultskey = "SitePasswordDefaults";
+    if (self.test) {
+        self.storagekey = "SitePasswordDataTest";
+        self.defaultskey = "SitePasswordDefaultsTest";
+        if (!localStorage.getItem("restart")) {
+            // Start with a clean slate
+            localStorage.removeItem(self.storagekey);
+            localStorage.removeItem(self.defaultskey);
+        }  
+    } 
+    console.log("storage key 0: " + self.storagekey);
     self.defaultsettings = {
         sitename: "",
         username: "",
@@ -38,7 +55,8 @@ let SitePassword = ((function (self) {
     function persistDatabase(database) {
         try {
             if (typeof database === 'object') {
-                localStorage[storagekey] = JSON.stringify(database);
+                console.log("storage key 1: " + self.storagekey);
+                localStorage[self.storagekey] = JSON.stringify(database);
                 localStorage[self.defaultskey] = JSON.stringify(self.defaultsettings);
             } else {
                 console.log("can't persist database:", database);
@@ -49,7 +67,8 @@ let SitePassword = ((function (self) {
     }
     function retrieveDatabase() {
         try {
-            return JSON.parse(localStorage[storagekey]);
+            console.log("storage key 2: " + self.storagekey);
+            return JSON.parse(localStorage[self.storagekey]);
         } catch (e) {
             console.log(e);
         }
@@ -218,7 +237,7 @@ let SitePassword = ((function (self) {
         self.database = retrieveDatabase();
     }
     if (typeof self.database !== 'object') {
-        console.log("creating new database:", storagekey);
+        console.log("creating new database:", self.storagekey);
         self.database = {
             domains: {},  // domainname -> sitename
             sites: {},  // sitename -> settings

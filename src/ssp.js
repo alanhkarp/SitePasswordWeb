@@ -1,8 +1,5 @@
 "use strict";
 let logging = false;
-if (typeof SitePassword !== 'object') {
-    console.log("ERROR! `SitePassword` must be defined (include `bg.js`)");
-}
 /*
     if domainname is empty
         bookmark disabled
@@ -86,6 +83,9 @@ let SitePasswordWeb = ((function (self) {
     }
     
     self.onload = function () {
+        if (typeof SitePassword !== 'object') {
+            console.log("ERROR! `SitePassword` must be defined (include `bg.js`)");
+        }
         const $superpw = get("superpw");
         const $domainname = get("domainname");
         const $bookmark = get("bookmark");
@@ -1135,6 +1135,9 @@ let SitePasswordWeb = ((function (self) {
 window.onload = function () {
     SitePasswordWeb.onload();
     SitePasswordWeb.instructionSetup();
+    if (SitePassword.test) {
+        runTests();
+    }
 }
 
 /* 
