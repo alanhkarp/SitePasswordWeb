@@ -236,8 +236,6 @@ let SitePasswordWeb = ((function (self) {
         }
 
         const $instructionpanel = get("instructionpanel");
-        const $instructionopen = get("instructionopen");
-        const $instructionclose = get("instructionclose");
         const $maininfo = get("maininfo");
         $maininfo.onclick = function () {
             if ($instructionpanel.style.display === "none") {
@@ -250,8 +248,6 @@ let SitePasswordWeb = ((function (self) {
 
         const strengthText = ["Too Weak", "Very Weak", "Weak", "Good", "Strong"];
         const strengthColor = ["#bbb", "#f06", "#f90", "#093", "#036"]; // 0,3,6,9,C,F
-        const $superpwMeter = get("superpw-strength-meter");
-        const $sitepwMeter = get("sitepw-strength-meter");
         $superpw.onblur = function () {
             SitePassword.setSuperPassword($superpw.value);
             generatePassword();
@@ -323,11 +319,11 @@ let SitePasswordWeb = ((function (self) {
         }
         $domainname.onpaste = function () {
             $domainnamemenuforget.style.opacity = "1";
-            setTimeout(() => {
+            //setTimeout(() => {
                 enableBookmark();
-                //$domainname.onblur();
+                $domainname.onblur();
                 $bookmark.focus();  // NOTE: this causes `onblur`
-            }, 0);
+            //}, 0);
         }
         $domainname.onkeyup = function () {
             enableBookmark();
@@ -539,7 +535,7 @@ let SitePasswordWeb = ((function (self) {
         }
     
         $username.onkeyup = function () {
-            handleKeyup("usernames");
+            handleKeyup("username");
             clearDatalist("usernames");
         }
         $username.onblur = function() {
@@ -1135,11 +1131,8 @@ let SitePasswordWeb = ((function (self) {
 window.onload = function () {
     SitePasswordWeb.onload();
     SitePasswordWeb.instructionSetup();
-    if (SitePassword.test) {
-        runTests();
-    }
+    runTests();
 }
-
 /* 
 This code is a major modification of the code released with the
 following licence.  Neither Hewlett-Packard Company nor Hewlett-Packard
