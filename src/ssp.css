@@ -400,21 +400,8 @@ input::placeholder {
   border-color: black;
   cursor: not-allowed;
 }
-#meter {
-  /* Reset the default appearance */
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-
-  margin: 0 auto 1em;
-  width: 100%;
-  height: 0.5em;
-  /* Needed for Safari to make meter change color */
-  border: 0; 
-
-  /* Applicable only to Firefox */
-  background: none;
-  background-color: rgba(0, 0, 0, 0.1);
+meter {
+  border: 0;
 }
 meter::-webkit-meter-bar {
   background: none;
