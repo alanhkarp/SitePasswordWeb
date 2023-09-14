@@ -1,21 +1,14 @@
 "use strict";
 let SitePassword = ((function (self) {
-    self.test = true;
-    if (self.test) {
+    const test = true;
+    self.storagekey = "SitePasswordData";
+    self.defaultskey = "SitePasswordDefaults";
+    if (test) {
         let script = document.createElement("script");
         script.src = "src/test.js";
         document.head.appendChild(script);
-    }
-    self.storagekey = "SitePasswordData";
-    self.defaultskey = "SitePasswordDefaults";
-    if (self.test) {
         self.storagekey = "SitePasswordDataTest";
         self.defaultskey = "SitePasswordDefaultsTest";
-        if (!localStorage.getItem("restart")) {
-            // Start with a clean slate
-            localStorage.removeItem(self.storagekey);
-            localStorage.removeItem(self.defaultskey);
-        }  
     } 
     self.defaultsettings = {
         sitename: "",
@@ -66,7 +59,7 @@ let SitePassword = ((function (self) {
         try {
             return JSON.parse(localStorage[self.storagekey]);
         } catch (e) {
-            if (!self.test) console.log(e);
+            if (!test) console.log(e);
         }
         return undefined;
     }
