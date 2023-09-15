@@ -15,7 +15,7 @@ function runTests() {
     const $makedefaultbutton = get("makedefaultbutton");
     let restart = localStorage.restart;
     if (restart) {
-        alert("Restarting test " + restart);
+        console.log("Restarting test " + restart);
     } else {
         alert("Starting tests");
     }
@@ -98,7 +98,7 @@ function runTests() {
         $specials.value = "%^&";
         $specials.onkeyup();
         $makedefaultbutton.click();
-        console.log("Pending: Test save as default");
+        location.reload();
         // Test is in testSaveAsDefault2
     }
     function testSaveAsDefault2() {
