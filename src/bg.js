@@ -1,9 +1,8 @@
 "use strict";
 let SitePassword = ((function (self) {
-    const test = true;
     self.storagekey = "SitePasswordData";
     self.defaultskey = "SitePasswordDefaults";
-    if (test) {
+    if (localStorage.test === "true") {
         let script = document.createElement("script");
         script.src = "src/test.js";
         document.head.appendChild(script);
@@ -59,7 +58,7 @@ let SitePassword = ((function (self) {
         try {
             return JSON.parse(localStorage[self.storagekey]);
         } catch (e) {
-            if (!test) console.log(e);
+            if (!localStorage.test === "true") console.log(e);
         }
         return undefined;
     }

@@ -1131,7 +1131,7 @@ let SitePasswordWeb = ((function (self) {
 window.onload = function () {
     SitePasswordWeb.onload();
     SitePasswordWeb.instructionSetup();
-    runTests();
+    if (localStorage.test === "true" ) runTests();
 }
 /* 
 This code is a major modification of the code released with the

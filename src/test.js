@@ -23,6 +23,7 @@ function runTests() {
         testCalculation();
         testRememberForm();
         testProvidedpw();
+        testForget();
         testSaveAsDefault();
     } else {
         if (restart === "testSaveAsDefault2") {
@@ -33,10 +34,8 @@ function runTests() {
     }
     // Test password calculation
     function testCalculation() {
-        const password = "qwerty";
-        const expected = "pvQhUS2xVu0I";
-        $superpw.value = password;
-        $superpw.onkeyup();
+        const expected = "to3X9g55EK8C";
+        fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
         actual = $sitepw.value;
         if (actual === expected) {
             console.log("Passed: Test calculation")
@@ -46,12 +45,7 @@ function runTests() {
         resetState();
     }
     function testRememberForm() {
-        $domainname.value = "https://alantheguru.alanhkarp.com";
-        $domainname.onpaste();
-        $sitename.value = "Guru";
-        $sitename.onkeyup();
-        $username.value = "alan";
-        $username.onkeyup();
+        fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
         $remember.onclick();
         clearForm();
         // See if it remembers
@@ -68,10 +62,7 @@ function runTests() {
     }
     function testProvidedpw() {
         const sitepw = "MyStrongPassword";
-        $superpw.value = "qwerty";
-        $superpw.onkeyup();
-        $domainname.value = "https://alantheguru.alanhkarp.com";
-        $domainname.onpaste();
+        fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
         $providesitepw.click();
         $sitepw.value = sitepw;
         $sitepw.onblur();
@@ -88,6 +79,23 @@ function runTests() {
             console.warn("Failed: Test provided pw", sitepw, "|" + $sitepw.value + "|");
         }
         resetState();
+    }
+    // Test forget
+    function testForget() {
+        fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
+        get("domainname3bluedots").onmouseover();
+        get("domainnamemenuforget").onclick();
+        $remember.onclick();
+        get("forgetbutton").onclick();
+        // See if it forgot
+        fillForm("qwerty", "https://alantheguru.alanhkarp.com", "", "");
+        let db = JSON.parse(localStorage.SitePasswordDataTest);
+        // Check the database directly since the form doesn't act the same programatically
+        if (!db.domains["alantheguru.alanhkarp.com"] && !db.sites["guru"]) {
+            console.log("Passed: Test forget");
+        } else {
+            console.warn("Failed: Test forget", db.domains["alantheguru.alanhkarp.com"], db.sites["guru"].sitename);
+        } 
     }
     // Test save as default
     function testSaveAsDefault() {
@@ -117,12 +125,30 @@ function runTests() {
         $allowspecialcheckbox.click();
         resetState();
     }
-     // Utility functions
+    // Utility functions
+    function fillForm(superpw, domainname, sitename, username) {
+        if (superpw) {
+            $superpw.value = superpw;
+            $superpw.onkeyup();
+        }
+        if (domainname) {
+            $domainname.value = domainname;
+            $domainname.onpaste();
+        }
+        if (sitename) {
+            $sitename.value = sitename;
+            $sitename.onkeyup();
+        }
+        if (username) {
+            $username.value = username;
+            $username.onkeyup();
+        }
+    }
     function resetState() {
         clearForm();
         if (!localStorage.restart) {
-            localStorage.removeItem("SitePasswordDataTest");
-            localStorage.removeItem("SitePasswordDefaultsTest");
+            localStorage.SitePasswordDataTest = JSON.stringify({domains: {}, sites: {}});
+            localStorage.SitePasswordDefaultsTest = JSON.stringify(SitePassword.defaultsettings);
         }
     }
     function clearForm() {
