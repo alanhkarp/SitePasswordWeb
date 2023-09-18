@@ -731,7 +731,7 @@ let SitePasswordWeb = ((function (self) {
             };
         }
         function phishingWarningMsg(testDomain) {
-            let sitename = $sitename.value;
+            let sitename = normalize($sitename.value);
             let previous = SitePassword.database.sites[sitename].domainname;
             get("phishingtext0").innerText = get("sitename").value;
             get("phishingtext1").innerText = previous;

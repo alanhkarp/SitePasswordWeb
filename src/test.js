@@ -24,6 +24,7 @@ function runTests() {
         testRememberForm();
         testProvidedpw();
         testForget();
+        testPhishing();
         testSaveAsDefault();
     } else {
         if (restart === "testSaveAsDefault2") {
@@ -94,6 +95,40 @@ function runTests() {
         } else {
             console.warn("Failed: Test forget", db.domains["alantheguru.alanhkarp.com"], db.sites["guru"].sitename);
         } 
+    }
+    // Test phishing
+    function testPhishing() {
+        fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
+        $remember.onclick();
+        clearForm();
+        phishingSetup();
+        // Does warning appear?
+        let test = get("phishing").style.display === "block";
+        // Does warning go away leaving form cleared?
+        get("cancelwarning").onclick();
+        test = test && get("phishing").style.display === "none" && get("sitename").value === "";
+        // Does setting new site name work?
+        phishingSetup();
+        get("nicknamebutton").onclick();
+        test = test && get("phishing").style.display === "none" && get("sitename").value === "Guru";
+        // Does same account option work?
+        phishingSetup();
+        get("warningbutton").onclick();
+        test = test && get("phishing").style.display === "none" && get("sitename").value === "Guru";
+        test = test && get("username").value === "alan";
+        $remember.onclick();
+        test = test && SitePassword.database.domains["allantheguru.alanhkarp.com"] === "guru";
+         if (test) {
+            console.log("Passed: Test phishing");
+        } else {    
+            console.warn("Failed: Test phishing");
+        }
+        function phishingSetup() {
+            $domainname.value = "https://allantheguru.alanhkarp.com";
+            $domainname.onblur();
+            $sitename.value = "Guru";
+            $sitename.onblur();    
+        }
     }
     // Test save as default
     function testSaveAsDefault() {
