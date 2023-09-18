@@ -321,8 +321,7 @@ let SitePasswordWeb = ((function (self) {
             $domainnamemenuforget.style.opacity = "1";
             setTimeout(() => {
                 enableBookmark();
-                $domainname.onblur();
-                $bookmark.focus();  // NOTE: this causes `onblur`
+                $bookmark.focus();  // NOTE: this causes `onblur` on $domainname
             }, 0);
         }
         $domainname.onkeyup = function () {
