@@ -319,11 +319,11 @@ let SitePasswordWeb = ((function (self) {
         }
         $domainname.onpaste = function () {
             $domainnamemenuforget.style.opacity = "1";
-            //setTimeout(() => {
+            setTimeout(() => {
                 enableBookmark();
                 $domainname.onblur();
                 $bookmark.focus();  // NOTE: this causes `onblur`
-            //}, 0);
+            }, 0);
         }
         $domainname.onkeyup = function () {
             enableBookmark();
@@ -399,7 +399,11 @@ let SitePasswordWeb = ((function (self) {
         // sitepw --> G.iJQEp-qB65UF5
         $bookmark.onpaste = function () {
             setTimeout(() => {
-                const settings = parseBookmark($bookmark.value);
+                self.bookmarkPaste();
+            }, 0);
+        }
+        self.bookmarkPaste = function () {
+            const settings = parseBookmark($bookmark.value);
                 $bookmark.value = "";  // clear bookmark field
                 if (settings) {
                     if (settings.domainname === $domainname.value) {
@@ -413,7 +417,6 @@ let SitePasswordWeb = ((function (self) {
                 } else {
                     alert("Invalid bookmark. Copy it again?");
                 }
-            }, 0);
         }
         function parseBookmark(bookmark) {
             let settings = undefined;
@@ -1118,10 +1121,9 @@ let SitePasswordWeb = ((function (self) {
         $list.appendChild($item);
     }
     function forgetDomainname(toforget) {
-        delete SitePassword.database.domains[toforget];
+        SitePassword.forgetSettings();
         get("sitename").value = "";
         get("username").value = "";
-        SitePassword.forgetSettings();
     }
 
     return self;

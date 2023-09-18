@@ -8,6 +8,10 @@ let SitePassword = ((function (self) {
         document.head.appendChild(script);
         self.storagekey = "SitePasswordDataTest";
         self.defaultskey = "SitePasswordDefaultsTest";
+        if (!localStorage.restart) {
+            localStorage.removeItem(self.storagekey);
+            localStorage.removeItem(self.defaultskey);
+        }
     } 
     self.defaultsettings = {
         sitename: "",
@@ -58,7 +62,7 @@ let SitePassword = ((function (self) {
         try {
             return JSON.parse(localStorage[self.storagekey]);
         } catch (e) {
-            if (!localStorage.test === "true") console.log(e);
+            if (localStorage.test === "false") console.log(e);
         }
         return undefined;
     }

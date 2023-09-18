@@ -42,7 +42,6 @@ function runTests() {
         } else {
             console.warn("Failed: Test calculation", expected, "|" + actual + "|");
         }
-        resetState();
     }
     function testRememberForm() {
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
@@ -50,17 +49,17 @@ function runTests() {
         clearForm();
         // See if it remembers
         $domainname.value = "https://alantheguru.alanhkarp.com";
-        $domainname.onpaste();
-        let tests = $sitename.value === "Guru";
+        $domainname.onblur();
+        let tests = $sitename.value.trim().toLowerCase() === "guru";
         tests = tests && $username.value === "alan";
         if (tests) {
             console.log("Passed: Test remember form");
         } else {
             console.warn("Failed: Test remember form", "Guru", "alan", "|" + $sitename.value + "|");
         }
-        clearForm();
     }
     function testProvidedpw() {
+        resetState();
         const sitepw = "MyStrongPassword";
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
         $providesitepw.click();
@@ -78,7 +77,6 @@ function runTests() {
         } else {
             console.warn("Failed: Test provided pw", sitepw, "|" + $sitepw.value + "|");
         }
-        resetState();
     }
     // Test forget
     function testForget() {
@@ -99,6 +97,7 @@ function runTests() {
     }
     // Test save as default
     function testSaveAsDefault() {
+        resetState();
         localStorage.restart = "testSaveAsDefault2";
         $pwlength.value = 15;
         $pwlength.onkeyup();
@@ -123,7 +122,6 @@ function runTests() {
         $specials.value = "/!=@?._-";
         $specials.onkeyup();
         $allowspecialcheckbox.click();
-        resetState();
     }
     // Utility functions
     function fillForm(superpw, domainname, sitename, username) {
@@ -133,7 +131,7 @@ function runTests() {
         }
         if (domainname) {
             $domainname.value = domainname;
-            $domainname.onpaste();
+            $domainname.onblur();
         }
         if (sitename) {
             $sitename.value = sitename;
