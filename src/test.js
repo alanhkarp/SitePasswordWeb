@@ -82,25 +82,36 @@ function runTests() {
     // Test forget
     function testForget() {
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
+        $remember.onclick();
         get("domainname3bluedots").onmouseover();
         get("domainnamemenuforget").onclick();
-        $remember.onclick();
         get("forgetbutton").onclick();
         // See if it forgot
+        clearForm();
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "", "");
         let db = JSON.parse(localStorage.SitePasswordDataTest);
         // Check the database directly since the form doesn't act the same programatically
-        if (!db.domains["alantheguru.alanhkarp.com"] && !db.sites["guru"]) {
+        let test = !db.domains["alantheguru.alanhkarp.com"] && !db.sites["guru"];
+        // See if database still has site name if it should
+        fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
+        $remember.onclick();
+        phishingSetup();
+        get("warningbutton").onclick();
+        get("domainname3bluedots").onmouseover();
+        get("domainnamemenuforget").onclick();
+        get("forgetbutton").onclick();
+        db = JSON.parse(localStorage.SitePasswordDataTest);
+        test = test && !db.domains["allantheguru.alanhkarp.com"] && db.sites["guru"];
+        if (test) {
             console.log("Passed: Test forget");
         } else {
-            console.warn("Failed: Test forget", db.domains["alantheguru.alanhkarp.com"], db.sites["guru"].sitename);
+            console.warn("Failed: Test forget");
         } 
     }
     // Test phishing
     function testPhishing() {
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
         $remember.onclick();
-        clearForm();
         phishingSetup();
         // Does warning appear?
         let test = get("phishing").style.display === "block";
@@ -122,12 +133,6 @@ function runTests() {
             console.log("Passed: Test phishing");
         } else {    
             console.warn("Failed: Test phishing");
-        }
-        function phishingSetup() {
-            $domainname.value = "https://allantheguru.alanhkarp.com";
-            $domainname.onblur();
-            $sitename.value = "Guru";
-            $sitename.onblur();    
         }
     }
     // Test save as default
@@ -160,6 +165,7 @@ function runTests() {
     }
     // Utility functions
     function fillForm(superpw, domainname, sitename, username) {
+        clearForm();
         if (superpw) {
             $superpw.value = superpw;
             $superpw.onkeyup();
@@ -176,6 +182,13 @@ function runTests() {
             $username.value = username;
             $username.onkeyup();
         }
+    }
+    function phishingSetup() {
+        clearForm();
+        $domainname.value = "https://allantheguru.alanhkarp.com";
+        $domainname.onblur();
+        $sitename.value = "Guru";
+        $sitename.onblur();    
     }
     function resetState() {
         clearForm();
