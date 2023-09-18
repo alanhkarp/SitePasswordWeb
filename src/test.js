@@ -34,6 +34,7 @@ function runTests() {
         testProvidedpw();
         testForget();
         testPhishing();
+        testBookmark();
         testSaveAsDefault();
     } else {
         if (restart === "testSaveAsDefault2") {
@@ -145,6 +146,21 @@ function runTests() {
             console.log("Passed: Test phishing");
         } else {    
             console.warn("Failed: Test phishing");
+        }
+    }
+    function testBookmark() {
+        fillForm("qwerty", "https://alantheguru.alanhkarp.com", "", "");
+        let bookmark = "https://sitepassword.info/index.html?bkmk=ssp://{%22sitename%22:%22Guru%22,%22username%22:%22alan%22,%22providesitepw%22:false,%22xor%22:[0,0,0,0,0,0,0,0,0,0,0,0],%22pwlength%22:12,%22domainname%22:%22alantheguru.alanhkarp.com%22,%22pwdomainname%22:%22alantheguru.alanhkarp.com%22,%22startwithletter%22:true,%22allowlower%22:true,%22allowupper%22:true,%22allownumber%22:true,%22allowspecial%22:false,%22minlower%22:1,%22minupper%22:1,%22minnumber%22:1,%22minspecial%22:1,%22specials%22:[47,33,61,64,63,46,95,45],%22characters%22:%220123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz%22}";
+        $bookmark.value = bookmark;
+        SitePasswordWeb.bookmarkPaste();
+        let tests = $sitename.value === "Guru";
+        tests = tests && $username.value === "alan";
+        tests = tests && $sitepw.value === "to3X9g55EK8C";
+        if (tests) {
+            console.log("Passed: Test bookmark");
+        } else {    
+            console.warn("Failed: Test bookmark: Guru, alan, to3X9g55EK8C", 
+            "|" + $sitename.value + "|", "|" + $username.value + "|", "|" + $sitepw.value + "|");
         }
     }
     // Test save as default

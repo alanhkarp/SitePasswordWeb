@@ -434,6 +434,7 @@ let SitePasswordWeb = ((function (self) {
                 console.log(e);
             }
             // console.log("Bookmark settings:", settings);
+            settings.specials = SitePassword.array2string(settings.specials);
             return settings;
         }
         function enableBookmark() {
