@@ -21,6 +21,10 @@ function runTests() {
     const $domainnamemenuforget = get("domainnamemenuforget");
     const $nicknamebutton = get("nicknamebutton");
     const $phishing = get("phishing");
+    const $sitename3bluedots = get("sitename3bluedots");
+    const $sitenamemenuforget = get("sitenamemenuforget");
+    const $username3bluedots = get("username3bluedots");
+    const $usernamemenuforget = get("usernamemenuforget");
     
     let restart = localStorage.restart;
     if (restart) {
@@ -115,6 +119,24 @@ function runTests() {
         $forgetbutton.onclick();
         db = JSON.parse(localStorage.SitePasswordDataTest);
         test = test && !db.domains["allantheguru.alanhkarp.com"] && db.sites["guru"];
+        // See if forget by site name works
+        phishingSetup();
+        $warningbutton.onclick(); // Now I have two domain names pointing to the same site name
+        $sitename3bluedots.onmouseover();
+        $sitenamemenuforget.onclick();
+        $forgetbutton.onclick();
+        db = JSON.parse(localStorage.SitePasswordDataTest);
+        test = test && !db.domains["alantheguru.alanhkarp.com"] && !db.sites["guru"];
+        test = test && !db.domains["allantheguru.alanhkarp.com"];
+        // See if forget by username works
+        phishingSetup();
+        $warningbutton.onclick(); // Now I have two domain names pointing to the same site name
+        $username3bluedots.onmouseover();
+        $usernamemenuforget.onclick();
+        $forgetbutton.onclick();
+        db = JSON.parse(localStorage.SitePasswordDataTest);
+        test = test && !db.domains["alantheguru.alanhkarp.com"] && !db.sites["guru"];
+        test = test && !db.domains["allantheguru.alanhkarp.com"];
         if (test) {
             console.log("Passed: Test forget");
         } else {
@@ -123,8 +145,6 @@ function runTests() {
     }
     // Test phishing
     function testPhishing() {
-        fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
-        $remember.onclick();
         phishingSetup();
         // Does warning appear?
         let test = $phishing.style.display === "block";
@@ -212,6 +232,8 @@ function runTests() {
         }
     }
     function phishingSetup() {
+        fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
+        $remember.onclick();
         clearForm();
         $domainname.value = "https://allantheguru.alanhkarp.com";
         $domainname.onblur();

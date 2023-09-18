@@ -1121,7 +1121,7 @@ let SitePasswordWeb = ((function (self) {
         $list.appendChild($item);
     }
     function forgetDomainname(toforget) {
-        SitePassword.forgetSettings();
+        SitePassword.forgetSettings(toforget);
         get("sitename").value = "";
         get("username").value = "";
     }

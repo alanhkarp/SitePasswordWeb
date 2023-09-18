@@ -302,8 +302,7 @@ let SitePassword = ((function (self) {
     self.settingsModified = function () {
         return (cachedsettings !== JSON.stringify(cloneObject(self.settings)));
     }
-    self.forgetSettings = function () {
-        const domainname = self.domainname;
+    self.forgetSettings = function (domainname) {
         const sitename = self.siteForDomain(domainname);
         delete self.database.domains[domainname];
         // Delete the item in database.sites if there are no entries
