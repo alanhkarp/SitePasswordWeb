@@ -13,6 +13,15 @@ function runTests() {
     const $allowspecialcheckbox = get("allowspecialcheckbox");
     const $specials = get("specials");
     const $makedefaultbutton = get("makedefaultbutton");
+    const $cancelbutton = get("cancelbutton");
+    const $warningbutton = get("warningbutton");
+    const $cancelwarning = get("cancelwarning");
+    const $forgetbutton = get("forgetbutton");
+    const $domainname3bluedots = get("domainname3bluedots");
+    const $domainnamemenuforget = get("domainnamemenuforget");
+    const $nicknamebutton = get("nicknamebutton");
+    const $phishing = get("phishing");
+    
     let restart = localStorage.restart;
     if (restart) {
         console.log("Restarting test " + restart);
@@ -83,23 +92,26 @@ function runTests() {
     function testForget() {
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
         $remember.onclick();
-        get("domainname3bluedots").onmouseover();
-        get("domainnamemenuforget").onclick();
-        get("forgetbutton").onclick();
+        $domainname3bluedots.onmouseover();
+        $domainnamemenuforget.onclick();
+        $forgetbutton.onclick();
         // See if it forgot
         clearForm();
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "", "");
         let db = JSON.parse(localStorage.SitePasswordDataTest);
         // Check the database directly since the form doesn't act the same programatically
         let test = !db.domains["alantheguru.alanhkarp.com"] && !db.sites["guru"];
+        if (!test) {
+            console.warn("Failed: Test forget when site name is supposed to be empty");
+        }
         // See if database still has site name if it should
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
         $remember.onclick();
         phishingSetup();
-        get("warningbutton").onclick();
-        get("domainname3bluedots").onmouseover();
-        get("domainnamemenuforget").onclick();
-        get("forgetbutton").onclick();
+        $warningbutton.onclick();
+        $domainname3bluedots.onmouseover();
+        $domainnamemenuforget.onclick();
+        $forgetbutton.onclick();
         db = JSON.parse(localStorage.SitePasswordDataTest);
         test = test && !db.domains["allantheguru.alanhkarp.com"] && db.sites["guru"];
         if (test) {
@@ -114,19 +126,19 @@ function runTests() {
         $remember.onclick();
         phishingSetup();
         // Does warning appear?
-        let test = get("phishing").style.display === "block";
+        let test = $phishing.style.display === "block";
         // Does warning go away leaving form cleared?
-        get("cancelwarning").onclick();
-        test = test && get("phishing").style.display === "none" && get("sitename").value === "";
+        $cancelwarning.onclick();
+        test = test && $phishing.style.display === "none" && $sitename.value === "";
         // Does setting new site name work?
         phishingSetup();
-        get("nicknamebutton").onclick();
-        test = test && get("phishing").style.display === "none" && get("sitename").value === "Guru";
+        $nicknamebutton.onclick();
+        test = test && $phishing.style.display === "none" && $sitename.value === "Guru";
         // Does same account option work?
         phishingSetup();
-        get("warningbutton").onclick();
-        test = test && get("phishing").style.display === "none" && get("sitename").value === "Guru";
-        test = test && get("username").value === "alan";
+        $warningbutton.onclick();
+        test = test && $phishing.style.display === "none" && $sitename.value === "Guru";
+        test = test && $username.value === "alan";
         $remember.onclick();
         test = test && SitePassword.database.domains["allantheguru.alanhkarp.com"] === "guru";
          if (test) {
