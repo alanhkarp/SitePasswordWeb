@@ -1,8 +1,5 @@
 "use strict";
 let logging = false;
-if (typeof SitePassword !== 'object') {
-    console.log("ERROR! `SitePassword` must be defined (include `bg.js`)");
-}
 /*
     if domainname is empty
         bookmark disabled
@@ -86,6 +83,9 @@ let SitePasswordWeb = ((function (self) {
     }
     
     self.onload = function () {
+        if (typeof SitePassword !== 'object') {
+            console.log("ERROR! `SitePassword` must be defined (include `bg.js`)");
+        }
         const $superpw = get("superpw");
         const $domainname = get("domainname");
         const $bookmark = get("bookmark");
@@ -236,8 +236,6 @@ let SitePasswordWeb = ((function (self) {
         }
 
         const $instructionpanel = get("instructionpanel");
-        const $instructionopen = get("instructionopen");
-        const $instructionclose = get("instructionclose");
         const $maininfo = get("maininfo");
         $maininfo.onclick = function () {
             if ($instructionpanel.style.display === "none") {
@@ -250,8 +248,6 @@ let SitePasswordWeb = ((function (self) {
 
         const strengthText = ["Too Weak", "Very Weak", "Weak", "Good", "Strong"];
         const strengthColor = ["#bbb", "#f06", "#f90", "#093", "#036"]; // 0,3,6,9,C,F
-        const $superpwMeter = get("superpw-strength-meter");
-        const $sitepwMeter = get("sitepw-strength-meter");
         $superpw.onblur = function () {
             SitePassword.setSuperPassword($superpw.value);
             generatePassword();
@@ -325,7 +321,7 @@ let SitePasswordWeb = ((function (self) {
             $domainnamemenuforget.style.opacity = "1";
             setTimeout(() => {
                 enableBookmark();
-                //$domainname.onblur();
+                $domainname.onblur();
                 $bookmark.focus();  // NOTE: this causes `onblur`
             }, 0);
         }
@@ -403,7 +399,11 @@ let SitePasswordWeb = ((function (self) {
         // sitepw --> G.iJQEp-qB65UF5
         $bookmark.onpaste = function () {
             setTimeout(() => {
-                const settings = parseBookmark($bookmark.value);
+                self.bookmarkPaste();
+            }, 0);
+        }
+        self.bookmarkPaste = function () {
+            const settings = parseBookmark($bookmark.value);
                 $bookmark.value = "";  // clear bookmark field
                 if (settings) {
                     if (settings.domainname === $domainname.value) {
@@ -417,7 +417,6 @@ let SitePasswordWeb = ((function (self) {
                 } else {
                     alert("Invalid bookmark. Copy it again?");
                 }
-            }, 0);
         }
         function parseBookmark(bookmark) {
             let settings = undefined;
@@ -539,7 +538,7 @@ let SitePasswordWeb = ((function (self) {
         }
     
         $username.onkeyup = function () {
-            handleKeyup("usernames");
+            handleKeyup("username");
             clearDatalist("usernames");
         }
         $username.onblur = function() {
@@ -732,7 +731,7 @@ let SitePasswordWeb = ((function (self) {
             };
         }
         function phishingWarningMsg(testDomain) {
-            let sitename = $sitename.value;
+            let sitename = normalize($sitename.value);
             let previous = SitePassword.database.sites[sitename].domainname;
             get("phishingtext0").innerText = get("sitename").value;
             get("phishingtext1").innerText = previous;
@@ -1122,10 +1121,9 @@ let SitePasswordWeb = ((function (self) {
         $list.appendChild($item);
     }
     function forgetDomainname(toforget) {
-        delete SitePassword.database.domains[toforget];
+        SitePassword.forgetSettings();
         get("sitename").value = "";
         get("username").value = "";
-        SitePassword.forgetSettings();
     }
 
     return self;
@@ -1135,8 +1133,8 @@ let SitePasswordWeb = ((function (self) {
 window.onload = function () {
     SitePasswordWeb.onload();
     SitePasswordWeb.instructionSetup();
+    if (localStorage.test === "true" ) runTests();
 }
-
 /* 
 This code is a major modification of the code released with the
 following licence.  Neither Hewlett-Packard Company nor Hewlett-Packard

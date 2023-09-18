@@ -1,7 +1,18 @@
 "use strict";
 let SitePassword = ((function (self) {
-    const storagekey = "SitePasswordData";
+    self.storagekey = "SitePasswordData";
     self.defaultskey = "SitePasswordDefaults";
+    if (localStorage.test === "true") {
+        let script = document.createElement("script");
+        script.src = "src/test.js";
+        document.head.appendChild(script);
+        self.storagekey = "SitePasswordDataTest";
+        self.defaultskey = "SitePasswordDefaultsTest";
+        if (!localStorage.restart) {
+            localStorage.removeItem(self.storagekey);
+            localStorage.removeItem(self.defaultskey);
+        }
+    } 
     self.defaultsettings = {
         sitename: "",
         username: "",
@@ -38,7 +49,7 @@ let SitePassword = ((function (self) {
     function persistDatabase(database) {
         try {
             if (typeof database === 'object') {
-                localStorage[storagekey] = JSON.stringify(database);
+                localStorage[self.storagekey] = JSON.stringify(database);
                 localStorage[self.defaultskey] = JSON.stringify(self.defaultsettings);
             } else {
                 console.log("can't persist database:", database);
@@ -49,9 +60,9 @@ let SitePassword = ((function (self) {
     }
     function retrieveDatabase() {
         try {
-            return JSON.parse(localStorage[storagekey]);
+            return JSON.parse(localStorage[self.storagekey]);
         } catch (e) {
-            console.log(e);
+            if (localStorage.test === "false") console.log(e);
         }
         return undefined;
     }
@@ -218,7 +229,7 @@ let SitePassword = ((function (self) {
         self.database = retrieveDatabase();
     }
     if (typeof self.database !== 'object') {
-        console.log("creating new database:", storagekey);
+        //console.log("creating new database:", self.storagekey);
         self.database = {
             domains: {},  // domainname -> sitename
             sites: {},  // sitename -> settings
