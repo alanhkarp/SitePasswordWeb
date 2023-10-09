@@ -12,7 +12,7 @@ The SitePassword web page is a companion to the SitePassword browser extension
 available from the Chrome Web Store.
 In addition to remembering your settings, the extension synchronizes them 
 across your machines.  You should use the extension if you are on a 
-compatible browser and device, currently Brave, Chrome, Edge, Opera, and Vivaldi on computers. 
+compatible browser and device, currently Firefox, Safari, and most Chromioum browsers on computers. 
 Unfortunately, those browsers don't allow extensions on mobile devices.
 
 
@@ -22,9 +22,7 @@ Unfortunately, those browsers don't allow extensions on mobile devices.
 SitePassword is different from most password managers. Instead of
 storing your passwords, it calculates them from a single super password
 and your nickname and user name
-for the account. That means you can usually get your site password if
-you remember those three things. (Some web pages require additional
-settings.)  It also allows you to specify the password
+for the account. The calculation includes additional parameteres, such as how many upper/lower case letters, numbers, and special characters.  It also allows you to specify a password
 when it can't compute a password acceptable to the site.
                 
 
@@ -58,7 +56,7 @@ might even want to write it down and keep the copy in a secure place.
 -------------------------------------------
 
 The domain name is associated with the settings for this account.
-It is also the name of a bookmark in the SitePasswordData bookmark folder.
+It is also the title of a bookmark in the SitePasswordData bookmark folder.
 That's the bookmark you can use to get your settings when you're on a machine
 that doesn't have the SitePassword extension installed.
 
@@ -77,9 +75,8 @@ and all settings associated with it by clicking the Forget menu icon or by delet
 -------------------------------------------
 
 SitePassword stores your settings in a bookmark in the SitePasswordData 
-bookmark folder.  
-You don't have to remember your settings if you synchonize your
-bookmarks to this machine.  You can click on the bookmark
+bookmark folder.  You don't have to remember your settings if you synchonize your
+bookmarks to a given machine.  You can click on the bookmark
 for the domain name to open this page with the form filled in, 
 or you can paste the bookmark into the form.
 
@@ -94,8 +91,8 @@ It is one of the things use to compute your site password.
 Your settings,
 such as your user name, the site password length, and whether your
 site password contains special characters are associated with this nickname.
-All domain names for this account are associated with this nickname.
-<a href="#changeinfo">Changing a Site Password</a> 
+All domain names for this account are associated with this nickname.  The section
+*Changing a Site Password* 
 tells you how to do that.
 
 [Your User Name](#username)
@@ -105,8 +102,8 @@ Your user name is the name you use to log in to the site. It is
 associated with the nickname for the account and is used to 
 calculate your site password.  That means you can only have a 
 single user name for a given nickname.  If you want to use different 
-user names for the same site, follow the instructions for 
-<a href="#sharedinfo">Shared Machines</a>.            
+user names for the same site, follow the instructions in 
+section *Shared Machines*.            
 
 SitePassword will attempt to fill in the userid field of a login form. If you
 don't see it when you think you should, one of a few things happened.
@@ -164,8 +161,7 @@ bookmark for the domain name to open this page with the form
 
 Each of the input fields has a menu that shows up when you mouse over 
 (or tap on a touchscreen) the 3 dots in the right side of the field.  Each field has a 
-particular set of menu items.  
-If an icon is grayed out, it is not available for that field.  For example, you can't 
+particular set of menu items.  If an icon is grayed out, it is not available for that field.  For example, you can't 
 forget a domain name if that field is empty.
 
 <img src="src/help.png" alt="help" style="width: 16px; height: 16px; vertical-align: middle;">
@@ -236,7 +232,7 @@ websites have several different login pages with different domain
 names.  So, when you see the warning, check the URL of the page 
 to make sure it's a login page for the site you think it is.
 
-[Phishing](#phishing)
+[Shared Machines](#phishing)
 ----------------------
 
 Many households have one machine shared by everybody. It's likely
@@ -246,7 +242,7 @@ people use their individual user names and passwords for other
 accounts, such as social media.
 
 SitePassword accomodates those uses with a feature provided by
-your browser called                 
+your browser called *Profiles*.                 
 
  [The Extension and this Page](#extension)
 ----------------------
@@ -276,7 +272,7 @@ the password for that app.
 [Downloading Your Settings](#download)
 ----------------------
 
-There is a <em>Download Local Data</em> button at the bottom of 
+There is a <em>Download local data</em> button at the bottom of 
 the page.  That button lets you save your settings in a file you 
 can reference if you're at a machine that doesn't have your 
 SitePassword settings. <b>Only settings for sites you've chosen
