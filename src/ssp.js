@@ -113,6 +113,7 @@ let SitePasswordWeb = ((function (self) {
         const $specials = get("specials");
         const $makedefaultbutton = get("makedefaultbutton")
         const $downloadbutton = get("downloadbutton");
+        const $phishing = get("phishing");
         // Fill in default values in case the user has changed them
         let defaultsettings = SitePassword.getDefaultSettings();
         loadSettingControls(defaultsettings);
@@ -418,6 +419,14 @@ let SitePasswordWeb = ((function (self) {
                     alert("Invalid bookmark. Copy it again?");
                 }
         }
+        const $httpclose = get("httpclose");
+        $httpclose.onclick = function () {
+            get("http").style.display = "none";
+        }
+        const $pwfailclose = get("pwfailclose");
+        $pwfailclose.onclick = function () {
+            get("pwfail").style.display = "none";
+        }
         const $bkmcheckclose = get("bkmkcheckclose");
         $bkmcheckclose.onclick = function () {
             get("bkmkcheck").style.display = "none";
@@ -696,7 +705,6 @@ let SitePasswordWeb = ((function (self) {
             }, 0);
         }
     
-        const $phishing = get("phishing");
         $cancelwarning.onclick = function () {
             $domainname.value = "";
             enableBookmark();
