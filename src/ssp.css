@@ -323,6 +323,11 @@ input::placeholder {
   right: 2em;
   top: 14px;
 }
+.copied {
+  color: #d51c24;
+  top: 2px;
+  font-size: 10pt;
+}
 .strength {
   position: absolute;
   right: 2em;

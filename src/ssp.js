@@ -616,9 +616,6 @@ let SitePasswordWeb = ((function (self) {
             helpAllOff();
             sectionClick("username");
         }    
-        get("usernamemenucopy").onclick = function () {
-            copyToClipboard($username);
-        }
         get("sitepwmenucopy").onclick = function () {
             copyToClipboard($sitepw);
         }
@@ -656,12 +653,6 @@ let SitePasswordWeb = ((function (self) {
             if (!sitepw) return;
             navigator.clipboard.writeText(sitepw).then(() => {
                 if (logging) console.log("wrote to clipboard", sitepw);
-                chrome.action.setTitle({title: "A site password may be on the clipboard."});
-                get("logopw").title = "A site password may be on the clipboard."
-                get("logo").style.display = "none";
-                get("logopw").style.display = "block";
-                chrome.action.setIcon({"path": "icon128pw.png"});
-                chrome.storage.local.set({"onClipboard": true})
                 copied("sitepw");
             }).catch((e) => {
                 if (logging) console.log("sitepw clipboard write failed", e);
