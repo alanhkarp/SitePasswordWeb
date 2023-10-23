@@ -48,6 +48,7 @@ body {
   font-size: 12pt;
 }
 .warning {
+  margin: 5px;
   padding : 1ex;
   border : 4pt solid red;
   background-color : white;
