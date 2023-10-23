@@ -193,8 +193,8 @@ let SitePasswordWeb = ((function (self) {
                 $pwok.style.display = "flex";
                 $pwfail.style.display = "none";
             } else {
-                $pwok.style.display = "none";
-                $pwfail.style.display = "flex";
+                $pwok.value = "";
+                $pwfail.style.display = "block";
             }
             if ($providesitepw.checked) {
                 $sitepw.value = SitePassword.stringXorArray(pw, SitePassword.settings.xor);
@@ -814,7 +814,7 @@ let SitePasswordWeb = ((function (self) {
             sectionClick("code");
         }
     
-        $pwlength.onkeyup = function () {
+        $pwlength.onblur = function () {
             handleKeyupNumber("pwlength");
         }
         $startwithletter.onclick = function () {

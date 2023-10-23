@@ -51,7 +51,8 @@ body {
   padding : 1ex;
   border : 4pt solid red;
   background-color : white;
-  width: 92%;
+  width: 400px;
+  height: fit-content;
 }
 .warningtext {
   position: relative;
