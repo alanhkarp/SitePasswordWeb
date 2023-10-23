@@ -431,6 +431,7 @@ let SitePasswordWeb = ((function (self) {
                 settings = JSON.parse(json);
             } catch (e) {
                 console.log(e);
+                return settings;
             }
             // console.log("Bookmark settings:", settings);
             settings.specials = SitePassword.array2string(settings.specials);
