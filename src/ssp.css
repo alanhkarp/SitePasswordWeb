@@ -107,6 +107,8 @@ body {
   overflow: hidden; 
   width: auto;
   padding: 0;
+  border: 2pt solid #47A;
+  border-radius: 6pt;
 }
 #instructionpanel {
   flex: 0 0 auto;
@@ -114,8 +116,6 @@ body {
 }
 #main {
   margin: 0;
-  border: 2pt solid #47A;
-  border-radius: 6pt;
   padding: 0;
   width: 22em;
   background-color: white;

@@ -29,7 +29,123 @@
     <div id="leftgutter" class="column"></div>
     <div id="content" class="column">
       <div id="mainpanel">
-        <div id="main">
+      <div id="settings">
+          <div class="setting-row" 
+            id="providesitepwdiv"
+            style="margin-left: 10px"
+            title="You must fill in the SitePassword form before you can provide your own site password.">
+            <input id="providesitepw" 
+              type="checkbox"
+              disabled
+              aria-disabled="true"
+              title="Check to type your own site password.  You must fill in the SitePassword form first." 
+            />
+            <span>Provide your own site password</span>
+          </div>
+          <div class="form-row">
+            <input 
+              id="code" 
+              class="sans" 
+              disabled
+              type="text" 
+              autocomplete="off"
+              value="" 
+              style="margin-top: 0"
+              placeholder="Code from your settings"
+              title="Paste or type the code from your settings here." />
+            <div id="code3bluedots" class="icon inner-icon-1" 
+              title=" Click for menu" style="display: block; top: -5px">
+              <img src="src/3bluedots.png" class="dots">
+            </div>
+            <div 
+              id="codemenu" 
+              style="top: -5px"
+              class="nodisplay menu inner-icon-0">
+              <div
+                id="codemenuhelp"
+                title="Learn more about how SitePassword uses the domain name.">
+                <img src="src/help.png" class="icon menu-icon menu-icon">
+              </div>
+            </div>
+          </div>
+          <div>
+          </div>
+          <div id="defaultsettings" style="background-color: rgb(136, 204, 255, 20%);">
+            <div class="setting-row" style="top: 5px">
+              <span style="position: relative; left: 4px">Site password is</span>
+              <input id="pwlength" type="text" value="12" size="2" 
+                style="position: relative; left: 2px"/>
+              <span>characters long</span>
+            </div>
+            <div class="setting-row">
+              <input id="startwithletter" type="checkbox" checked="checked" />
+              <span>Starts with letter</span>
+            </div>
+            <div class="setting-row">
+              <input id="allowlowercheckbox" type="checkbox" checked="checked" />
+              <span id="allowlower" style="display: none;">Allows lowercase letters</span>
+              <span id="requirelower" style="display: inline;">
+                Requires at least
+                <input id="minlower" type="text" value="1" size="2" />
+                lowercase letter(s)
+              </span>
+            </div>
+            <div class="setting-row">
+              <input id="allowuppercheckbox" type="checkbox" checked="checked" />
+              <span id="allowupper" style="display: none;">Allows uppercase letters</span>
+              <span id="requireupper" style="display: inline;">
+                Requires at least
+                <input id="minupper" type="text" value="1" size="2" />
+                uppercase letter(s)
+              </span>
+            </div>
+            <div class="setting-row">
+              <input id="allownumbercheckbox" type="checkbox" checked="checked" />
+              <span id="allownumber" style="display: none;">Allows numbers</span>
+              <span id="requirenumber" style="display: inline;">
+                Requires at least
+                <input id="minnumber" type="text" value="1" size="2" />
+                number(s)
+              </span>
+            </div>
+            <div class="setting-row">
+              <input id="allowspecialcheckbox" type="checkbox" />
+              <span id="allowspecial" style="display: inline;">Allows special characters</span>
+              <span id="requirespecial" style="display: none;">
+                Requires at least
+                <input id="minspecial" type="text" value="1" size="2" />
+                of
+                <input 
+                  id="specials" 
+                  class="fixed" 
+                  title="Enter up to 12 special characters.  Alphanumerics are not allowed."
+                  type="text" 
+                  value="$/!=@?._-" 
+                  size="12" maxlength="12" />
+              </span>
+            </div>
+            <div class="form-row">
+              <button id="makedefaultbutton"
+                type="button"
+                style="display: inline; margin-left: 10px; margin-right: 40px;"
+                target="_blank"
+                title="Make the settings in the box your default"
+                >
+                Save as default 
+              </button>                  
+            </div>
+          </div>
+          <div class="form-row">
+          <button id="downloadbutton" type="button" style="display: 
+            inline" target="_blank"
+            title="Download the settings stored on this machine to a file that you can use to calculate your passwords when the SitePassword extension is not available.">
+            Download local data
+          </button>
+          <a id="data" href="data:application/octet-stream," target="_blank" style="display: none"
+            download="SiteData.html">SiteData.html</a>
+          </div>
+      </div>
+      <div id="main">
           <div class="form-row">
             <span style="flex:1"></span>
             <span>
@@ -264,122 +380,6 @@
               </button>
             </div>
           </div>
-          <div id="settings">
-            <div class="setting-row" 
-              id="providesitepwdiv"
-              style="margin-left: 10px"
-              title="You must fill in the SitePassword form before you can provide your own site password.">
-              <input id="providesitepw" 
-                type="checkbox"
-                disabled
-                aria-disabled="true"
-                title="Check to type your own site password.  You must fill in the SitePassword form first." 
-              />
-              <span>Provide your own site password</span>
-            </div>
-            <div class="form-row">
-              <input 
-                id="code" 
-                class="sans" 
-                disabled
-                type="text" 
-                autocomplete="off"
-                value="" 
-                style="margin-top: 0"
-                placeholder="Code from your settings"
-                title="Paste or type the code from your settings here." />
-              <div id="code3bluedots" class="icon inner-icon-1" 
-                title=" Click for menu" style="display: block; top: -5px">
-                <img src="src/3bluedots.png" class="dots">
-              </div>
-              <div 
-                id="codemenu" 
-                style="top: -5px"
-                class="nodisplay menu inner-icon-0">
-                <div
-                  id="codemenuhelp"
-                  title="Learn more about how SitePassword uses the domain name.">
-                  <img src="src/help.png" class="icon menu-icon menu-icon">
-                </div>
-              </div>
-            </div>
-            <div>
-            </div>
-            <div id="defaultsettings" style="background-color: rgb(136, 204, 255, 20%);">
-              <div class="setting-row" style="top: 5px">
-                <span style="position: relative; left: 4px">Site password is</span>
-                <input id="pwlength" type="text" value="12" size="2" 
-                  style="position: relative; left: 2px"/>
-                <span>characters long</span>
-              </div>
-              <div class="setting-row">
-                <input id="startwithletter" type="checkbox" checked="checked" />
-                <span>Starts with letter</span>
-              </div>
-              <div class="setting-row">
-                <input id="allowlowercheckbox" type="checkbox" checked="checked" />
-                <span id="allowlower" style="display: none;">Allows lowercase letters</span>
-                <span id="requirelower" style="display: inline;">
-                  Requires at least
-                  <input id="minlower" type="text" value="1" size="2" />
-                  lowercase letter(s)
-                </span>
-              </div>
-              <div class="setting-row">
-                <input id="allowuppercheckbox" type="checkbox" checked="checked" />
-                <span id="allowupper" style="display: none;">Allows uppercase letters</span>
-                <span id="requireupper" style="display: inline;">
-                  Requires at least
-                  <input id="minupper" type="text" value="1" size="2" />
-                  uppercase letter(s)
-                </span>
-              </div>
-              <div class="setting-row">
-                <input id="allownumbercheckbox" type="checkbox" checked="checked" />
-                <span id="allownumber" style="display: none;">Allows numbers</span>
-                <span id="requirenumber" style="display: inline;">
-                  Requires at least
-                  <input id="minnumber" type="text" value="1" size="2" />
-                  number(s)
-                </span>
-              </div>
-              <div class="setting-row">
-                <input id="allowspecialcheckbox" type="checkbox" />
-                <span id="allowspecial" style="display: inline;">Allows special characters</span>
-                <span id="requirespecial" style="display: none;">
-                  Requires at least
-                  <input id="minspecial" type="text" value="1" size="2" />
-                  of
-                  <input 
-                    id="specials" 
-                    class="fixed" 
-                    title="Enter up to 12 special characters.  Alphanumerics are not allowed."
-                    type="text" 
-                    value="$/!=@?._-" 
-                    size="12" maxlength="12" />
-                </span>
-              </div>
-              <div class="form-row">
-                <button id="makedefaultbutton"
-                  type="button"
-                  style="display: inline; margin-left: 10px; margin-right: 40px;"
-                  target="_blank"
-                  title="Make the settings in the box your default"
-                  >
-                  Save as default 
-                </button>                  
-              </div>
-            </div>
-            <div class="form-row">
-            <button id="downloadbutton" type="button" style="display: 
-              inline" target="_blank"
-              title="Download the settings stored on this machine to a file that you can use to calculate your passwords when the SitePassword extension is not available.">
-              Download local data
-            </button>
-            <a id="data" href="data:application/octet-stream," target="_blank" style="display: none"
-              download="SiteData.html">SiteData.html</a>
-            </div>
-          </div>
         </div>
         <div id="help">
           <div id="superpwhelptext" name="help" class="helptext nodisplay">
@@ -520,7 +520,7 @@
           </div>
           </div>
         </div>
-      <div id="warnings"class="form-row">
+        <div id="warnings"class="form-row">
           <div id="phishing" class="warning nodisplay">
             <img src="src/warning.png" class="icon warning-icon">
             <span class="warningtext">Warning: Possible Phishing</span>
