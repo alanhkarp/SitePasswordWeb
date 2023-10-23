@@ -381,7 +381,146 @@
             </div>
           </div>
         </div>
-        <div id="warnings"class="form-row">
+        <div id="help">
+          <div id="superpwhelptext" name="help" class="helptext nodisplay">
+            <h3>Super Password Help</h3>
+            <p style="width: 270px">
+              You should choose a strong super password, one with lots of characters that contain
+              upper and lower case letters, numbers, and special characters. Just make sure
+              it's something you won't forget. SitePassword can't help you if you do.
+            </p>
+            <div class="form-row">
+              <button id="superpwhelptextclose" class="button" title="Close this help text.">
+                <span class="btn-text">Close<span class="btn-text"></span>
+              </button>
+              &nbsp;&nbsp;
+              <button id="superpwhelptextmore" title="Learn more about your super password">
+                <span class="btn-text">Learn more</span>
+              </button>
+              <span style="flex:1"></span>
+            </div>
+          </div>
+          <div id="domainnamehelptext" name="help" class="helptext nodisplay">
+            <h3>Domain Name Help</h3>
+            <p style="width: 270px">
+              The domain name is associated with your settings for this account.
+              It is also the name of a bookmark in the SitePasswordData bookmark folder.
+              That's the bookmark you can use to get your settings when you're on a machine
+              that doesn't have the SitePassword extension installed.
+            </p>
+            <div class="form-row">
+              <button id="domainnamehelptextclose" class="button" title="Close this help text">
+                <span class="btn-text">Close</span>
+              </button>
+              &nbsp;&nbsp;
+              <button id="domainnamehelptextmore" title="Learn more about how SitePassword uses domain names.">
+                <span class="btn-text">Learn more</span>
+              </button>
+            </div>
+          </div>
+          <div id="bookmarkhelptext" name="help" class="helptext nodisplay">
+            <h3>Bookmark Help</h3>
+            <p style="width: 270px">
+              Each domain name has a bookmark in the SitePasswordData bookmark folder.
+              That's where you can get your settings when you're on a machine
+              that doesn't have the SitePassword extension installed. You can click on the
+              bookmark to open this page with the form filled in 
+              or you can paste the bookmark into the form.
+            </p>
+            <div class="form-row">
+              <button id="bookmarkhelptextclose" class="button" title="Close this help text">
+                <span class="btn-text">Close</span>
+              </button>
+              &nbsp;&nbsp;
+              <button id="bookmarkhelptextmore" title="Learn more about how SitePassword uses domain names.">
+                <span class="btn-text">Learn more</span>
+              </button>
+            </div>
+          </div>
+          <div id="sitenamehelptext" name="help" class="helptext nodisplay">
+          <h3>Site Name Help</h3>
+            <p style="width: 270px">
+              Your site name is the nickname use to you refer to this account. It can be easy to remember,
+              such as <em>amazon</em> for amazon.com, but it doesn't have to be that simple.  You can 
+              change the password for an account by changing the nickname.  
+            </p>
+            <div class="form-row">
+              <button id="sitenamehelptextclose" class="button" title="Close this help text.">
+                <span class="btn-text">Close<span class="btn-text"></span>
+              </button>
+              &nbsp;&nbsp;
+              <button id="sitenamehelptextmore" title="Learn more about your site nickname">
+                <span class="btn-text">Learn more</span>
+              </button>
+            </div>
+          </div>
+          <div id="usernamehelptext" name="help" class="helptext nodisplay">
+            <h3>User Name Help</h3>
+            <p style="width: 270px">
+              Your user name is the name you use to log in to the site. It is
+              associated with the nickname for the account and is used to 
+              calculate your site password.  That means you can only have a 
+              single user name for a given nickname.  
+              <span name="hideifnobookmarks">If you want to use different 
+              user names for the same site, follow the instructions for 
+              <span id="sharedref"><a href="#sharedinfo">Shared Machines</a></span>.</span>   
+            </p>
+            <div class="form-row">
+              <button id="usernamehelptextclose" class="button" title="Close this help text.">
+                <span class="btn-text">Close</span>
+              </button>
+              &nbsp;&nbsp;
+              <button id="usernamehelptextmore" title="Learn more about your username">
+                <span class="btn-text">Learn more</span>
+              </button>
+            </div>
+          </div>
+          <div id="sitepwhelptext" name="help" class="helptext nodisplay">
+            <h3>Site Password Help</h3>
+            <p style="width: 270px">
+              SitePassword uses your super password, nickname for the site, and
+              your user name for the site along with the additional settings to
+              calculate this password for the account.
+            </p>
+            <p style="width: 270px">
+              If the password field on
+              the login form doesn't say <em>Click here for password</em>, you
+              can use the Copy option on the menu to put this password on the clipboard.
+            </p>
+            <div class="form-row">
+              <button id="sitepwhelptextclose" class="button" title="Close this help text.">
+                <span class="btn-text">Close</span>
+              </button>
+              &nbsp;&nbsp;
+              <button id="sitepwhelptextmore" title="Learn more about your site password">
+                <span class="btn-text">Learn more</span>
+              </button>
+            </div>
+          </div>
+          <div id="codehelptext" name="help" class="helptext">
+          <h3>Settings Code</h3>
+          <p style="width: 270px">
+            SitePassword encrypts passwords you provide with the computed 
+            password for the account.  That means you must provide the code
+            when manually entering your settings.
+          </p>
+          <p style="width: 270px">
+            The code is stored in the bookmark for the domain name.  You can 
+            download your settings or copy them from the file created when 
+            you downloaded your bookmarks.
+          </p>
+          <div class="form-row">
+            <button id="codehelptextclose" class="button" title="Close this help text.">
+              <span class="btn-text">Close</span>
+            </button>
+            &nbsp;&nbsp;
+            <button id="codehelptextmore" title="Learn more about your site password">
+              <span class="btn-text">Learn more</span>
+            </button>
+          </div>
+          </div>
+        </div>
+      <div id="warnings"class="form-row">
           <div id="phishing" class="warning nodisplay">
             <img src="src/warning.png" class="icon warning-icon">
             <span class="warningtext">Warning: Possible Phishing</span>
@@ -478,7 +617,7 @@
               that doesn't work, try another nickname for the site.
             </p>
           </div>
-          <div id="bkmk" class="warning nodisplay">
+          <div id="bkmkcheck" class="warning nodisplay">
             You can paste the URL for the login page to see if you might be at a fake site that is trying 
             to steal your password.
             <br />
@@ -489,147 +628,11 @@
               style="width: 90%"
               autocomplete="off"
               title="URL of the page you're logging into"
-              placeholder="Login page URL"
+              placeholder="Paste the login page URL"
             />
-          </div>
-          <div id="help">
-            <div id="superpwhelptext" name="help" class="helptext nodisplay">
-              <h3>Super Password Help</h3>
-              <p style="width: 270px">
-                You should choose a strong super password, one with lots of characters that contain
-                upper and lower case letters, numbers, and special characters. Just make sure
-                it's something you won't forget. SitePassword can't help you if you do.
-              </p>
-              <div class="form-row">
-                <button id="superpwhelptextclose" class="button" title="Close this help text.">
-                  <span class="btn-text">Close<span class="btn-text"></span>
-                </button>
-                &nbsp;&nbsp;
-                <button id="superpwhelptextmore" title="Learn more about your super password">
-                  <span class="btn-text">Learn more</span>
-                </button>
-                <span style="flex:1"></span>
-              </div>
-            </div>
-            <div id="domainnamehelptext" name="help" class="helptext nodisplay">
-              <h3>Domain Name Help</h3>
-              <p style="width: 270px">
-                The domain name is associated with your settings for this account.
-                It is also the name of a bookmark in the SitePasswordData bookmark folder.
-                That's the bookmark you can use to get your settings when you're on a machine
-                that doesn't have the SitePassword extension installed.
-              </p>
-              <div class="form-row">
-                <button id="domainnamehelptextclose" class="button" title="Close this help text">
-                  <span class="btn-text">Close</span>
-                </button>
-                &nbsp;&nbsp;
-                <button id="domainnamehelptextmore" title="Learn more about how SitePassword uses domain names.">
-                  <span class="btn-text">Learn more</span>
-                </button>
-              </div>
-            </div>
-            <div id="bookmarkhelptext" name="help" class="helptext nodisplay">
-              <h3>Bookmark Help</h3>
-              <p style="width: 270px">
-                Each domain name has a bookmark in the SitePasswordData bookmark folder.
-                That's where you can get your settings when you're on a machine
-                that doesn't have the SitePassword extension installed. You can click on the
-                bookmark to open this page with the form filled in 
-                or you can paste the bookmark into the form.
-              </p>
-              <div class="form-row">
-                <button id="bookmarkhelptextclose" class="button" title="Close this help text">
-                  <span class="btn-text">Close</span>
-                </button>
-                &nbsp;&nbsp;
-                <button id="bookmarkhelptextmore" title="Learn more about how SitePassword uses domain names.">
-                  <span class="btn-text">Learn more</span>
-                </button>
-              </div>
-            </div>
-            <div id="sitenamehelptext" name="help" class="helptext nodisplay">
-            <h3>Site Name Help</h3>
-              <p style="width: 270px">
-                Your site name is the nickname use to you refer to this account. It can be easy to remember,
-                such as <em>amazon</em> for amazon.com, but it doesn't have to be that simple.  You can 
-                change the password for an account by changing the nickname.  
-              </p>
-              <div class="form-row">
-                <button id="sitenamehelptextclose" class="button" title="Close this help text.">
-                  <span class="btn-text">Close<span class="btn-text"></span>
-                </button>
-                &nbsp;&nbsp;
-                <button id="sitenamehelptextmore" title="Learn more about your site nickname">
-                  <span class="btn-text">Learn more</span>
-                </button>
-              </div>
-            </div>
-            <div id="usernamehelptext" name="help" class="helptext nodisplay">
-              <h3>User Name Help</h3>
-              <p style="width: 270px">
-                Your user name is the name you use to log in to the site. It is
-                associated with the nickname for the account and is used to 
-                calculate your site password.  That means you can only have a 
-                single user name for a given nickname.  
-                <span name="hideifnobookmarks">If you want to use different 
-                user names for the same site, follow the instructions for 
-                <span id="sharedref"><a href="#sharedinfo">Shared Machines</a></span>.</span>   
-              </p>
-              <div class="form-row">
-                <button id="usernamehelptextclose" class="button" title="Close this help text.">
-                  <span class="btn-text">Close</span>
-                </button>
-                &nbsp;&nbsp;
-                <button id="usernamehelptextmore" title="Learn more about your username">
-                  <span class="btn-text">Learn more</span>
-                </button>
-              </div>
-            </div>
-            <div id="sitepwhelptext" name="help" class="helptext nodisplay">
-              <h3>Site Password Help</h3>
-              <p style="width: 270px">
-                SitePassword uses your super password, nickname for the site, and
-                your user name for the site along with the additional settings to
-                calculate this password for the account.
-              </p>
-              <p style="width: 270px">
-                If the password field on
-                the login form doesn't say <em>Click here for password</em>, you
-                can use the Copy option on the menu to put this password on the clipboard.
-              </p>
-              <div class="form-row">
-                <button id="sitepwhelptextclose" class="button" title="Close this help text.">
-                  <span class="btn-text">Close</span>
-                </button>
-                &nbsp;&nbsp;
-                <button id="sitepwhelptextmore" title="Learn more about your site password">
-                  <span class="btn-text">Learn more</span>
-                </button>
-              </div>
-            </div>
-            <div id="codehelptext" name="help" class="helptext">
-            <h3>Settings Code</h3>
-            <p style="width: 270px">
-              SitePassword encrypts passwords you provide with the computed 
-              password for the account.  That means you must provide the code
-              when manually entering your settings.
-            </p>
-            <p style="width: 270px">
-              The code is stored in the bookmark for the domain name.  You can 
-              download your settings or copy them from the file created when 
-              you downloaded your bookmarks.
-            </p>
-            <div class="form-row">
-              <button id="codehelptextclose" class="button" title="Close this help text.">
-                <span class="btn-text">Close</span>
-              </button>
-              &nbsp;&nbsp;
-              <button id="codehelptextmore" title="Learn more about your site password">
-                <span class="btn-text">Learn more</span>
-              </button>
-            </div>
-            </div>
+            <button id="bkmkcheckclose" type="button" style="width:40%"
+              title="Close">
+              <span class="btn-text" style="color: black">Close</span>
           </div>
         </div>
         <div id="instructionpanel" style="display: none;">

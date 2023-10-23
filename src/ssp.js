@@ -50,12 +50,13 @@ let query = window.location.search;
 let bkmkSettings;
 if (query) {
     let params = new URLSearchParams(query);
-    let bkmk = params.get("bkmk");
-    bkmkSettings = JSON.parse(bkmk.substring(6));
+    let bkmkcheck = params.get("bkmk");
+    bkmkSettings = JSON.parse(bkmkcheck.substring(6));
     if ('string' !== typeof bkmkSettings.specials) {
         let specials = SitePassword.array2string(bkmkSettings.specials);
         bkmkSettings.specials = specials;
         SitePassword.settings = bkmkSettings;
+        console.log("bkmkSettings", bkmkSettings);
     }
 }
 
@@ -120,7 +121,7 @@ let SitePasswordWeb = ((function (self) {
             $domainname.value = bkmkSettings.domainname;
             $sitename.value = bkmkSettings.sitename;
             $username.value = bkmkSettings.username;
-            get("bkmk").style.display = "block";
+            get("bkmkcheck").style.display = "block";
             $superpw.focus();
         }
 
@@ -309,7 +310,7 @@ let SitePasswordWeb = ((function (self) {
     
         $domainname.onblur = function () {
             const domainname = parseDomain(normalize($domainname.value));
-            get("bkmk").style.display = "none";
+            get("bkmkcheck").style.display = "none";
             $domainname.value = domainname;
             SitePassword.domainname = domainname;
             const sitename = SitePassword.siteForDomain(domainname);
@@ -417,6 +418,10 @@ let SitePasswordWeb = ((function (self) {
                     alert("Invalid bookmark. Copy it again?");
                 }
         }
+        const $bkmcheckclose = get("bkmkcheckclose");
+        $bkmcheckclose.onclick = function () {
+            get("bkmkcheck").style.display = "none";
+        }
         function parseBookmark(bookmark) {
             let settings = undefined;
             let bkmkstr = "";
@@ -477,7 +482,7 @@ let SitePasswordWeb = ((function (self) {
                 settings.username = $username.value;
                 SitePassword.settings = settings;
                 phishingWarningOff();
-            } else if (!SitePassword.validateDomain(domainname, sitename)) {
+            } else if (!testDomain) {
                 updateSettings(settings);
             } else {
                 phishingWarningMsg(testDomain);
@@ -687,7 +692,7 @@ let SitePasswordWeb = ((function (self) {
                     phishingWarningMsg($bkmkDomain.value);
                     phishingWarningOn(settings);
                 }                    
-                get("bkmk").style.display = "none";
+                get("bkmkcheck").style.display = "none";
             }, 0);
         }
     
@@ -733,9 +738,8 @@ let SitePasswordWeb = ((function (self) {
         }
         function phishingWarningMsg(testDomain) {
             let sitename = normalize($sitename.value);
-            let previous = SitePassword.database.sites[sitename].domainname;
             get("phishingtext0").innerText = get("sitename").value;
-            get("phishingtext1").innerText = previous;
+            get("phishingtext1").innerText = testDomain;
             get("phishingtext2").innerText = get("domainname").value;
        }
        get("forgetbutton").onclick = function () {
@@ -1106,7 +1110,7 @@ let SitePasswordWeb = ((function (self) {
                         
         if (bkmkSettings) {
             SitePassword.loadSettings(bkmkSettings.sitename);
-            get("bkmk").style.display = "block";
+            get("bkmkcheck").style.display = "block";
             SitePassword.settings = bkmkSettings;
             SitePassword.domainname = bkmkSettings.domainname;
             $domainname.value = bkmkSettings.domainname;
