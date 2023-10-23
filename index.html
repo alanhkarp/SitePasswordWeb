@@ -29,6 +29,127 @@
     <div id="leftgutter" class="column"></div>
     <div id="content" class="column">
     <div id="mainpanel">
+      <div id="warnings"class="form-row">
+        <div id="phishing" class="warning nodisplay">
+          <img src="src/warning.png" class="icon warning-icon">
+          <span class="warningtext">Warning: Possible Phishing</span>
+          <p>
+            <!-- https://www.ipqualityscore.com/threat-feeds/malicious-url-scanner 
+                  https://www.abuseipdb.com/
+                  https://www.malwareurl.com/listing-urls.php
+                  https://www.scamadviser.com/
+            -->
+            You may be at a fake site that is trying to steal your password.
+            You previously used the nickname
+            <span id="phishingtext0" class="phishing" style="padding-left: 5px"></span>
+            for
+          </p>
+          <span id="phishingtext1" class="phishing"></span>
+          <br /><br />
+          <p>The domain asking for your password is</p>
+          <span id="phishingtext2" class="phishing"></span>
+          <br /><br />
+          <p>
+            Check the domain name carefully; it may not be for your account.
+            You can check for known bad web pages at 
+            <a id="phishingcheck" href="https://www.scamadviser.com/">ScamAdvisor</a>
+            or other sites that check for phishing.
+          </p>
+          <button id="cancelwarning" type="button"
+            style="background-color: #21973f; margin: auto; color: white; width:100%"
+            title="I don't recognize this domain name. Take me away from this web page.">
+            <span class="btn-text" style="color: white">Ths domain name looks suspicious</span>
+          </button>
+          <br /><br />
+          <p>
+            It is common to see different domain names for the same account login. 
+            You may see <span class="example">login.example.com</span> and 
+            <span class="example">www.example.com</span> for the same account at example.com.
+            Just make sure you recognize the domain name.
+          </p>
+          <button id="warningbutton" type="button"
+            style="background-color: #D51c24; margin: auto; color:white; width:100%"
+            title="This page is for the same account. Use the same settings for it.">
+            <span class="btn-text" style="color: white">This page is for the same account</span>
+          </button>
+          <br /><br />
+          <p>
+            You may have accidentally reused a nickname. In that case, you can just pick a different one.
+          </p>
+          <button id="nicknamebutton" type="button"
+            style="background-color: #1964dc; margin: auto; color:white; width:100%"
+            title="This page is for a different account.  I'll select a new nickname.">
+            <span class="btn-text" style="color: white">Pick a new nickname</span>
+          </button>
+          <br /><br />
+        </div>
+        <div id="http" class="warning nodisplay">
+          <img src="src/warning.png" class="icon warning-icon">
+          <span class="warningtext">Warning: Page Not Secure</span>
+          <p>
+            The connection to this page is not secure. Are you sure you want
+            to enter your password?
+          </p>
+          <button id="httpclose" type="button" style="width:40%"
+            title="Close">
+            <span class="btn-text" style="color: black">Close</span>
+        </div>
+        <div id="forget" class="warning nodisplay"
+          title="You can change your mind or permanently forget the settings for the listed domain names.">
+          <div id="forgettext">
+            <img src="src/warning.png" class="icon warning-icon">
+            <span class="warningtext">Forget Enabled</span>
+            <p>
+              Are you sure you want to delete the settings for these domain names?
+            </p>
+            <ul id="toforgetlist"></ul>
+            <div>
+              <p>You can change your mind,</p>
+              <button id="cancelbutton" type="button" style="background-color: #21973f; color: white; width:100%"
+                title="Click to cancel forgetting the settings for the listed domain names.">
+                <span class="btn-text" style="color: white">Cancel</span>
+              </button>
+              <p>
+                or permanently forget the settings for the listed domain names.
+                <b>This action cannot be undone.</b>
+              </p>
+              <button id="forgetbutton" type="button" style="background-color: #D51c24; color:white; width:100%"
+                title="Click to delete the settings for the listed domain names.">
+                <span class="btn-text" style="color: white">Permanently forget</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="pwfail" class="warning nodisplay">
+          <img src="src/warning.png" class="icon warning-icon">
+          <span class="warningtext">Warning: No Password</span>
+          <p>
+            Can't compute a password with these settings!  You may need to enable some characters, increase the 
+            pasword length, or reduce the number of special characters you're asking for.  If 
+            that doesn't work, try another nickname for the site.
+          </p>
+          <button id="pwfailclose" type="button" style="width:40%"
+            title="Close">
+            <span class="btn-text" style="color: black">Close</span>
+        </div>
+        <div id="bkmkcheck" class="warning nodisplay">
+          You can paste the URL for the login page to see if you might be at a fake site that is trying 
+          to steal your password.
+          <br />
+          <input 
+            id="bkmkDomain" 
+            type="input"
+            class="sans"
+            style="width: 90%"
+            autocomplete="off"
+            title="URL of the page you're logging into"
+            placeholder="Paste the login page URL"
+          />
+          <button id="bkmkcheckclose" type="button" style="width:40%"
+            title="Close">
+            <span class="btn-text" style="color: black">Close</span>
+        </div>
+      </div>
       <div id="main">
           <div class="form-row">
             <span style="flex:1"></span>
@@ -520,127 +641,6 @@
           <a id="data" href="data:application/octet-stream," target="_blank" style="display: none"
             download="SiteData.html">SiteData.html</a>
           </div>
-      </div>
-      <div id="warnings"class="form-row">
-        <div id="phishing" class="warning nodisplay">
-          <img src="src/warning.png" class="icon warning-icon">
-          <span class="warningtext">Warning: Possible Phishing</span>
-          <p>
-            <!-- https://www.ipqualityscore.com/threat-feeds/malicious-url-scanner 
-                  https://www.abuseipdb.com/
-                  https://www.malwareurl.com/listing-urls.php
-                  https://www.scamadviser.com/
-            -->
-            You may be at a fake site that is trying to steal your password.
-            You previously used the nickname
-            <span id="phishingtext0" class="phishing" style="padding-left: 5px"></span>
-            for
-          </p>
-          <span id="phishingtext1" class="phishing"></span>
-          <br /><br />
-          <p>The domain asking for your password is</p>
-          <span id="phishingtext2" class="phishing"></span>
-          <br /><br />
-          <p>
-            Check the domain name carefully; it may not be for your account.
-            You can check for known bad web pages at 
-            <a id="phishingcheck" href="https://www.scamadviser.com/">ScamAdvisor</a>
-            or other sites that check for phishing.
-          </p>
-          <button id="cancelwarning" type="button"
-            style="background-color: #21973f; margin: auto; color: white; width:100%"
-            title="I don't recognize this domain name. Take me away from this web page.">
-            <span class="btn-text" style="color: white">Ths domain name looks suspicious</span>
-          </button>
-          <br /><br />
-          <p>
-            It is common to see different domain names for the same account login. 
-            You may see <span class="example">login.example.com</span> and 
-            <span class="example">www.example.com</span> for the same account at example.com.
-            Just make sure you recognize the domain name.
-          </p>
-          <button id="warningbutton" type="button"
-            style="background-color: #D51c24; margin: auto; color:white; width:100%"
-            title="This page is for the same account. Use the same settings for it.">
-            <span class="btn-text" style="color: white">This page is for the same account</span>
-          </button>
-          <br /><br />
-          <p>
-            You may have accidentally reused a nickname. In that case, you can just pick a different one.
-          </p>
-          <button id="nicknamebutton" type="button"
-            style="background-color: #1964dc; margin: auto; color:white; width:100%"
-            title="This page is for a different account.  I'll select a new nickname.">
-            <span class="btn-text" style="color: white">Pick a new nickname</span>
-          </button>
-          <br /><br />
-        </div>
-        <div id="http" class="warning nodisplay">
-          <img src="src/warning.png" class="icon warning-icon">
-          <span class="warningtext">Warning: Page Not Secure</span>
-          <p>
-            The connection to this page is not secure. Are you sure you want
-            to enter your password?
-          </p>
-          <button id="httpclose" type="button" style="width:40%"
-            title="Close">
-            <span class="btn-text" style="color: black">Close</span>
-        </div>
-        <div id="forget" class="warning nodisplay"
-          title="You can change your mind or permanently forget the settings for the listed domain names.">
-          <div id="forgettext">
-            <img src="src/warning.png" class="icon warning-icon">
-            <span class="warningtext">Forget Enabled</span>
-            <p>
-              Are you sure you want to delete the settings for these domain names?
-            </p>
-            <ul id="toforgetlist"></ul>
-            <div>
-              <p>You can change your mind,</p>
-              <button id="cancelbutton" type="button" style="background-color: #21973f; color: white; width:100%"
-                title="Click to cancel forgetting the settings for the listed domain names.">
-                <span class="btn-text" style="color: white">Cancel</span>
-              </button>
-              <p>
-                or permanently forget the settings for the listed domain names.
-                <b>This action cannot be undone.</b>
-              </p>
-              <button id="forgetbutton" type="button" style="background-color: #D51c24; color:white; width:100%"
-                title="Click to delete the settings for the listed domain names.">
-                <span class="btn-text" style="color: white">Permanently forget</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div id="pwfail" class="warning nodisplay">
-          <img src="src/warning.png" class="icon warning-icon">
-          <span class="warningtext">Warning: No Password</span>
-          <p>
-            Can't compute a password with these settings!  You may need to enable some characters, increase the 
-            pasword length, or reduce the number of special characters you're asking for.  If 
-            that doesn't work, try another nickname for the site.
-          </p>
-          <button id="pwfailclose" type="button" style="width:40%"
-            title="Close">
-            <span class="btn-text" style="color: black">Close</span>
-        </div>
-        <div id="bkmkcheck" class="warning nodisplay">
-          You can paste the URL for the login page to see if you might be at a fake site that is trying 
-          to steal your password.
-          <br />
-          <input 
-            id="bkmkDomain" 
-            type="input"
-            class="sans"
-            style="width: 90%"
-            autocomplete="off"
-            title="URL of the page you're logging into"
-            placeholder="Paste the login page URL"
-          />
-          <button id="bkmkcheckclose" type="button" style="width:40%"
-            title="Close">
-            <span class="btn-text" style="color: black">Close</span>
-        </div>
       </div>
       <div id="instructionpanel" style="display: none;">
         <h2 class="nodisplay">Instructions</h2>
