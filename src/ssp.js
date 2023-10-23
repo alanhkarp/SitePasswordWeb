@@ -399,25 +399,26 @@ let SitePasswordWeb = ((function (self) {
         // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"The Real Alan","username":"dalnefre","pwlength":"15","startwithletter":false,"allowlower":true,"minlower":"1","allowupper":true,"minupper":"1","allownumber":true,"minnumber":"1","allowspecial":true,"minspecial":"1","specials":"$/!=@?._-"}
         // sitepw --> G.iJQEp-qB65UF5
         $bookmark.onpaste = function () {
+            // The paste result isn't available until the next turn
             setTimeout(() => {
                 self.bookmarkPaste();
             }, 0);
         }
         self.bookmarkPaste = function () {
             const settings = parseBookmark($bookmark.value);
-                $bookmark.value = "";  // clear bookmark field
-                if (settings) {
-                    if (settings.domainname === $domainname.value) {
-                        SitePassword.settings = settings;  // update data-model
-                        updateSettings(settings);
-                    } else {
-                        $sitename.value = settings.sitename;
-                        //alert("Bookmark is not for this domain. Try another one.");
-                        phishingWarningOn(settings);
-                    }
+            $bookmark.value = "";  // clear bookmark field
+            if (settings) {
+                if (settings.domainname === $domainname.value) {
+                    SitePassword.settings = settings;  // update data-model
+                    updateSettings(settings);
                 } else {
-                    alert("Invalid bookmark. Copy it again?");
+                    $sitename.value = settings.sitename;
+                    //alert("Bookmark is not for this domain. Try another one.");
+                    phishingWarningOn(settings);
                 }
+            } else {
+                alert("Invalid bookmark. Copy it again?");
+            }
         }
         const $httpclose = get("httpclose");
         $httpclose.onclick = function () {
@@ -706,6 +707,10 @@ let SitePasswordWeb = ((function (self) {
         }
         function phishingWarningOn(settings) {
             httpWarningOff();
+            const domainname = $domainname.value;
+            const sitename = settings.sitename;
+            let testDomain = SitePassword.validateDomain(domainname, sitename);
+            phishingWarningMsg(testDomain);
             $phishing.style.display = "block";
             $results.style.display = "none";  // hide sitepw/remember/settings...
             $domainname.classList.add("bad-input");
@@ -737,7 +742,7 @@ let SitePasswordWeb = ((function (self) {
         }
         function phishingWarningMsg(testDomain) {
             let sitename = normalize($sitename.value);
-            get("phishingtext0").innerText = get("sitename").value;
+            get("phishingtext0").innerText = sitename;
             get("phishingtext1").innerText = testDomain;
             get("phishingtext2").innerText = get("domainname").value;
        }
