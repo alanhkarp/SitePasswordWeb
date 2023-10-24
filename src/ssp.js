@@ -686,11 +686,12 @@ let SitePasswordWeb = ((function (self) {
         let $bkmkDomain = get("bkmkDomain");
         $bkmkDomain.onpaste = function () {
             setTimeout(() => {
-                if (parseDomain($bkmkDomain.value) === $domainname.value) {
+                let domainname = parseDomain(normalize($bkmkDomain.value));
+                if (domainname === $domainname.value) {
                     phishingWarningOff();
                 } else {
                     const settings = SitePassword.loadSettings($sitename.value);
-                    phishingWarningMsg($bkmkDomain.value);
+                    phishingWarningMsg(domainname);
                     phishingWarningOn(settings);
                 }                    
                 get("bkmkcheck").style.display = "none";
@@ -707,10 +708,6 @@ let SitePasswordWeb = ((function (self) {
         }
         function phishingWarningOn(settings) {
             httpWarningOff();
-            const domainname = $domainname.value;
-            const sitename = settings.sitename;
-            let testDomain = SitePassword.validateDomain(domainname, sitename);
-            phishingWarningMsg(testDomain);
             $phishing.style.display = "block";
             $results.style.display = "none";  // hide sitepw/remember/settings...
             $domainname.classList.add("bad-input");
@@ -743,8 +740,8 @@ let SitePasswordWeb = ((function (self) {
         function phishingWarningMsg(testDomain) {
             let sitename = normalize($sitename.value);
             get("phishingtext0").innerText = sitename;
-            get("phishingtext1").innerText = testDomain;
-            get("phishingtext2").innerText = get("domainname").value;
+            get("phishingtext1").innerText = $domainname.value;
+            get("phishingtext2").innerText = testDomain;
        }
        get("forgetbutton").onclick = function () {
         let children = get("toforgetlist").children;
