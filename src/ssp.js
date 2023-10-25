@@ -414,6 +414,7 @@ let SitePasswordWeb = ((function (self) {
                 } else {
                     $sitename.value = settings.sitename;
                     //alert("Bookmark is not for this domain. Try another one.");
+                    phishingWarningMsg($domainname.value);
                     phishingWarningOn(settings);
                 }
             } else {
@@ -742,20 +743,20 @@ let SitePasswordWeb = ((function (self) {
             get("phishingtext0").innerText = sitename;
             get("phishingtext1").innerText = $domainname.value;
             get("phishingtext2").innerText = testDomain;
-       }
-       get("forgetbutton").onclick = function () {
-        let children = get("toforgetlist").children;
-        for (let child of children) {
-            forgetDomainname(child.innerText);
         }
-        get("cancelbutton").click();
-    }
-    get("cancelbutton").onclick = function () {
-        while ( get("toforgetlist").firstChild ) {
-            get("toforgetlist").removeChild(get("toforgetlist").firstChild);
+        get("forgetbutton").onclick = function () {
+            let children = get("toforgetlist").children;
+            for (let child of children) {
+                forgetDomainname(child.innerText);
+            }
+            get("cancelbutton").click();
         }
-        get("forget").classList.toggle("nodisplay");
-    }
+        get("cancelbutton").onclick = function () {
+            while ( get("toforgetlist").firstChild ) {
+                get("toforgetlist").removeChild(get("toforgetlist").firstChild);
+            }
+            get("forget").classList.toggle("nodisplay");
+        }
 
         const $http = get("http");
         function httpWarningOn() {
