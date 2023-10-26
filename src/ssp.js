@@ -799,27 +799,6 @@ let SitePasswordWeb = ((function (self) {
         get("codemenu").onmouseleave = function (e) {
             menuOff("code", e);
         }
-        let $code3bluedots = get("code3bluedots");
-        let $codemenuhelp = get("codemenuhelp");
-        let $codehelptextclose = get("codehelptextclose");
-        let $codehelptextmore = get("codehelptextmore");
-        $code3bluedots.onmouseover = function (e) {
-            menuOn("code", e);
-        }
-        $code3bluedots.onclick = get("code3bluedots").onmouseover;
-        get("codemenu").onmouseleave = function (e) {
-            menuOff("code", e);
-        } 
-        $codemenuhelp.onclick = function (e) {
-            helpItemOn("code");
-        }
-        $codehelptextclose.onclick = function (e) {
-            helpAllOff();
-        }
-        $codehelptextmore.onclick = function (e) {
-            helpAllOff();
-            sectionClick("code");
-        }
     
         $pwlength.onblur = function () {
             handleKeyupNumber("pwlength");
