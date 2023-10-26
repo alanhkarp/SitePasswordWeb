@@ -796,9 +796,6 @@ let SitePasswordWeb = ((function (self) {
             settings.xor = JSON.parse("[" + $code.value + "]");
             generatePassword();
         }
-        get("codemenu").onmouseleave = function (e) {
-            menuOff("code", e);
-        }
     
         $pwlength.onblur = function () {
             handleKeyupNumber("pwlength");
@@ -991,7 +988,6 @@ let SitePasswordWeb = ((function (self) {
             get("sitenamemenu").style.display = "none";
             get("usernamemenu").style.display = "none";
             get("sitepwmenu").style.display = "none";
-            get("codemenu").style.display = "none";
         }
         function dotsAllOn() {
             get("domainname3bluedots").style.display = "block";
@@ -1000,7 +996,6 @@ let SitePasswordWeb = ((function (self) {
             get("sitename3bluedots").style.display = "block";
             get("username3bluedots").style.display = "block";
             get("sitepw3bluedots").style.display = "block";
-            get("code3bluedots").style.display = "block";
         }
         function helpItemOn(which) {
             let $main = get("main");
@@ -1016,12 +1011,14 @@ let SitePasswordWeb = ((function (self) {
                 let bottom = $buttons.getBoundingClientRect().bottom + 10;
                 $element.style.height = bottom - top + "px";
                 hideInstructions();
+                hideSettings();
             } else {
                 helpAllOff();
             }
         }
         function helpItemOff(which) {
             get(which).style.display = "none";
+            showSettings();
         }
         function helpAllOff() {
             let helps = document.getElementsByName("help");
@@ -1079,6 +1076,12 @@ let SitePasswordWeb = ((function (self) {
             get("maininfo").title = "Open Instructions";
             get("instructionopen").classList.remove("nodisplay");
             get("instructionclose").classList.add("nodisplay");
+        }
+        function showSettings() {
+            get("settings").classList.remove("nodisplay");
+        }
+        function hideSettings() {
+            get("settings").classList.add("nodisplay");
         }
         function hidesitepw() {
             if (logging) console.log("checking hidesitepw", get("hidesitepw").checked, SitePassword.database.hidesitepw);
