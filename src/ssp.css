@@ -105,10 +105,9 @@ body {
   flex: 0 0 auto;
   display: flex; 
   background-color: rgb(136, 204, 255, 0%); 
-  overflow: auto;
   width: auto;
   padding: 0;
-  border: 2pt solid #47A;
+  border: 0pt solid #47A;
   border-radius: 6pt;
 }
 #instructionpanel {
