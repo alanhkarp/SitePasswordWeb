@@ -116,7 +116,7 @@ body {
   flex: 0 0 auto;
   padding-left: 1em;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 #main {
   margin: 0;
