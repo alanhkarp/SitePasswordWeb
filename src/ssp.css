@@ -107,12 +107,16 @@ body {
   background-color: rgb(136, 204, 255, 0%); 
   width: auto;
   padding: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
   border: 0pt solid #47A;
   border-radius: 6pt;
 }
 #instructionpanel {
   flex: 0 0 auto;
   padding-left: 1em;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 #main {
   margin: 0;

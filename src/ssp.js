@@ -114,10 +114,12 @@ let SitePasswordWeb = ((function (self) {
         const $makedefaultbutton = get("makedefaultbutton")
         const $downloadbutton = get("downloadbutton");
         const $phishing = get("phishing");
+        const $instructionpanel = get("instructionpanel");
         // Fill in default values in case the user has changed them
         let defaultsettings = SitePassword.getDefaultSettings();
         loadSettingControls(defaultsettings);
-
+        // Set size of window for separately scrolling sections
+        $instructionpanel.style.height = window.innerHeight + "px";
         if (bkmkSettings) {
             $domainname.value = bkmkSettings.domainname;
             $sitename.value = bkmkSettings.sitename;
@@ -237,7 +239,6 @@ let SitePasswordWeb = ((function (self) {
             //$element.focus();
         }
 
-        const $instructionpanel = get("instructionpanel");
         const $maininfo = get("maininfo");
         $maininfo.onclick = function () {
             if ($instructionpanel.style.display === "none") {
@@ -1010,7 +1011,6 @@ let SitePasswordWeb = ((function (self) {
                 let $buttons = get(which + "helptextclose");
                 let bottom = $buttons.getBoundingClientRect().bottom + 10;
                 $element.style.height = bottom - top + "px";
-                hideInstructions();
                 hideSettings();
             } else {
                 helpAllOff();
