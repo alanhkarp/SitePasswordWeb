@@ -125,15 +125,19 @@ let SitePassword = ((function (self) {
         return valOK;
     }
     async function computePassword(superpw, salt, settings) {
+        if (!(settings.allowupper || settings.allowlower || settings.allownumber)) {
+            return Promise.resolve("");
+        }
         let payload = Utf8Encode(superpw);
         const cset = generateCharacterSet(settings);
         var passphrase = new TextEncoder().encode(payload);
         let start = Date.now();
-        if (logging) console.log("superpw, salt", superpw, salt)
+        if (logging) console.log("bg superpw, salt", superpw, salt)
         // Use Password Based Key Derivation Function because repeated iterations
         // don't weaken the result as much as repeated hashing.
         return window.crypto.subtle.importKey("raw", passphrase, { name: "PBKDF2" }, false, ["deriveBits"])
-        .then((passphraseImported) => {
+        .then(async (passphraseImported) => {
+            if (logging) console.log("bg passphraseImported", passphraseImported);
             return window.crypto.subtle.deriveBits(
                 {
                     name: "PBKDF2",
@@ -172,18 +176,18 @@ let SitePassword = ((function (self) {
     }
     async function generatePassword() {
         const settings = self.settings;
-        if (settings.allowupper || settings.allowlower || settings.allownumber) {
-            const n = normalize(settings.sitename);
-            const u = normalize(settings.username);
-            const m = self.getSuperPassword();
-            if (!m) {
-                return "";
-            }
-            const salt = n.toString() + '\t'+ u.toString();
-            let pw = await computePassword(m, salt, settings);
-            return pw;
+        const n = normalize(settings.sitename);
+        const u = normalize(settings.username);
+        const m = self.getSuperPassword();
+        if (!m) {
+            return "";
         }
-        return "";
+        const salt = n.toString() + '\t'+ u.toString();
+        if (logging) console.log("bg calling computePassword");
+        let start = Date.now();
+        let pw = await computePassword(m, salt, settings);
+        console.log("bg computePassword returned", pw, "took", Date.now() - start, "ms");
+        return pw;
     }
     function xorStrings(provided, sitepw) {
         let b = sitepw;

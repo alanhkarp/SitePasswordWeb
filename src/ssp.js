@@ -56,7 +56,7 @@ if (query) {
         let specials = SitePassword.array2string(bkmkSettings.specials);
         bkmkSettings.specials = specials;
         SitePassword.settings = bkmkSettings;
-        console.log("bkmkSettings", bkmkSettings);
+        if (logging) console.log("bkmkSettings", bkmkSettings);
     }
 }
 
@@ -192,7 +192,9 @@ let SitePasswordWeb = ((function (self) {
         const $pwfail = get("pwfail");
         async function generatePassword() {
             saveSettingControls(SitePassword.settings);
-            SitePassword.generatePassword().then((pw) => {
+            if (logging) console.log("ssp calling generatePassword");
+            return SitePassword.generatePassword().then((pw) => {
+                if (logging) console.log("ssp got password", pw);
                 if (pw || !$superpw.value) {
                     $pwok.style.display = "flex";
                     $pwfail.style.display = "none";
@@ -217,9 +219,10 @@ let SitePasswordWeb = ((function (self) {
                 }
                 return pw;
             }).catch((e) => {
-            console.log("generatePassword failed", e);
-        });
-    }
+                console.log("generatePassword failed", e);
+                return "";
+            });
+        }
         function handleBlur(id) {
             const $element = get(id);
             SitePassword.settings[id] = $element.value;
@@ -230,15 +233,15 @@ let SitePasswordWeb = ((function (self) {
             if (value && isNaN(value)) {
                 alert("Must be a number");
             } else {
-                SitePassword.settings[id] = +value;
-                generatePassword();
+                SitePassword.settings[id] = value;
+                //generatePassword();
                 setMeter("sitepw");
             }
         }
         function handleKeyup(id) {
             const $element = get(id);
             SitePassword.settings[id] = $element.value;
-            generatePassword();
+            //generatePassword();
             //$element.focus();
         }
 
@@ -256,9 +259,12 @@ let SitePasswordWeb = ((function (self) {
         const strengthColor = ["#bbb", "#f06", "#f90", "#093", "#036"]; // 0,3,6,9,C,F
         $superpw.onblur = function () {
             SitePassword.setSuperPassword($superpw.value);
-            generatePassword();
-            setMeter("superpw");
-            setMeter("sitepw");
+            if (logging) console.log("ssp onblur generate password");
+            generatePassword().then((calculated) => {
+                if (logging) console.log("ssp onblur got password", calculated);
+                setMeter("superpw");
+                setMeter("sitepw");
+            });
         }
         function setMeter(which) {
             const $meter = get(which + "-strength-meter");
@@ -269,7 +275,7 @@ let SitePasswordWeb = ((function (self) {
             $input.style.color = strengthColor[report.score];
         }
         $superpw.onkeyup = function () {
-            $superpw.onblur();
+            //$superpw.onblur();
         }
         const $superpwmenuhide = get("superpwmenuhide");
         const $superpwmenushow = get("superpwmenushow");
@@ -564,6 +570,7 @@ let SitePasswordWeb = ((function (self) {
         }
         $username.onblur = function() {
             clearDatalist("usernames");
+            generatePassword();
         }
         $username.onfocus = function () {
             let set = new Set();
@@ -629,10 +636,11 @@ let SitePasswordWeb = ((function (self) {
         $sitepw.onblur = function () {
             if ($sitepw.readOnly) return;
             let provided = $sitepw.value;
-            let computed = generatePassword();
-            SitePassword.settings.xor = SitePassword.xorStrings(provided, computed);
-            $sitepw.value = provided;
-            enableRemember();
+            generatePassword().then((computed) => {
+                SitePassword.settings.xor = SitePassword.xorStrings(provided, computed);
+                $sitepw.value = provided;
+                enableRemember();
+            });
          }
         $sitepw.onkeyup = function () {
             $code.disabled = true;
@@ -803,6 +811,7 @@ let SitePasswordWeb = ((function (self) {
     
         $pwlength.onblur = function () {
             handleKeyupNumber("pwlength");
+            generatePassword();
         }
         $startwithletter.onclick = function () {
             SitePassword.settings.startwithletter = $startwithletter.checked;
@@ -814,18 +823,21 @@ let SitePasswordWeb = ((function (self) {
         }
         $minlower.onblur = function () {
             handleKeyupNumber("minlower");
+            generatePassword();
         }
         $allowuppercheckbox.onclick = function () {
             handleCheck("upper");
         }
         $minupper.onblur = function () {
             handleKeyupNumber("minupper");
+            generatePassword();
         }
         $allownumbercheckbox.onclick = function () {
             handleCheck("number");
         }
         $minnumber.onblur = function () {
             handleKeyupNumber("minnumber");
+            generatePassword();
         }
         $allowspecialcheckbox.onclick = function () {
             handleCheck("special");
@@ -833,6 +845,7 @@ let SitePasswordWeb = ((function (self) {
         }
         $minspecial.onblur = function () {
             handleKeyupNumber("minspecial");
+            generatePassword();
         }
         const alphanumerics = /[0-9A-Za-z]/g;
         $specials.onblur = function () {
@@ -840,6 +853,7 @@ let SitePasswordWeb = ((function (self) {
                 .replace(alphanumerics, '')  // eliminate alphanumerics
                 .substring(0, 12);  // limit to 12 specials
             handleKeyup("specials");
+            generatePassword();
         }
         function handleCheck(group) {
             const $allow_group_checkbox = get("allow"+group+"checkbox");
