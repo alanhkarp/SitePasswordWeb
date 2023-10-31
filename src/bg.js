@@ -124,30 +124,53 @@ let SitePassword = ((function (self) {
         }
         return valOK;
     }
-    function computePassword(payload, settings) {
-        let pw = "";
-        payload = Utf8Encode(payload);
+    async function computePassword(superpw, salt, settings) {
+        let payload = Utf8Encode(superpw);
         const cset = generateCharacterSet(settings);
-        //console.log("computePassword: characterSet =", cset);
-        let h = core_sha256(str2binb(payload), payload.length * chrsz);
-        for (var iter = 1; iter < self.miniter; iter++) {
-            h = core_sha256(h, 16 * chrsz);
-        }
-        while (iter < self.maxiter) {
-            h = core_sha256(h, 16 * chrsz);
-            let hswap = Array(h.length);
-            for (let i = 0; i < h.length; i++) {
-                hswap[i] = swap32(h[i]);
-            }
-            pw = binl2b64(hswap, cset).substring(0, settings.pwlength);
-            if (verifyPassword(pw, settings)) {
-                return pw;
-            }
-            iter++;
-        }
-        return "";
+        var passphrase = new TextEncoder().encode(payload);
+        let start = Date.now();
+        if (logging) console.log("superpw, salt", superpw, salt)
+        // Use Password Based Key Derivation Function because repeated iterations
+        // don't weaken the result as much as repeated hashing.
+        return window.crypto.subtle.importKey("raw", passphrase, { name: "PBKDF2" }, false, ["deriveBits"])
+        .then((passphraseImported) => {
+            return window.crypto.subtle.deriveBits(
+                {
+                    name: "PBKDF2",
+                    hash: 'SHA-256',
+                    salt: new TextEncoder().encode(salt),
+                    iterations: self.miniter
+                },
+                passphraseImported, 
+                2048
+            )  
+            .then((bits) => {
+                let bytes = new Int32Array(bits);
+                let pw = binl2b64(bytes, cset).substring(0, settings.pwlength);
+                if (logging) console.log(pw, "deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
+                let h = core_sha256(str2binb(pw), pw.length * chrsz);
+                let iter = 0;
+                let startExtra = Date.now();
+                if (logging) console.log("bg extra iterations");
+                while (iter < self.maxiter) {
+                    h = core_sha256(h, 16 * chrsz);
+                    let hswap = Array(h.length);
+                    for (let i = 0; i < h.length; i++) {
+                        hswap[i] = swap32(h[i]);
+                    }
+                    pw = binl2b64(hswap, cset).substring(0, settings.pwlength);
+                    if (verifyPassword(pw, settings)) {
+                        console.log("bg extra iterations succeeded", iter, "took", Date.now() - startExtra, "ms");
+                        return pw;
+                    }
+                    iter++;
+                }
+                console.log("bg extra iterations failed", iter, "took", Date.now() - startExtra, "ms");
+                return "";
+           }); 
+        });
     }
-    function generatePassword() {
+    async function generatePassword() {
         const settings = self.settings;
         if (settings.allowupper || settings.allowlower || settings.allownumber) {
             const n = normalize(settings.sitename);
@@ -156,10 +179,9 @@ let SitePassword = ((function (self) {
             if (!m) {
                 return "";
             }
-            const s = n.toString() + '\t'
-                + u.toString() + '\t'
-                + m.toString();
-            return computePassword(s, settings);
+            const salt = n.toString() + '\t'+ u.toString();
+            let pw = await computePassword(m, salt, settings);
+            return pw;
         }
         return "";
     }
@@ -318,8 +340,8 @@ let SitePassword = ((function (self) {
 })({
     version: "1.1",
     clearsuperpw: false,
-    miniter: 100,
-    maxiter: 1000,
+    miniter: 25_000,
+    maxiter: 1_000,
     digits: "0123456789",
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",

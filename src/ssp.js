@@ -190,33 +190,36 @@ let SitePasswordWeb = ((function (self) {
         }
         const $pwok = get("pwok");
         const $pwfail = get("pwfail");
-        function generatePassword() {
+        async function generatePassword() {
             saveSettingControls(SitePassword.settings);
-            const pw = SitePassword.generatePassword();
-            if (pw || !$superpw.value) {
-                $pwok.style.display = "flex";
-                $pwfail.style.display = "none";
-            } else {
-                $pwok.value = "";
-                $pwfail.style.display = "block";
-            }
-            if ($providesitepw.checked) {
-                $sitepw.value = SitePassword.stringXorArray(pw, SitePassword.settings.xor);
-            } else {
-                SitePassword.settings.xor = SitePassword.xorStrings($sitepw.value, $sitepw.value);
-                $sitepw.value = pw;
-            }
-            const report = zxcvbn($sitepw.value);
-            $sitepw.style.color = strengthColor[report.score];
-            $sitepw.title = strengthText[report.score] + " site password";
-            enableRemember();
-            if ($sitename.value && $username.value) {
-                get("providesitepw").disabled = false;
-            } else {
-                get("providesitepw").disabled = true;
-            }
-            return pw;
-        }
+            SitePassword.generatePassword().then((pw) => {
+                if (pw || !$superpw.value) {
+                    $pwok.style.display = "flex";
+                    $pwfail.style.display = "none";
+                } else {
+                    $pwok.value = "";
+                    $pwfail.style.display = "block";
+                }
+                if ($providesitepw.checked) {
+                    $sitepw.value = SitePassword.stringXorArray(pw, SitePassword.settings.xor);
+                } else {
+                    SitePassword.settings.xor = SitePassword.xorStrings($sitepw.value, $sitepw.value);
+                    $sitepw.value = pw;
+                }
+                const report = zxcvbn($sitepw.value);
+                $sitepw.style.color = strengthColor[report.score];
+                $sitepw.title = strengthText[report.score] + " site password";
+                enableRemember();
+                if ($sitename.value && $username.value) {
+                    get("providesitepw").disabled = false;
+                } else {
+                    get("providesitepw").disabled = true;
+                }
+                return pw;
+            }).catch((e) => {
+            console.log("generatePassword failed", e);
+        });
+    }
         function handleBlur(id) {
             const $element = get(id);
             SitePassword.settings[id] = $element.value;
@@ -641,7 +644,7 @@ let SitePasswordWeb = ((function (self) {
         const $sitepw3bluedots = get("sitepw3bluedots");
         const $sitepwmenucopy = get("sitepwmenucopy");
         $sitepw3bluedots.onmouseover = function (e) {
-            let sitepw = get("sitepw").value;
+            let sitepw = $sitepw.value;
             if (sitepw) {
                 $sitepwmenucopy.style.opacity = "1";
             } else {
@@ -651,8 +654,8 @@ let SitePasswordWeb = ((function (self) {
         }
         $sitepw3bluedots.onclick = $sitepw3bluedots.onmouseover;
         $sitepwmenucopy.onclick = function(e) {
-            if (!get("sitepw").value) return;
-            let sitepw = get("sitepw").value;
+            if (!$sitepw.value) return;
+            let sitepw = $sitepw.value;
             if (!sitepw) return;
             navigator.clipboard.writeText(sitepw).then(() => {
                 if (logging) console.log("wrote to clipboard", sitepw);
@@ -675,12 +678,12 @@ let SitePasswordWeb = ((function (self) {
         const $sitepwmenuhide = get("sitepwmenuhide");
         const $sitepwmenushow = get("sitepwmenushow");
         $sitepwmenushow.onclick = function () {
-            get("sitepw").type = "text";
+            $sitepw.type = "text";
             $sitepwmenushow.classList.toggle("nodisplay");
             $sitepwmenuhide.classList.toggle("nodisplay")    ;
         };
         $sitepwmenuhide.onclick = function () {
-            get("sitepw").type = "password";
+            $sitepw.type = "password";
             $sitepwmenushow.classList.toggle("nodisplay");
             $sitepwmenuhide.classList.toggle("nodisplay");
         }
@@ -809,30 +812,30 @@ let SitePasswordWeb = ((function (self) {
         $allowlowercheckbox.onclick = function () {
             handleCheck("lower");
         }
-        $minlower.onkeyup = function () {
+        $minlower.onblur = function () {
             handleKeyupNumber("minlower");
         }
         $allowuppercheckbox.onclick = function () {
             handleCheck("upper");
         }
-        $minupper.onkeyup = function () {
+        $minupper.onblur = function () {
             handleKeyupNumber("minupper");
         }
         $allownumbercheckbox.onclick = function () {
             handleCheck("number");
         }
-        $minnumber.onkeyup = function () {
+        $minnumber.onblur = function () {
             handleKeyupNumber("minnumber");
         }
         $allowspecialcheckbox.onclick = function () {
             handleCheck("special");
             $specials.disabled = !($allowspecialcheckbox.checked);
         }
-        $minspecial.onkeyup = function () {
+        $minspecial.onblur = function () {
             handleKeyupNumber("minspecial");
         }
         const alphanumerics = /[0-9A-Za-z]/g;
-        $specials.onkeyup = function () {
+        $specials.onblur = function () {
             $specials.value = $specials.value
                 .replace(alphanumerics, '')  // eliminate alphanumerics
                 .substring(0, 12);  // limit to 12 specials
@@ -1086,9 +1089,9 @@ let SitePasswordWeb = ((function (self) {
         function hidesitepw() {
             if (logging) console.log("checking hidesitepw", get("hidesitepw").checked, SitePassword.database.hidesitepw);
             if (get("hidesitepw").checked || (database && SitePassword.database.hidesitepw)) {
-                get("sitepw").type = "password";
+                $sitepw.type = "password";
             } else {
-                get("sitepw").type = "text";
+                $sitepw.type = "text";
             }
         }
                         
