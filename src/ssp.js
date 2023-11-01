@@ -193,7 +193,7 @@ let SitePasswordWeb = ((function (self) {
         async function generatePassword() {
             saveSettingControls(SitePassword.settings);
             if (logging) console.log("ssp calling generatePassword");
-            $sitepw.value = "Computing ...";
+            //$sitepw.value = "Computing ...";
             return SitePassword.generatePassword().then((pw) => {
                 if (logging) console.log("ssp got password", pw);
                 if (pw || !$superpw.value) {
@@ -242,7 +242,7 @@ let SitePasswordWeb = ((function (self) {
         function handleKeyup(id) {
             const $element = get(id);
             SitePassword.settings[id] = $element.value;
-            //generatePassword();
+            generatePassword();
             //$element.focus();
         }
 
@@ -276,7 +276,7 @@ let SitePasswordWeb = ((function (self) {
             $input.style.color = strengthColor[report.score];
         }
         $superpw.onkeyup = function () {
-            //$superpw.onblur();
+            $superpw.onblur();
         }
         const $superpwmenuhide = get("superpwmenuhide");
         const $superpwmenushow = get("superpwmenushow");

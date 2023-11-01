@@ -143,16 +143,16 @@ let SitePassword = ((function (self) {
                     name: "PBKDF2",
                     hash: 'SHA-256',
                     salt: new TextEncoder().encode(salt),
-                    iterations: self.miniter
+                    iterations: 1
                 },
                 passphraseImported, 
-                2048
+                1024*1024*4
             )  
             .then((bits) => {
                 let bytes = new Int32Array(bits);
-                let pw = binl2b64(bytes, cset).substring(0, settings.pwlength);
-                if (logging) console.log(pw, "deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
-                let h = core_sha256(str2binb(pw), pw.length * chrsz);
+                let pw = binl2b64(bytes, cset);
+                console.log(pw.substring(0, 100), "deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
+                let h = core_sha256(bytes, bytes.length);
                 let iter = 0;
                 let startExtra = Date.now();
                 if (logging) console.log("bg extra iterations");
