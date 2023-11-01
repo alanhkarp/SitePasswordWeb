@@ -415,7 +415,6 @@ let SitePasswordWeb = ((function (self) {
                 } else {
                     $sitename.value = settings.sitename;
                     //alert("Bookmark is not for this domain. Try another one.");
-                    phishingWarningMsg($domainname.value);
                     phishingWarningOn(settings);
                 }
             } else {
@@ -497,7 +496,6 @@ let SitePasswordWeb = ((function (self) {
             } else if (!testDomain) {
                 updateSettings(settings);
             } else {
-                phishingWarningMsg(testDomain);
                 phishingWarningOn(settings);
             }
             clearDatalist("sitenames");
@@ -693,7 +691,6 @@ let SitePasswordWeb = ((function (self) {
                     phishingWarningOff();
                 } else {
                     const settings = SitePassword.loadSettings($sitename.value);
-                    phishingWarningMsg(domainname);
                     phishingWarningOn(settings);
                 }                    
                 get("bkmkcheck").style.display = "none";
@@ -710,6 +707,10 @@ let SitePasswordWeb = ((function (self) {
         }
         function phishingWarningOn(settings) {
             httpWarningOff();
+            let sitename = normalize($sitename.value);
+            get("phishingtext0").innerText = sitename;
+            get("phishingtext1").innerText = settings.domainname;
+            get("phishingtext2").innerText = $domainname.value;
             $phishing.style.display = "block";
             $results.style.display = "none";  // hide sitepw/remember/settings...
             $domainname.classList.add("bad-input");
@@ -738,12 +739,6 @@ let SitePasswordWeb = ((function (self) {
             $nicknamebutton.onclick = function () {
                 console.log("WARNING! nicknamebutton clicked while phishing warning off.");
             };
-        }
-        function phishingWarningMsg(testDomain) {
-            let sitename = normalize($sitename.value);
-            get("phishingtext0").innerText = sitename;
-            get("phishingtext1").innerText = $domainname.value;
-            get("phishingtext2").innerText = testDomain;
         }
         get("forgetbutton").onclick = function () {
             let children = get("toforgetlist").children;
