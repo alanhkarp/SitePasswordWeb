@@ -344,8 +344,8 @@ let SitePassword = ((function (self) {
 })({
     version: "1.1",
     clearsuperpw: false,
-    miniter: 25_000,
-    maxiter: 1_000,
+    miniter: 250_000,
+    maxiter: 2_000,
     digits: "0123456789",
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
