@@ -146,10 +146,10 @@ let SitePassword = ((function (self) {
                     iterations: 1
                 },
                 passphraseImported, 
-                1024*1024*32// Choose the longest key that meets the latency requireents
+                1024*1024*16 // Choose the longest key that meets the latency requireents
             )  
             .then((bits) => {
-                console.log("deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
+                if (logging) console.log("deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
                 let bytes = new Int32Array(bits);
                 let h = core_sha256(bytes, bytes.length);
                 let iter = 0;
@@ -158,12 +158,12 @@ let SitePassword = ((function (self) {
                     let rotated = rotate(cset, iter);
                     let pw = binl2b64(h, rotated).substring(0, settings.pwlength);
                     if (verifyPassword(pw, settings)) {
-                        console.log("bg iterations succeeded", iter, "took", Date.now() - startIter, "ms");
+                        if (logging) console.log("bg iterations succeeded", iter, "took", Date.now() - startIter, "ms");
                         return pw;
                     }
                     iter++;
                 }
-                console.log("bg extra iterations failed", iter, "took", Date.now() - startIter, "ms");
+                if (logging) console.log("bg extra iterations failed", iter, "took", Date.now() - startIter, "ms");
                 return "";
            }); 
         });
