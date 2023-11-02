@@ -146,33 +146,31 @@ let SitePassword = ((function (self) {
                     iterations: 1
                 },
                 passphraseImported, 
-                1024*1024*4
+                1024*1024*32// Choose the longest key that meets the latency requireents
             )  
             .then((bits) => {
+                console.log("deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
                 let bytes = new Int32Array(bits);
-                let pw = binl2b64(bytes, cset);
-                console.log(pw.substring(0, 100), "deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
                 let h = core_sha256(bytes, bytes.length);
                 let iter = 0;
-                let startExtra = Date.now();
-                if (logging) console.log("bg extra iterations");
-                while (iter < self.maxiter) {
-                    h = core_sha256(h, 16 * chrsz);
-                    let hswap = Array(h.length);
-                    for (let i = 0; i < h.length; i++) {
-                        hswap[i] = swap32(h[i]);
-                    }
-                    pw = binl2b64(hswap, cset).substring(0, settings.pwlength);
+                let startIter = Date.now();
+                while (iter < cset.length) {
+                    let rotated = rotate(cset, iter);
+                    let pw = binl2b64(h, rotated).substring(0, settings.pwlength);
                     if (verifyPassword(pw, settings)) {
-                        console.log("bg extra iterations succeeded", iter, "took", Date.now() - startExtra, "ms");
+                        console.log("bg iterations succeeded", iter, "took", Date.now() - startIter, "ms");
                         return pw;
                     }
                     iter++;
                 }
-                console.log("bg extra iterations failed", iter, "took", Date.now() - startExtra, "ms");
+                console.log("bg extra iterations failed", iter, "took", Date.now() - startIter, "ms");
                 return "";
            }); 
         });
+    }
+    function rotate(string, n) {
+        let s = string + "";
+        return s.substring(n) + s.substring(0, n);
     }
     async function generatePassword() {
         const settings = self.settings;
@@ -186,7 +184,7 @@ let SitePassword = ((function (self) {
         if (logging) console.log("bg calling computePassword");
         let start = Date.now();
         let pw = await computePassword(m, salt, settings);
-        console.log("bg computePassword returned", pw, "took", Date.now() - start, "ms");
+        if (logging) console.log("bg computePassword returned", pw, "took", Date.now() - start, "ms");
         return pw;
     }
     function xorStrings(provided, sitepw) {

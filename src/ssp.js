@@ -209,9 +209,7 @@ let SitePasswordWeb = ((function (self) {
                     SitePassword.settings.xor = SitePassword.xorStrings($sitepw.value, $sitepw.value);
                     $sitepw.value = pw;
                 }
-                const report = zxcvbn($sitepw.value);
-                $sitepw.style.color = strengthColor[report.score];
-                $sitepw.title = strengthText[report.score] + " site password";
+                setMeter("sitepw");
                 enableRemember();
                 if ($sitename.value && $username.value) {
                     get("providesitepw").disabled = false;

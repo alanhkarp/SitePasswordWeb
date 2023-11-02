@@ -120,7 +120,7 @@ function binb2hex (binarray) {
 /*
  * Convert an array of little-endian words to a base-64 string
  */
-function binl2b64(binarray,characters) {
+function binl2b64(binarray, characters) {
     var tab = characters;
     var b64pad = "";
     var str = "";
