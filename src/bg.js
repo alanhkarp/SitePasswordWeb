@@ -145,18 +145,20 @@ let SitePassword = ((function (self) {
                     salt: new TextEncoder().encode(salt),
                     iterations: 1
                 },
-                passphraseImported, 
-                1024*1024*16 // Choose the longest key that meets the latency requireents
+                passphraseImported,
+                // Choose the longest key that meets the latency requireents,
+                // including when the algorithm fails to find an acceptable password. 
+                1024*1024*64 
             )  
             .then((bits) => {
                 if (logging) console.log("deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
                 let bytes = new Int32Array(bits);
-                let h = core_sha256(bytes, bytes.length);
                 let iter = 0;
                 let startIter = Date.now();
                 while (iter < cset.length) {
                     let rotated = rotate(cset, iter);
-                    let pw = binl2b64(h, rotated).substring(0, settings.pwlength);
+                    // Don't have to convert entire key to characters, just the first pwlength characters
+                    let pw = binl2b64(bytes.slice(0,8*settings.pwlength), rotated).substring(0, settings.pwlength);
                     if (verifyPassword(pw, settings)) {
                         if (logging) console.log("bg iterations succeeded", iter, "took", Date.now() - startIter, "ms");
                         return pw;

@@ -193,7 +193,6 @@ let SitePasswordWeb = ((function (self) {
         async function generatePassword() {
             saveSettingControls(SitePassword.settings);
             if (logging) console.log("ssp calling generatePassword");
-            //$sitepw.value = "Computing ...";
             return SitePassword.generatePassword().then((pw) => {
                 if (logging) console.log("ssp got password", pw);
                 if (pw || !$superpw.value) {
