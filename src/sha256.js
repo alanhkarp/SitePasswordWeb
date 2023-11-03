@@ -132,7 +132,7 @@ function binl2b64(binarray, characters) {
 	for(var j = 0; j < 4; j++)
 	{
 	    if(i * 8 + j * 6 > binarray.length * 32) str += b64pad;
-	    else str += tab.charAt((triplet >> 6*(3-j)) & 0x3F);
+	    else str += tab.charAt((triplet >> 6*(3-j)) & 0x7F); // Accept longer strings than Base64, now Base128
 	}
     }
     return str;

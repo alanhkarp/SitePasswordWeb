@@ -71,10 +71,12 @@ let SitePassword = ((function (self) {
         // generate a set of 64 characters for encoding
         let chars = "";
         if (settings.allowspecial) {
-            chars += settings.specials;
+            while (chars.length < 20) {
+                chars += settings.specials;
+            }
         }
         if (settings.allownumber) {
-            chars += self.digits;
+            chars += self.digits + self.digits;
         }
         if (settings.allowupper) {
             chars += self.upper;
@@ -82,7 +84,7 @@ let SitePassword = ((function (self) {
         if (settings.allowlower) {
             chars += self.lower;
         }
-        while ((chars.length > 0) && (chars.length < 64)) {
+        while ((chars.length > 0) && (chars.length < 128)) {
             chars += chars;
         }
         return chars;
@@ -151,28 +153,26 @@ let SitePassword = ((function (self) {
                 1024*1024*64 
             )  
             .then((bits) => {
-                if (logging) console.log("deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
                 let bytes = new Int32Array(bits);
+                let candidates = binl2b64(bytes.slice(0, 200), cset);
+                console.log("deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
                 let iter = 0;
                 let startIter = Date.now();
-                while (iter < cset.length) {
-                    let rotated = rotate(cset, iter);
-                    // Don't have to convert entire key to characters, just the first pwlength characters
-                    let pw = binl2b64(bytes.slice(0,8*settings.pwlength), rotated).substring(0, settings.pwlength);
+                let pwlength = settings.pwlength - 0; // Convert to number
+                while (pwlength < candidates.length) {
+                    // Scan candidates for a valid password
+                    candidates = candidates.substring(1);
+                    let pw = candidates.substring(0, pwlength);
                     if (verifyPassword(pw, settings)) {
-                        if (logging) console.log("bg iterations succeeded", iter, "took", Date.now() - startIter, "ms");
+                        console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
                         return pw;
                     }
                     iter++;
                 }
-                if (logging) console.log("bg extra iterations failed", iter, "took", Date.now() - startIter, "ms");
+                console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
                 return "";
            }); 
         });
-    }
-    function rotate(string, n) {
-        let s = string + "";
-        return s.substring(n) + s.substring(0, n);
     }
     async function generatePassword() {
         const settings = self.settings;
