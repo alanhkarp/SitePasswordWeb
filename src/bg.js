@@ -145,28 +145,28 @@ let SitePassword = ((function (self) {
                     name: "PBKDF2",
                     hash: 'SHA-256',
                     salt: new TextEncoder().encode(salt),
-                    iterations: 1
+                    iterations: self.miniter,
                 },
                 passphraseImported,
                 // Choose the longest key that meets the latency requireents,
                 // including when the algorithm fails to find an acceptable password. 
-                1024*1024*64 
+                1024*2 
             )  
             .then((bits) => {
                 let bytes = new Int32Array(bits);
-                let candidates = binl2b64(bytes.slice(0, 200), cset);
+                let candidates = binl2b64(bytes, cset);
                 console.log("deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
                 let iter = 0;
                 let startIter = Date.now();
                 let pwlength = settings.pwlength - 0; // Convert to number
                 while (pwlength < candidates.length) {
                     // Scan candidates for a valid password
-                    candidates = candidates.substring(1);
                     let pw = candidates.substring(0, pwlength);
                     if (verifyPassword(pw, settings)) {
                         console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
                         return pw;
                     }
+                    candidates = candidates.substring(1);
                     iter++;
                 }
                 console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
@@ -344,7 +344,7 @@ let SitePassword = ((function (self) {
 })({
     version: "1.1",
     clearsuperpw: false,
-    miniter: 250_000,
+    miniter: 50_000,
     maxiter: 2_000,
     digits: "0123456789",
     lower: "abcdefghijklmnopqrstuvwxyz",
