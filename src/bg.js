@@ -154,12 +154,14 @@ let SitePassword = ((function (self) {
             )  
             .then((bits) => {
                 console.log("deriveBits took", Date.now() - start, "ms", self.hashiter, "iterations");
+                // Convert the bits to a 2048 bit integer
                 let bytes = new Uint32Array(bits);
                 let buffer = bytes.buffer;
                 let view = new DataView(buffer, 0);
                 start = Date.now();
                 let h = view.getBigUint64(0, true);
                 let s = h;
+                // Compute h**L, where L divides the chosen modulus
                 let modulus = 2n**2048n + 1n;
                 for (let i = 0; i < 1024*16; i++) {
                     let sp = (s * s) % modulus;
@@ -169,6 +171,7 @@ let SitePassword = ((function (self) {
                         s = sp;
                     }
                 }
+                // Convert the resuling BigInto to a Uint32Array
                 let result = new Uint32Array(32);
                 let i = 0;
                 let bit32 = BigInt(2**32);
@@ -177,7 +180,8 @@ let SitePassword = ((function (self) {
                     s = s/bit32;
                     i += 1;
                 }
-                console.log("bg hardening took", Date.now() - start, "ms", self.hardeniter, "iterations");                
+                console.log("bg hardening took", Date.now() - start, "ms", self.hardeniter, "iterations"); 
+                // Convert the Uint32Array to a string using a custom algorithm               
                 let candidates = binl2b64(result, cset);
                 let iter = 0;
                 let startIter = Date.now();
