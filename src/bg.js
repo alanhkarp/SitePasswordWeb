@@ -376,7 +376,7 @@ let SitePassword = ((function (self) {
     }
     return self;
 })({
-    version: "1.1",
+    version: "3.0",
     clearsuperpw: false,
     hashiter: 50_000, // Largest value that meets the latency requirements
     keySize: 1024*2,  // 256 bytes to match SHA-256
