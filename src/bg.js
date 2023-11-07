@@ -159,7 +159,7 @@ let SitePassword = ((function (self) {
                 let buffer = bytes.buffer;
                 let view = new DataView(buffer, 0);
                 start = Date.now();
-                // Compute h**L, where L divides the chosen modulus
+                // Compute h**L, where L divides one minus the chosen modulus
                 let h = view.getBigUint64(0, true);
                 let s = h;
                 let modulus = 2n**BigInt(self.keySize) + 1n; // Exponent is key size
@@ -173,7 +173,7 @@ let SitePassword = ((function (self) {
                         s = sp;
                     }
                 }
-                // Convert the resuling BigInto to a Uint32Array
+                // Convert the resulting BigInto to a Uint32Array
                 let result = new Uint32Array(32);
                 let i = 0;
                 let bit32 = BigInt(2**32);
