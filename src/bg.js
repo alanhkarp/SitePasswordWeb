@@ -145,11 +145,9 @@ let SitePassword = ((function (self) {
                     name: "PBKDF2",
                     hash: 'SHA-256',
                     salt: new TextEncoder().encode(salt),
-                    iterations: self.hashiter,
+                    iterations: self.hashiter, // Choose as many iterations that meet latency requirement
                 },
                 passphraseImported,
-                // Choose the longest key that meets the latency requireents,
-                // including when the algorithm fails to find an acceptable password. 
                 self.keySize 
             )  
             .then((bits) => {
@@ -163,9 +161,31 @@ let SitePassword = ((function (self) {
                 let h = view.getBigUint64(0, true);
                 let s = h;
                 let modulus = 2n**BigInt(self.keySize) + 1n; // Exponent is key size
-                let exp = 1n;
                 for (let i = 0; i < self.hardener; i++) {
-                    exp = exp * 2n;
+                    harden();
+                }
+                // Convert the resulting BigInto to a Uint32Array
+                console.log("bg hardening took", Date.now() - start, "ms", self.maxharden, "iterations");
+                // Find a valid password
+                start = Date.now();
+                // Convert the Uint32Array to a string using a custom algorithm               
+                let startIter = Date.now();
+                let iter = 0;
+                while (iter < self.maxharden) {
+                    // Run collision inducer
+                    let result = bits2Uint32array(s, cset);
+                    let candidate = binl2b64(result, cset);
+                    let pw = candidate.substring(0, settings.pwlength);
+                    if (verifyPassword(pw, settings)) {
+                        console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
+                        return pw;
+                    }
+                    harden();
+                    iter++;
+                }
+                console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
+                return "";
+                function harden() {
                     let sp = (s * s) % modulus;
                     if (sp === 0n) {
                         s = (s * h * h) % modulus; // Need an even power of H for L to divide p-1
@@ -173,39 +193,20 @@ let SitePassword = ((function (self) {
                         s = sp;
                     }
                 }
-                // Convert the resulting BigInto to a Uint32Array
-                let result = new Uint32Array(32);
-                let i = 0;
-                let bit32 = BigInt(2**32);
-                while (s > 0n) {
-                    result[i] = new Number(s % bit32);
-                    s = s/bit32;
-                    i += 1;
-                }
-                console.log("bg hardening took", Date.now() - start, "ms", self.hardeniter, "iterations"); 
-                // Convert the Uint32Array to a string using a custom algorithm               
-                let candidates = binl2b64(result, cset);
-                let iter = 0;
-                let startIter = Date.now();
-                let pwlength = settings.pwlength - 0; // Convert to number
-                while (pwlength < candidates.length) {
-                    // Scan candidates for a valid password
-                    let pw = candidates.substring(0, pwlength);
-                    if (verifyPassword(pw, settings)) {
-                        console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
-                        return pw;
+                function bits2Uint32array() {
+                    let sp = s;
+                    let result = new Uint32Array(32);
+                    let i = 0;
+                    let bit32 = BigInt(2**32);
+                    while (sp > 0n) {
+                        result[i] = new Number(sp % bit32);
+                        sp = sp/bit32;
+                        i += 1;
                     }
-                    candidates = candidates.substring(1);
-                    iter++;
+                    return result;
                 }
-                console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
-                return "";
-           }); 
+            }); 
         });
-    }
-    // Adapted from https://stackoverflow.com/questions/48521840/biginteger-to-a-uint8array-of-bytes
-    function toLittleEndian(bigNumber) {
-        return result;
     }
     async function generatePassword() {
         const settings = self.settings;
@@ -377,9 +378,10 @@ let SitePassword = ((function (self) {
 })({
     version: "1.1",
     clearsuperpw: false,
-    hashiter: 50_000,
-    keySize: 1024*2,
-    hardener: 20,
+    hashiter: 50_000, // Largest value that meets the latency requirements
+    keySize: 1024*2,  // 256 bytes to match SHA-256
+    hardener: 20,     // Produce 1M collisions in the hash function
+    maxharden: 100,   // Maximum number of additional iterations to find a valid password
     digits: "0123456789",
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
