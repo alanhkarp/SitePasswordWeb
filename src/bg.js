@@ -150,7 +150,7 @@ let SitePassword = ((function (self) {
                 passphraseImported,
                 // Choose the longest key that meets the latency requireents,
                 // including when the algorithm fails to find an acceptable password. 
-                1024*2 
+                self.keySize 
             )  
             .then((bits) => {
                 console.log("deriveBits took", Date.now() - start, "ms", self.hashiter, "iterations");
@@ -159,14 +159,16 @@ let SitePassword = ((function (self) {
                 let buffer = bytes.buffer;
                 let view = new DataView(buffer, 0);
                 start = Date.now();
+                // Compute h**L, where L divides the chosen modulus
                 let h = view.getBigUint64(0, true);
                 let s = h;
-                // Compute h**L, where L divides the chosen modulus
-                let modulus = 2n**2048n + 1n;
-                for (let i = 0; i < 1024*16; i++) {
+                let modulus = 2n**BigInt(self.keySize) + 1n; // Exponent is key size
+                let exp = 1n;
+                for (let i = 0; i < self.hardener; i++) {
+                    exp = exp * 2n;
                     let sp = (s * s) % modulus;
                     if (sp === 0n) {
-                        s = s * h % modulus;
+                        s = (s * h * h) % modulus; // Need an even power of H for L to divide p-1
                     } else {
                         s = sp;
                     }
@@ -376,7 +378,8 @@ let SitePassword = ((function (self) {
     version: "1.1",
     clearsuperpw: false,
     hashiter: 50_000,
-    hardeniter: 10_000,
+    keySize: 1024*2,
+    hardener: 20,
     digits: "0123456789",
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
