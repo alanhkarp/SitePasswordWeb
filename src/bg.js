@@ -145,7 +145,7 @@ let SitePassword = ((function (self) {
                     name: "PBKDF2",
                     hash: 'SHA-256',
                     salt: new TextEncoder().encode(salt),
-                    iterations: self.miniter,
+                    iterations: self.hashiter,
                 },
                 passphraseImported,
                 // Choose the longest key that meets the latency requireents,
@@ -153,9 +153,32 @@ let SitePassword = ((function (self) {
                 1024*2 
             )  
             .then((bits) => {
-                let bytes = new Int32Array(bits);
-                let candidates = binl2b64(bytes, cset);
-                console.log("deriveBits took", Date.now() - start, "ms", self.miniter, "iterations");
+                console.log("deriveBits took", Date.now() - start, "ms", self.hashiter, "iterations");
+                let bytes = new Uint32Array(bits);
+                let buffer = bytes.buffer;
+                let view = new DataView(buffer, 0);
+                start = Date.now();
+                let h = view.getBigUint64(0, true);
+                let s = h;
+                let modulus = 2n**2048n + 1n;
+                for (let i = 0; i < 1024*16; i++) {
+                    let sp = (s * s) % modulus;
+                    if (sp === 0n) {
+                        s = s * h % modulus;
+                    } else {
+                        s = sp;
+                    }
+                }
+                let result = new Uint32Array(32);
+                let i = 0;
+                let bit32 = BigInt(2**32);
+                while (s > 0n) {
+                    result[i] = new Number(s % bit32);
+                    s = s/bit32;
+                    i += 1;
+                }
+                console.log("bg hardening took", Date.now() - start, "ms", self.hardeniter, "iterations");                
+                let candidates = binl2b64(result, cset);
                 let iter = 0;
                 let startIter = Date.now();
                 let pwlength = settings.pwlength - 0; // Convert to number
@@ -173,6 +196,10 @@ let SitePassword = ((function (self) {
                 return "";
            }); 
         });
+    }
+    // Adapted from https://stackoverflow.com/questions/48521840/biginteger-to-a-uint8array-of-bytes
+    function toLittleEndian(bigNumber) {
+        return result;
     }
     async function generatePassword() {
         const settings = self.settings;
@@ -344,8 +371,8 @@ let SitePassword = ((function (self) {
 })({
     version: "1.1",
     clearsuperpw: false,
-    miniter: 50_000,
-    maxiter: 2_000,
+    hashiter: 50_000,
+    hardeniter: 10_000,
     digits: "0123456789",
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
