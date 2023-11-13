@@ -68,7 +68,7 @@ let SitePassword = ((function (self) {
     }
 
     function generateCharacterSet(settings) {
-        // generate a set of 64 characters for encoding
+        // generate a set of 256 characters for encoding
         let chars = "";
         if (settings.allowspecial) {
             while (chars.length < 20) {
@@ -84,10 +84,10 @@ let SitePassword = ((function (self) {
         if (settings.allowlower) {
             chars += self.lower;
         }
-        while ((chars.length > 0) && (chars.length < 128)) {
+        while ((chars.length > 0) && (chars.length < 256)) {
             chars += chars;
         }
-        return chars;
+        return chars.substring(0, 256);
     }
     function verifyPassword(pw, settings) {
         let report = zxcvbn(pw);
@@ -174,7 +174,7 @@ let SitePassword = ((function (self) {
                 while (iter < self.maxharden) {
                     // Run collision inducer
                     let result = bits2Uint32array(s, cset);
-                    let candidate = binl2b64(result, cset);
+                    let candidate = binl2chars(result, cset);
                     let pw = candidate.substring(0, settings.pwlength);
                     if (verifyPassword(pw, settings)) {
                         console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
@@ -263,6 +263,15 @@ let SitePassword = ((function (self) {
             str += String.fromCharCode(array[i]);
         }
         return str;
+    }
+    function binl2chars(uint32array, cset) {
+        let chars = "";
+        let binarray = new Uint8Array(uint32array.buffer);
+        let len = binarray.length;
+        for (let i = 0; i < len; i++) {
+            chars += cset[binarray[i]];
+        }
+        return chars;
     }
     self.array2string = array2string;
     self.normalize = normalize;
