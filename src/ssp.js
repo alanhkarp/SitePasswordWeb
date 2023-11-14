@@ -232,7 +232,7 @@ let SitePasswordWeb = ((function (self) {
                 alert("Must be a number");
             } else {
                 SitePassword.settings[id] = value;
-                //generatePassword();
+                generatePassword();
                 setMeter("sitepw");
             }
         }
@@ -521,9 +521,6 @@ let SitePasswordWeb = ((function (self) {
             let list = [... set].sort();
             setupdatalist(this, list);
         }
-        $sitename.onkeyup = function () {
-            handleKeyup("sitename");
-        }
         get("sitenamemenu").onmouseleave = function (e) {
             menuOff("sitename", e);
         }
@@ -809,8 +806,7 @@ let SitePasswordWeb = ((function (self) {
     
         $pwlength.onblur = function () {
             handleKeyupNumber("pwlength");
-            generatePassword();
-        }
+       }
         $startwithletter.onclick = function () {
             SitePassword.settings.startwithletter = $startwithletter.checked;
             restrictStartsWithLetter();
@@ -821,21 +817,18 @@ let SitePasswordWeb = ((function (self) {
         }
         $minlower.onblur = function () {
             handleKeyupNumber("minlower");
-            generatePassword();
         }
         $allowuppercheckbox.onclick = function () {
             handleCheck("upper");
         }
         $minupper.onblur = function () {
             handleKeyupNumber("minupper");
-            generatePassword();
         }
         $allownumbercheckbox.onclick = function () {
             handleCheck("number");
         }
         $minnumber.onblur = function () {
             handleKeyupNumber("minnumber");
-            generatePassword();
         }
         $allowspecialcheckbox.onclick = function () {
             handleCheck("special");
@@ -843,7 +836,6 @@ let SitePasswordWeb = ((function (self) {
         }
         $minspecial.onblur = function () {
             handleKeyupNumber("minspecial");
-            generatePassword();
         }
         const alphanumerics = /[0-9A-Za-z]/g;
         $specials.onblur = function () {
@@ -851,7 +843,6 @@ let SitePasswordWeb = ((function (self) {
                 .replace(alphanumerics, '')  // eliminate alphanumerics
                 .substring(0, 12);  // limit to 12 specials
             handleKeyup("specials");
-            generatePassword();
         }
         function handleCheck(group) {
             const $allow_group_checkbox = get("allow"+group+"checkbox");

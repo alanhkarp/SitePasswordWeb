@@ -131,7 +131,6 @@ let SitePassword = ((function (self) {
             return Promise.resolve("");
         }
         let payload = Utf8Encode(superpw);
-        const cset = generateCharacterSet(settings);
         var passphrase = new TextEncoder().encode(payload);
         let start = Date.now();
         if (logging) console.log("bg superpw, salt", superpw, salt)
@@ -151,6 +150,7 @@ let SitePassword = ((function (self) {
                 self.keySize 
             )  
             .then((bits) => {
+                const cset = generateCharacterSet(settings);
                 console.log("deriveBits took", Date.now() - start, "ms", self.hashiter, "iterations");
                 // Convert the bits to a 2048 bit integer
                 let bytes = new Uint32Array(bits);
@@ -162,7 +162,7 @@ let SitePassword = ((function (self) {
                 let s = h;
                 let modulus = 2n**BigInt(self.keySize) + 1n; // Exponent is key size
                 for (let i = 0; i < self.hardener; i++) {
-                    harden();
+                    harden(s*s % modulus);
                 }
                 // Convert the resulting BigInto to a Uint32Array
                 console.log("bg hardening took", Date.now() - start, "ms", self.maxharden, "iterations");
@@ -180,13 +180,12 @@ let SitePassword = ((function (self) {
                         console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
                         return pw;
                     }
-                    harden();
+                    harden(s*h*h % modulus);
                     iter++;
                 }
                 console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
                 return "";
-                function harden() {
-                    let sp = (s * s) % modulus;
+                function harden(sp) {
                     if (sp === 0n) {
                         s = (s * h * h) % modulus; // Need an even power of H for L to divide p-1
                     } else {
