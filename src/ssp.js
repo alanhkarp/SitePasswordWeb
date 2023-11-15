@@ -805,7 +805,12 @@ let SitePasswordWeb = ((function (self) {
         }
     
         $pwlength.onblur = function () {
-            handleKeyupNumber("pwlength");
+            if ($pwlength.value > 40) {
+                alert("Sitepasswords must be 40 or fewer characters");
+                $pwlength.value = SitePassword.settings.pwlength;
+            } else {
+                handleKeyupNumber("pwlength");
+            }
        }
         $startwithletter.onclick = function () {
             SitePassword.settings.startwithletter = $startwithletter.checked;
