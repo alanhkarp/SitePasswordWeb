@@ -135,7 +135,7 @@ let SitePassword = ((function (self) {
         let start = Date.now();
         if (logging) console.log("bg superpw, salt", superpw, salt)
         // Use Password Based Key Derivation Function because repeated iterations
-        // don't weaken the result as much as repeated hashing.
+        // don't weaken the result as much as repeated SHA-256 hashing.
         return window.crypto.subtle.importKey("raw", passphrase, { name: "PBKDF2" }, false, ["deriveBits"])
         .then(async (passphraseImported) => {
             if (logging) console.log("bg passphraseImported", passphraseImported);
@@ -161,7 +161,6 @@ let SitePassword = ((function (self) {
                 let iter = 0;
                 let len = candidates.length - settings.pwlength;
                 while (iter < len) {
-                    // Run collision inducer
                     let pw = candidates.substring(0, settings.pwlength);
                     if (verifyPassword(pw, settings)) {
                         console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
@@ -174,13 +173,14 @@ let SitePassword = ((function (self) {
                 return "";
                 function binl2chars(uint32array, cset) {
                     let chars = "";
-                    let binarray = new Uint8Array(uint32array.buffer);
-                    let len = binarray.length;
+                    let bytearray = new Uint8Array(uint32array.buffer);
+                    let len = bytearray.length;
                     for (let i = 0; i < len; i++) {
-                        chars += cset[binarray[i]];
+                        chars += cset[bytearray[i]];
                     }
                     return chars;
-                }            }); 
+                }            
+            }); 
         });
     }
     async function generatePassword() {
