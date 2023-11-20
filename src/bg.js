@@ -159,7 +159,7 @@ let SitePassword = ((function (self) {
                 start = Date.now();
                 let startIter = Date.now();
                 let iter = 0;
-                let len = candidates.length;
+                let len = candidates.length - pwlength.value;
                 while (iter < len) {
                     // Run collision inducer
                     let pw = candidates.substring(0, settings.pwlength);
