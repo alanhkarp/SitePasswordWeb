@@ -152,59 +152,35 @@ let SitePassword = ((function (self) {
             .then((bits) => {
                 const cset = generateCharacterSet(settings);
                 console.log("deriveBits took", Date.now() - start, "ms", self.hashiter, "iterations");
-                // Convert the bits to a 2048 bit integer
                 let bytes = new Uint32Array(bits);
-                let buffer = bytes.buffer;
-                let view = new DataView(buffer, 0);
-                start = Date.now();
-                // Compute h**L, where L divides one minus the chosen modulus
-                let h = view.getBigUint64(0, true);
-                let s = h;
-                let modulus = 2n**BigInt(self.keySize) + 1n; // Exponent is key size
-                for (let i = 0; i < self.hardener; i++) {
-                    harden(s*s % modulus);
-                }
-                // Convert the resulting BigInto to a Uint32Array
-                console.log("bg hardening took", Date.now() - start, "ms", self.maxharden, "iterations");
-                // Find a valid password
-                start = Date.now();
                 // Convert the Uint32Array to a string using a custom algorithm               
+                let candidates = binl2chars(bytes, cset);
+               // Find a valid password
+                start = Date.now();
                 let startIter = Date.now();
                 let iter = 0;
-                while (iter < self.maxharden) {
+                let len = candidates.length;
+                while (iter < len) {
                     // Run collision inducer
-                    let result = bits2Uint32array(s, cset);
-                    let candidate = binl2chars(result, cset);
-                    let pw = candidate.substring(0, settings.pwlength);
+                    let pw = candidates.substring(0, settings.pwlength);
                     if (verifyPassword(pw, settings)) {
                         console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
                         return pw;
                     }
-                    harden(s*h*h % modulus);
+                    candidates = candidates.substring(1);
                     iter++;
                 }
                 console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
                 return "";
-                function harden(sp) {
-                    if (sp === 0n) {
-                        s = (s * h * h) % modulus; // Need an even power of H for L to divide p-1
-                    } else {
-                        s = sp;
+                function binl2chars(uint32array, cset) {
+                    let chars = "";
+                    let binarray = new Uint8Array(uint32array.buffer);
+                    let len = binarray.length;
+                    for (let i = 0; i < len; i++) {
+                        chars += cset[binarray[i]];
                     }
-                }
-                function bits2Uint32array() {
-                    let sp = s;
-                    let result = new Uint32Array(32);
-                    let i = 0;
-                    let bit32 = BigInt(2**32);
-                    while (sp > 0n) {
-                        result[i] = new Number(sp % bit32);
-                        sp = sp/bit32;
-                        i += 1;
-                    }
-                    return result;
-                }
-            }); 
+                    return chars;
+                }            }); 
         });
     }
     async function generatePassword() {
