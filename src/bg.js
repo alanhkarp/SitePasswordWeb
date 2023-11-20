@@ -159,7 +159,7 @@ let SitePassword = ((function (self) {
                 start = Date.now();
                 let startIter = Date.now();
                 let iter = 0;
-                let len = candidates.length - pwlength.value;
+                let len = candidates.length - settings.pwlength;
                 while (iter < len) {
                     // Run collision inducer
                     let pw = candidates.substring(0, settings.pwlength);
@@ -393,9 +393,7 @@ function Utf8Encode(string) {
     version: "3.0",
     clearsuperpw: false,
     hashiter: 50_000, // Largest value that meets the latency requirements
-    keySize: 1024*2,  // 256 bytes to match SHA-256
-    hardener: 20,     // Produce 1M collisions in the hash function
-    maxharden: 100,   // Maximum number of additional iterations to find a valid password
+    keySize: 1024*2,  // for this key size
     digits: "0123456789",
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
