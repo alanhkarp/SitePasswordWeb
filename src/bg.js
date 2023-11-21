@@ -71,12 +71,13 @@ let SitePassword = ((function (self) {
         // generate a set of 256 characters for encoding
         let chars = "";
         if (settings.allowspecial) {
-            while (chars.length < 20) {
+            chars += settings.specials;
+            while (chars.length <= 8) {
                 chars += settings.specials;
             }
         }
         if (settings.allownumber) {
-            chars += self.digits + self.digits;
+            chars += self.digits;
         }
         if (settings.allowupper) {
             chars += self.upper;
@@ -84,10 +85,7 @@ let SitePassword = ((function (self) {
         if (settings.allowlower) {
             chars += self.lower;
         }
-        while ((chars.length > 0) && (chars.length < 256)) {
-            chars += chars;
-        }
-        return chars.substring(0, 256);
+        return chars.substring(0, 256); // substring just in case...
     }
     function verifyPassword(pw, settings) {
         let report = zxcvbn(pw);
@@ -176,7 +174,7 @@ let SitePassword = ((function (self) {
                     let bytearray = new Uint8Array(uint32array.buffer);
                     let len = bytearray.length;
                     for (let i = 0; i < len; i++) {
-                        chars += cset[bytearray[i]];
+                        chars += cset[bytearray[i] % cset.length];
                     }
                     return chars;
                 }            
