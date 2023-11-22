@@ -157,14 +157,13 @@ let SitePassword = ((function (self) {
                 start = Date.now();
                 let startIter = Date.now();
                 let iter = 0;
-                let len = candidates.length - settings.pwlength;
-                while (candidates.length >= settings.pwlength) {
-                    let pw = candidates.substring(0, settings.pwlength);
+                let pwlen = settings.pwlength - 0;
+                while (iter < candidates.length - pwlen) {
+                    let pw = candidates.substring(iter, iter + pwlen);
                     if (verifyPassword(pw, settings)) {
                         console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
                         return pw;
                     }
-                    candidates = candidates.substring(1);
                     iter++;
                 }
                 console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
