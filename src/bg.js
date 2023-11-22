@@ -158,7 +158,7 @@ let SitePassword = ((function (self) {
                 let startIter = Date.now();
                 let iter = 0;
                 let len = candidates.length - settings.pwlength;
-                while (iter < len) {
+                while (candidates.length >= settings.pwlength) {
                     let pw = candidates.substring(0, settings.pwlength);
                     if (verifyPassword(pw, settings)) {
                         console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
