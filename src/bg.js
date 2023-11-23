@@ -150,9 +150,11 @@ let SitePassword = ((function (self) {
             .then((bits) => {
                 const cset = generateCharacterSet(settings);
                 console.log("deriveBits took", Date.now() - start, "ms", self.hashiter, "iterations");
-                let bytes = new Uint32Array(bits);
+                start = Date.now();
+                let bytes = new Uint8Array(bits);
                 // Convert the Uint32Array to a string using a custom algorithm               
-                let candidates = binl2chars(bytes, cset);
+                let candidates = bytes2chars(bytes.slice(0, 256), cset);
+                console.log("binl2chars took", Date.now() - start, "ms");
                // Find a valid password
                 start = Date.now();
                 let startIter = Date.now();
@@ -168,9 +170,8 @@ let SitePassword = ((function (self) {
                 }
                 console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
                 return "";
-                function binl2chars(uint32array, cset) {
+                function bytes2chars(bytearray, cset) {
                     let chars = "";
-                    let bytearray = new Uint8Array(uint32array.buffer);
                     let len = bytearray.length;
                     for (let i = 0; i < len; i++) {
                         chars += cset[bytearray[i] % cset.length];
@@ -389,8 +390,8 @@ function Utf8Encode(string) {
 })({
     version: "3.0",
     clearsuperpw: false,
-    hashiter: 50_000, // Largest value that meets the latency requirements
-    keySize: 1024*2,  // for this key size
+    hashiter: 1, // Largest value that meets the latency requirements
+    keySize: 1024*1024*64,  // for this key size
     digits: "0123456789",
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
