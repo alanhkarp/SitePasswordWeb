@@ -128,48 +128,56 @@ let SitePassword = ((function (self) {
         if (!(settings.allowupper || settings.allowlower || settings.allownumber)) {
             return Promise.resolve("");
         }
-        let payload = Utf8Encode(superpw);
-        var passphrase = new TextEncoder().encode(payload);
-        let start = Date.now();
         if (logging) console.log("bg superpw, salt", superpw, salt)
+        let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": self.hashiter, "keysize": self.keySize};
+        let pw = await candidatePassword(args);
+        // Find a valid password
+        let startIter = Date.now();
+        let iter = 0;
+        while (Date.now() - startIter < 150) {
+            if (verifyPassword(pw, settings)) {
+                console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
+                return pw;
+            }
+            iter++;
+            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": 2048};
+            pw = await candidatePassword(args);
+        }
+        console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
+        return "";
+    }
+    async function candidatePassword(args) {
+        let superpw = args.pw;
+        let salt = args.salt;
+        let settings = args.settings;
+        let iters = args.iters;
+        let keysize = args.keysize;
+        let payload = Utf8Encode(superpw);
+        let passphrase = new TextEncoder().encode(payload);
         // Use Password Based Key Derivation Function because repeated iterations
         // don't weaken the result as much as repeated SHA-256 hashing.
         return window.crypto.subtle.importKey("raw", passphrase, { name: "PBKDF2" }, false, ["deriveBits"])
         .then(async (passphraseImported) => {
+            let start = Date.now();
             if (logging) console.log("bg passphraseImported", passphraseImported);
             return window.crypto.subtle.deriveBits(
                 {
                     name: "PBKDF2",
                     hash: 'SHA-256',
                     salt: new TextEncoder().encode(salt),
-                    iterations: self.hashiter, // Choose as many iterations that meet latency requirement
+                    iterations: iters
                 },
                 passphraseImported,
-                self.keySize 
+                keysize 
             )  
             .then((bits) => {
                 const cset = generateCharacterSet(settings);
-                console.log("deriveBits took", Date.now() - start, "ms", self.hashiter, "iterations");
-                start = Date.now();
+                if (Date.now() - start > 2) console.log("deriveBits did", self.hashiter, "iterations in", Date.now() - start, "ms");
                 let bytes = new Uint8Array(bits);
                 // Convert the Uint32Array to a string using a custom algorithm               
                 let candidates = bytes2chars(bytes.slice(0, 256), cset);
-                console.log("binl2chars took", Date.now() - start, "ms");
-               // Find a valid password
-                start = Date.now();
-                let startIter = Date.now();
-                let iter = 0;
-                let pwlen = settings.pwlength - 0;
-                while (iter < candidates.length - pwlen) {
-                    let pw = candidates.substring(iter, iter + pwlen);
-                    if (verifyPassword(pw, settings)) {
-                        console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
-                        return pw;
-                    }
-                    iter++;
-                }
-                console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
-                return "";
+                let pw = candidates.substring(0, settings.pwlength);
+                return pw;
                 function bytes2chars(bytearray, cset) {
                     let chars = "";
                     let len = bytearray.length;

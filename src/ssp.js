@@ -805,8 +805,8 @@ let SitePasswordWeb = ((function (self) {
         }
     
         $pwlength.onblur = function () {
-            if ($pwlength.value > 40) {
-                alert("Sitepasswords must be 40 or fewer characters");
+            if ($pwlength.value > 100) {
+                alert("Sitepasswords must be 100 or fewer characters");
                 $pwlength.value = SitePassword.settings.pwlength;
             } else {
                 handleKeyupNumber("pwlength");
