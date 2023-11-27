@@ -140,7 +140,7 @@ let SitePassword = ((function (self) {
                 return pw;
             }
             iter++;
-            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": 2048};
+            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": 1024*16};
             pw = await candidatePassword(args);
         }
         console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
