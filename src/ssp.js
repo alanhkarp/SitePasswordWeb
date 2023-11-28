@@ -315,7 +315,7 @@ let SitePasswordWeb = ((function (self) {
             get("bkmkcheck").style.display = "none";
             $domainname.value = domainname;
             SitePassword.domainname = domainname;
-            const sitename = SitePassword.siteForDomain(domainname);
+            const sitename = SitePassword.siteForDomain(domainname) || "";
             const settings = SitePassword.loadSettings(sitename);
             updateSettings(settings);
             generatePassword();
@@ -510,9 +510,6 @@ let SitePasswordWeb = ((function (self) {
             })
             let list = [... set].sort();
             setupdatalist(this, list);
-        }
-        $sitename.onkeyup = function () {
-            handleKeyup("sitename");
         }
         get("sitenamemenu").onmouseleave = function (e) {
             menuOff("sitename", e);
@@ -803,30 +800,30 @@ let SitePasswordWeb = ((function (self) {
         $allowlowercheckbox.onclick = function () {
             handleCheck("lower");
         }
-        $minlower.onkeyup = function () {
+        $minlower.onblur = function () {
             handleKeyupNumber("minlower");
         }
         $allowuppercheckbox.onclick = function () {
             handleCheck("upper");
         }
-        $minupper.onkeyup = function () {
+        $minupper.onblur = function () {
             handleKeyupNumber("minupper");
         }
         $allownumbercheckbox.onclick = function () {
             handleCheck("number");
         }
-        $minnumber.onkeyup = function () {
+        $minnumber.onblur = function () {
             handleKeyupNumber("minnumber");
         }
         $allowspecialcheckbox.onclick = function () {
             handleCheck("special");
             $specials.disabled = !($allowspecialcheckbox.checked);
         }
-        $minspecial.onkeyup = function () {
+        $minspecial.onblur = function () {
             handleKeyupNumber("minspecial");
         }
         const alphanumerics = /[0-9A-Za-z]/g;
-        $specials.onkeyup = function () {
+        $specials.onblur = function () {
             $specials.value = $specials.value
                 .replace(alphanumerics, '')  // eliminate alphanumerics
                 .substring(0, 12);  // limit to 12 specials
