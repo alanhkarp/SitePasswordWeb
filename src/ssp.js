@@ -365,7 +365,9 @@ let SitePasswordWeb = ((function (self) {
             sectionClick("domainname");
         }
         function parseDomain(url) {
-            const protocol = url.split(":")[0].toLowerCase();
+            const protocol = url.split(":")[0].toLowerCase(); 
+            // Don't warn if protocol is not specified
+            if (!url.split(":")[1]) return protocol
             const split = url.split("/");
             let domain = (split.length > 1 ? split[2] : split[0]);
             if (domain && !isValidDomain(normalize(domain))) {
