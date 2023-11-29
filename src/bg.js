@@ -129,21 +129,25 @@ let SitePassword = ((function (self) {
             return Promise.resolve("");
         }
         if (logging) console.log("bg superpw, salt", superpw, salt)
+        // keysize determines the number of preimages when iteration is not needed
         let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": self.hashiter, "keysize": self.keySize};
+        let start = Date.now();
         let pw = await candidatePassword(args);
+        console.log("bg candidatePassword took", Date.now() - start, "ms");
         // Find a valid password
         let startIter = Date.now();
         let iter = 0;
         while (Date.now() - startIter < 150) {
             if (verifyPassword(pw, settings)) {
-                console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
+                console.log("bg succeeded in", iter, "iterations and took", Date.now() - start, "ms");
                 return pw;
             }
             iter++;
+            // keysize determines the number of preimages when iteration is needed
             args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": 1024*16};
             pw = await candidatePassword(args);
         }
-        console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
+        console.log("bg failed after", iter, "iteration and took", Date.now() - startIter, "ms");
         return "";
     }
     async function candidatePassword(args) {
@@ -158,7 +162,6 @@ let SitePassword = ((function (self) {
         // don't weaken the result as much as repeated SHA-256 hashing.
         return window.crypto.subtle.importKey("raw", passphrase, { name: "PBKDF2" }, false, ["deriveBits"])
         .then(async (passphraseImported) => {
-            let start = Date.now();
             if (logging) console.log("bg passphraseImported", passphraseImported);
             return window.crypto.subtle.deriveBits(
                 {
@@ -171,14 +174,14 @@ let SitePassword = ((function (self) {
                 keysize 
             )  
             .then((bits) => {
-                const cset = generateCharacterSet(settings);
-                if (Date.now() - start > 2) console.log("deriveBits did", self.hashiter, "iterations in", Date.now() - start, "ms");
+                // cset must be defined inside the closure in case the settings change
+                let cset = generateCharacterSet(settings);
                 let bytes = new Uint8Array(bits);
-                // Convert the Uint32Array to a string using a custom algorithm               
-                let candidates = bytes2chars(bytes.slice(0, 256), cset);
-                let pw = candidates.substring(0, settings.pwlength);
+                // Convert the Uint8Array to a string using a custom algorithm 
+                let pw = bytes2chars(bytes.slice(0, settings.pwlength));
                 return pw;
-                function bytes2chars(bytearray, cset) {
+
+                function bytes2chars(bytearray) {
                     let chars = "";
                     let len = bytearray.length;
                     for (let i = 0; i < len; i++) {
