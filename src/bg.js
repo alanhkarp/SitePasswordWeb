@@ -68,11 +68,11 @@ let SitePassword = ((function (self) {
     }
 
     function generateCharacterSet(settings) {
-        // generate a set of 256 characters for encoding
+        // generate a set of no more than 256 characters for encoding
         let chars = "";
         if (settings.allowspecial) {
             chars += settings.specials;
-            while (chars.length <= 8) {
+            while (chars.length < 5) {
                 chars += settings.specials;
             }
         }
@@ -144,7 +144,7 @@ let SitePassword = ((function (self) {
             }
             iter++;
             // keysize determines the number of preimages when iteration is needed
-            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": 1024*16};
+            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 8};
             pw = await candidatePassword(args);
         }
         console.log("bg failed after", iter, "iteration and took", Date.now() - startIter, "ms");
