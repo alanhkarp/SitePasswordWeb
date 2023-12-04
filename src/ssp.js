@@ -844,6 +844,11 @@ let SitePasswordWeb = ((function (self) {
         }
         const alphanumerics = /[0-9A-Za-z]/g;
         $specials.onblur = function () {
+            if (!$specials.value) {
+                $specials.value = SitePassword.settings.specials;
+                alert("Specials cannot be empty");
+                return;
+            }
             $specials.value = $specials.value
                 .replace(alphanumerics, '')  // eliminate alphanumerics
                 .substring(0, 12);  // limit to 12 specials
