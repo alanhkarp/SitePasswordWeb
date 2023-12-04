@@ -197,7 +197,7 @@ let SitePassword = ((function (self) {
         const n = normalize(settings.sitename);
         const u = normalize(settings.username);
         const m = self.getSuperPassword();
-        if (!m) {
+        if (!m || !isConsistent(settings)) {
             return "";
         }
         const salt = n.toString() + '\t'+ u.toString();
@@ -206,6 +206,14 @@ let SitePassword = ((function (self) {
         let pw = await computePassword(m, salt, settings);
         if (logging) console.log("bg computePassword returned", pw, "took", Date.now() - start, "ms");
         return pw;
+        function isConsistent(settings) {
+            let total = 0
+            if (settings.allowupper) total += settings.minupper;
+            if (settings.allowlower) total += settings.minlower;
+            if (settings.allownumber) total += settings.minnumber;
+            if (settings.allowspecial) total += settings.minspecial;
+            return total <= settings.pwlength;
+        }
     }
     function xorStrings(provided, sitepw) {
         let b = sitepw;
