@@ -70,12 +70,6 @@ let SitePassword = ((function (self) {
     function generateCharacterSet(settings) {
         // generate a set of no more than 256 characters for encoding
         let chars = "";
-        if (settings.allowspecial) {
-            chars += settings.specials;
-            while (chars.length < 5) {
-                chars += settings.specials;
-            }
-        }
         if (settings.allownumber) {
             chars += self.digits;
         }
@@ -84,6 +78,12 @@ let SitePassword = ((function (self) {
         }
         if (settings.allowlower) {
             chars += self.lower;
+        }
+        if (settings.allowspecial) {
+            chars += settings.specials;
+            while (chars.length < 5) {
+                chars += settings.specials;
+            }
         }
         return chars.substring(0, 256); // substring just in case...
     }
@@ -134,21 +134,12 @@ let SitePassword = ((function (self) {
         let start = Date.now();
         let pw = await candidatePassword(args);
         console.log("bg candidatePassword took", Date.now() - start, "ms");
-        // Find a valid password
-        let startIter = Date.now();
-        let iter = 0;
-        while (Date.now() - startIter < 150) {
-            if (verifyPassword(pw, settings)) {
-                console.log("bg succeeded in", iter, "iterations and took", Date.now() - start, "ms");
-                return pw;
-            }
-            iter++;
-            // keysize determines the number of preimages when iteration is needed
-            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 8};
-            pw = await candidatePassword(args);
+        // Test just in case something went wrong
+        if (verifyPassword(pw, settings)) {
+            return pw;
+        } else {
+            return "";
         }
-        console.log("bg failed after", iter, "iteration and took", Date.now() - startIter, "ms");
-        return "";
     }
     async function candidatePassword(args) {
         let superpw = args.pw;
@@ -177,18 +168,53 @@ let SitePassword = ((function (self) {
                 // cset must be defined inside the closure in case the settings change
                 let cset = generateCharacterSet(settings);
                 let bytes = new Uint8Array(bits);
-                // Convert the Uint8Array to a string using a custom algorithm 
-                let pw = bytes2chars(bytes.slice(0, settings.pwlength));
-                return pw;
 
-                function bytes2chars(bytearray) {
-                    let chars = "";
-                    let len = bytearray.length;
-                    for (let i = 0; i < len; i++) {
-                        chars += cset[bytearray[i] % cset.length];
+                // Convert the Uint8Array to a string using a custom algorithm 
+                let pw = pwchars();
+                return pw;
+                function pwchars() {
+                    let start = Date.now();
+                    // Sum of required characters guaranteed to be <= pwlength
+                    let pwlength = settings.pwlength - 0; // -0 converts to number
+                    let pwarray = Array(pwlength); 
+                    let uint16Index = 0;
+                    let nchars = 0;
+                    let minlower = settings.minlower;
+                    let minupper = settings.minupper;
+                    if (settings.startwithletter) {
+                        pwarray[0] = cset.substring(10, 62)[bytes[uint16Index] % 52];
+                        nchars++;
+                        // Did I pick an upper or a lower case letter?
+                        if (cset.substring(10, 36).includes(pwarray[0])) {
+                            minupper--;
+                        } else {
+                            minlower--;
+                        }
                     }
-                    return chars;
-                }            
+                    // Same order as in popup settings menu
+                    if (settings.allowlower) addCharType(cset.substring(36, 62), minlower);
+                    if (settings.allowupper) addCharType(cset.substring(10,36), minupper);    
+                    if (settings.allownumber) addCharType(cset.substring(0, 10), settings.minnumber);
+                    if (settings.allowspecial) addCharType(cset.substring(62), settings.minspecial);
+                    addCharType(cset, pwlength - nchars);
+                    console.log("bg pwchars took", uint16Index, "steps in", Date.now() - start, "ms");
+                    return pwarray.join("");
+                    function addCharType(chars, min) {
+                        for (let i = 0; i < min; i++) {
+                            if (nchars >= pwlength) return;
+                            let char = chars[bytes[uint16Index] % chars.length];
+                            while (true) {
+                                uint16Index++;
+                                if (!pwarray[bytes[uint16Index] % pwlength]) {
+                                    pwarray[bytes[uint16Index] % pwlength] = char;
+                                    uint16Index++;
+                                    nchars++;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
             }); 
         });
     }
