@@ -156,7 +156,7 @@ let SitePassword = ((function (self) {
                 return pw;
             }
             iter++;
-            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 8};
+            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 16};
             pw = await candidatePassword(args);
         }
         console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
@@ -188,15 +188,15 @@ let SitePassword = ((function (self) {
             .then((bits) => {
                 const cset = generateCharacterSet(settings);
                 if (Date.now() - start > 2) console.log("deriveBits did", iters, "iterations in", Date.now() - start, "ms");
-                let bytes = new Uint8Array(bits);
+                let uint16 = new Uint16Array(bits);
                 // Convert the Uint32Array to a string using a custom algorithm               
-                let pw = bytes2chars(bytes.slice(0, settings.pwlength*8), cset).substring(0, settings.pwlength);
+                let pw = uint2chars(uint16.slice(0, settings.pwlength*16), cset).substring(0, settings.pwlength);
                 return pw;
-                function bytes2chars(bytearray, cset) {
+                function uint2chars(uint16array, cset) {
                     let chars = "";
-                    let len = bytearray.length;
+                    let len = uint16array.length;
                     for (let i = 0; i < len; i++) {
-                        chars += cset[bytearray[i] % cset.length];
+                        chars += cset[uint16array[i] % cset.length];
                     }
                     return chars;
                 }            
@@ -420,12 +420,10 @@ function Utf8Encode(string) {
 })({
     version: "3.0",
     clearsuperpw: false,
-    hashiter: 1, // Largest value that meets the latency requirements
-    keySize: 1024*1024*64,  // for this key size
     digits: "0123456789",
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-    specials: "/!=@?._-",
+    specials: "$/!=@?._-",
 }));
 
 /* 
