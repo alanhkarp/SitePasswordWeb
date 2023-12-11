@@ -203,7 +203,7 @@ let SitePassword = ((function (self) {
             }); 
         });
     }
-        async function generatePassword() {
+    async function generatePassword() {
         const settings = self.settings;
         const n = normalize(settings.sitename);
         const u = normalize(settings.username);
