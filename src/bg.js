@@ -156,7 +156,7 @@ let SitePassword = ((function (self) {
                 return pw;
             }
             iter++;
-            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 16};
+            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * self.indexSize};
             pw = await candidatePassword(args);
         }
         console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
@@ -188,15 +188,15 @@ let SitePassword = ((function (self) {
             .then((bits) => {
                 const cset = generateCharacterSet(settings);
                 if (Date.now() - start > 2) console.log("deriveBits did", iters, "iterations in", Date.now() - start, "ms");
-                let uint16 = new Uint16Array(bits);
+                let uintArray = [new Uint8Array(bits), new Uint16Array(bits), new Uint32Array(bits)][Math.log2(self.indexSize) - 3];
                 // Convert the Uint32Array to a string using a custom algorithm               
-                let pw = uint2chars(uint16.slice(0, settings.pwlength*16), cset).substring(0, settings.pwlength);
+                let pw = uint2chars(uintArray.slice(0, settings.pwlength*self.indexSize), cset).substring(0, settings.pwlength);
                 return pw;
-                function uint2chars(uint16array, cset) {
+                function uint2chars() {
                     let chars = "";
-                    let len = uint16array.length;
+                    let len = uintArray.length;
                     for (let i = 0; i < len; i++) {
-                        chars += cset[uint16array[i] % cset.length];
+                        chars += cset[uintArray[i] % cset.length];
                     }
                     return chars;
                 }            
@@ -424,6 +424,7 @@ function Utf8Encode(string) {
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     specials: "$/!=@?._-",
+    indexSize: 32
 }));
 
 /* 
