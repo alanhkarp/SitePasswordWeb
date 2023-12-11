@@ -141,6 +141,27 @@ let SitePassword = ((function (self) {
             return "";
         }
     }
+    async function computePassword(superpw, salt, settings) {
+        if (!(settings.allowupper || settings.allowlower || settings.allownumber)) {
+            return Promise.resolve("");
+        }
+        let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": 1, "keysize": 1024*1024*64};
+        let pw = await candidatePassword(args);
+        // Find a valid password
+        let startIter = Date.now();
+        let iter = 0;
+        while (Date.now() - startIter < 150) {
+            if (verifyPassword(pw, settings)) {
+                console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
+                return pw;
+            }
+            iter++;
+            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 8};
+            pw = await candidatePassword(args);
+        }
+        console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
+        return "";
+    }
     async function candidatePassword(args) {
         let superpw = args.pw;
         let salt = args.salt;
@@ -153,7 +174,7 @@ let SitePassword = ((function (self) {
         // don't weaken the result as much as repeated SHA-256 hashing.
         return window.crypto.subtle.importKey("raw", passphrase, { name: "PBKDF2" }, false, ["deriveBits"])
         .then(async (passphraseImported) => {
-            if (logging) console.log("bg passphraseImported", passphraseImported);
+            let start = Date.now();
             return window.crypto.subtle.deriveBits(
                 {
                     name: "PBKDF2",
@@ -165,60 +186,24 @@ let SitePassword = ((function (self) {
                 keysize 
             )  
             .then((bits) => {
-                // cset must be defined inside the closure in case the settings change
-                let cset = generateCharacterSet(settings);
+                const cset = generateCharacterSet(settings);
+                if (Date.now() - start > 2) console.log("deriveBits did", iters, "iterations in", Date.now() - start, "ms");
                 let bytes = new Uint8Array(bits);
-
-                // Convert the Uint8Array to a string using a custom algorithm 
-                let pw = pwchars();
+                // Convert the Uint32Array to a string using a custom algorithm               
+                let pw = bytes2chars(bytes.slice(0, settings.pwlength*8), cset).substring(0, settings.pwlength);
                 return pw;
-                function pwchars() {
-                    let start = Date.now();
-                    // Sum of required characters guaranteed to be <= pwlength
-                    let pwlength = settings.pwlength - 0; // -0 converts to number
-                    let pwarray = Array(pwlength); 
-                    let uint16Index = 0;
-                    let nchars = 0;
-                    let minlower = settings.minlower;
-                    let minupper = settings.minupper;
-                    if (settings.startwithletter) {
-                        pwarray[0] = cset.substring(10, 62)[bytes[uint16Index] % 52];
-                        nchars++;
-                        // Did I pick an upper or a lower case letter?
-                        if (cset.substring(10, 36).includes(pwarray[0])) {
-                            minupper--;
-                        } else {
-                            minlower--;
-                        }
+                function bytes2chars(bytearray, cset) {
+                    let chars = "";
+                    let len = bytearray.length;
+                    for (let i = 0; i < len; i++) {
+                        chars += cset[bytearray[i] % cset.length];
                     }
-                    // Same order as in popup settings menu
-                    if (settings.allowlower) addCharType(cset.substring(36, 62), minlower);
-                    if (settings.allowupper) addCharType(cset.substring(10,36), minupper);    
-                    if (settings.allownumber) addCharType(cset.substring(0, 10), settings.minnumber);
-                    if (settings.allowspecial) addCharType(cset.substring(62), settings.minspecial);
-                    addCharType(cset, pwlength - nchars);
-                    console.log("bg pwchars took", uint16Index, "steps in", Date.now() - start, "ms");
-                    return pwarray.join("");
-                    function addCharType(chars, min) {
-                        for (let i = 0; i < min; i++) {
-                            if (nchars >= pwlength) return;
-                            let char = chars[bytes[uint16Index] % chars.length];
-                            while (true) {
-                                uint16Index++;
-                                if (!pwarray[bytes[uint16Index] % pwlength]) {
-                                    pwarray[bytes[uint16Index] % pwlength] = char;
-                                    uint16Index++;
-                                    nchars++;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
+                    return chars;
+                }            
             }); 
         });
     }
-    async function generatePassword() {
+        async function generatePassword() {
         const settings = self.settings;
         const n = normalize(settings.sitename);
         const u = normalize(settings.username);
