@@ -156,7 +156,7 @@ let SitePassword = ((function (self) {
                 return pw;
             }
             iter++;
-            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * self.indexSize};
+            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 8};
             pw = await candidatePassword(args);
         }
         console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
@@ -188,7 +188,7 @@ let SitePassword = ((function (self) {
             .then((bits) => {
                 const cset = generateCharacterSet(settings);
                 if (Date.now() - start > 2) console.log("deriveBits did", iters, "iterations in", Date.now() - start, "ms");
-                let uintArray = [new Uint8Array(bits), new Uint16Array(bits), new Uint32Array(bits)][Math.log2(self.indexSize) - 3];
+                let uintArray = new Uint8Array(bits);
                 // Convert the Uint32Array to a string using a custom algorithm               
                 let pw = uint2chars(uintArray.slice(0, settings.pwlength*self.indexSize), cset).substring(0, settings.pwlength);
                 return pw;
@@ -424,7 +424,6 @@ function Utf8Encode(string) {
     lower: "abcdefghijklmnopqrstuvwxyz",
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     specials: "$/!=@?._-",
-    indexSize: 32
 }));
 
 /* 
