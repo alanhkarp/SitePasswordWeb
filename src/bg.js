@@ -128,28 +128,11 @@ let SitePassword = ((function (self) {
         if (!(settings.allowupper || settings.allowlower || settings.allownumber)) {
             return Promise.resolve("");
         }
-        if (logging) console.log("bg superpw, salt", superpw, salt)
-        // keysize determines the number of preimages when iteration is not needed
-        let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": self.hashiter, "keysize": self.keySize};
-        let start = Date.now();
-        let pw = await candidatePassword(args);
-        console.log("bg candidatePassword took", Date.now() - start, "ms");
-        // Test just in case something went wrong
-        if (verifyPassword(pw, settings)) {
-            return pw;
-        } else {
-            return "";
-        }
-    }
-    async function computePassword(superpw, salt, settings) {
-        if (!(settings.allowupper || settings.allowlower || settings.allownumber)) {
-            return Promise.resolve("");
-        }
         let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": 1, "keysize": 1024*1024*64};
         let pw = await candidatePassword(args);
         // Find a valid password
-        let startIter = Date.now();
         let iter = 0;
+        let startIter = Date.now();
         while (Date.now() - startIter < 150) {
             if (verifyPassword(pw, settings)) {
                 console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
@@ -159,7 +142,7 @@ let SitePassword = ((function (self) {
             args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 8};
             pw = await candidatePassword(args);
         }
-        console.log("bgs failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
+        console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
         return "";
     }
     async function candidatePassword(args) {
@@ -186,17 +169,17 @@ let SitePassword = ((function (self) {
                 keysize 
             )  
             .then((bits) => {
-                const cset = generateCharacterSet(settings);
                 if (Date.now() - start > 2) console.log("deriveBits did", iters, "iterations in", Date.now() - start, "ms");
+                const cset = generateCharacterSet(settings);
                 let uintArray = new Uint8Array(bits);
                 // Convert the Uint32Array to a string using a custom algorithm               
-                let pw = uint2chars(uintArray.slice(0, settings.pwlength*self.indexSize), cset).substring(0, settings.pwlength);
+                let pw = uint2chars(uintArray.slice(0, settings.pwlength*8), cset).substring(0, settings.pwlength);
                 return pw;
-                function uint2chars() {
+                function uint2chars(array) {
                     let chars = "";
-                    let len = uintArray.length;
+                    let len = array.length;
                     for (let i = 0; i < len; i++) {
-                        chars += cset[uintArray[i] % cset.length];
+                        chars += cset[array[i] % cset.length];
                     }
                     return chars;
                 }            
