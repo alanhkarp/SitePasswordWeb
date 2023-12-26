@@ -133,7 +133,7 @@ let SitePassword = ((function (self) {
         // Find a valid password
         let iter = 0;
         let startIter = Date.now();
-        while (Date.now() - startIter < 150) {
+        while (iter < 150) {
             if (verifyPassword(pw, settings)) {
                 console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
                 return pw;
