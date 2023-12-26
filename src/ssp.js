@@ -269,7 +269,8 @@ let SitePasswordWeb = ((function (self) {
             const $input = get(which);
             const report = zxcvbn($input.value);
             $meter.value = report.score;
-            $meter.title = strengthText[report.score];
+            $meter.title = strengthText[report.score] + " (equivalent to " + 
+                Math.round(report.guesses_log10) + " random characters)";
             $input.style.color = strengthColor[report.score];
         }
         $superpw.onkeyup = function () {
