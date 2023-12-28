@@ -171,9 +171,9 @@ let SitePassword = ((function (self) {
             .then((bits) => {
                 if (Date.now() - start > 2) console.log("deriveBits did", iters, "iterations in", Date.now() - start, "ms");
                 const cset = generateCharacterSet(settings);
-                let uint8Array = new Uint8Array(bits);
-                // Convert the Uint8Array to a string using a custom algorithm               
-                let pw = uint2chars(uint8Array.slice(0, settings.pwlength), cset).substring(0, settings.pwlength);
+                let uint8array = new Uint8Array(bits);
+                // Convert the Uint8array to a string using a custom algorithm               
+                let pw = uint2chars(uint8array.slice(0, settings.pwlength), cset);
                 return pw;
                 function uint2chars(array) {
                     let chars = "";
