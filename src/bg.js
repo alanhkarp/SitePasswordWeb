@@ -130,20 +130,11 @@ let SitePassword = ((function (self) {
         }
         let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": 250_000, "keysize": settings.pwlength * 8};
         let pw = await candidatePassword(args);
-        // Find a valid password
-        let iter = 0;
-        let startIter = Date.now();
-        while (iter < 200) {
-            if (verifyPassword(pw, settings)) {
-                console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
-                return pw;
-            }
-            iter++;
-            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 8};
-            pw = await candidatePassword(args);
+        if (!verifyPassword(pw, settings)) {
+            alert("System Error: Password is not consistent with the settings.")
+            return Promise.resolve("");
         }
-        console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
-        return "";
+        return pw;
     }
     async function candidatePassword(args) {
         let superpw = args.pw;
@@ -176,12 +167,48 @@ let SitePassword = ((function (self) {
                 let pw = uint2chars(uint8array.slice(0, settings.pwlength), cset);
                 return pw;
                 function uint2chars(array) {
+                    let ints = "0123456789";
+                    let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    let lower = "abcdefghijklmnopqrstuvwxyz";
+                    let specials = settings.specials;
                     let chars = "";
-                    let len = array.length;
-                    for (let i = 0; i < len; i++) {
-                        chars += cset[array[i] % cset.length];
+                    if (settings.startwithletter) pickChars(1, array, upper + lower);
+                    let firstIsUpper = chars.length > 0 && upper.includes(chars[0]) ? 1 : 0;
+                    let firstIsLower = chars.length > 0 && lower.includes(chars[0]) ? 1 : 0;
+                    if (settings.allowupper) pickChars(settings.minupper - firstIsUpper, array.slice(chars.length), upper);
+                    if (settings.allowlower) pickChars(settings.minlower - firstIsLower, array.slice(chars.length), lower);
+                    if (settings.allownumber) pickChars(settings.minnumber, array.slice(chars.length), ints);
+                    if (settings.allowspecial) pickChars(settings.minspecial, array.slice(chars.length), specials);
+                    let len = array.length - chars.length;
+                    pickChars(len, array.slice(chars.length), cset);
+                    // In case password must start with a letter
+                    if (settings.startwithletter) {
+                        chars = chars[0] + shuffle(chars.slice(1));
+                    } else {
+                        chars = shuffle(chars);
                     }
                     return chars;
+                    function pickChars(nchars, array, cset) {
+                        for (let i = 0; i < nchars; i++) {
+                            chars += cset[array[i] % cset.length];
+                        }
+                    }
+                    function shuffle(chars) {
+                        let currentIndex = chars.length, temporaryValue, randomIndex;
+                        let charsArray = chars.split("");
+                        // While there remain elements to shuffle...
+                        while (0 !== currentIndex) {                      
+                          // Pick a remaining element...
+                          randomIndex = array[currentIndex % array.length] % charsArray.length;
+                          currentIndex -= 1;                      
+                          // And swap it with the current element.
+                          temporaryValue = charsArray[currentIndex];
+                          charsArray[currentIndex] = charsArray[randomIndex];
+                          charsArray[randomIndex] = temporaryValue;
+                        }
+                        chars = charsArray.join("");
+                        return chars;
+                      }                      
                 }            
             }); 
         });
