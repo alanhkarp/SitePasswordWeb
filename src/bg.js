@@ -128,12 +128,12 @@ let SitePassword = ((function (self) {
         if (!(settings.allowupper || settings.allowlower || settings.allownumber)) {
             return Promise.resolve("");
         }
-        let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": 1, "keysize": 1024*1024*64};
+        let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": 250_000, "keysize": settings.pwlength * 8};
         let pw = await candidatePassword(args);
         // Find a valid password
         let iter = 0;
         let startIter = Date.now();
-        while (iter < 150) {
+        while (iter < 200) {
             if (verifyPassword(pw, settings)) {
                 console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
                 return pw;
