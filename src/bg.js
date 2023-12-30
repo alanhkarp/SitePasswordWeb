@@ -172,9 +172,14 @@ let SitePassword = ((function (self) {
                     let lower = "abcdefghijklmnopqrstuvwxyz";
                     let specials = settings.specials;
                     let chars = "";
-                    if (settings.startwithletter) pickChars(1, array, upper + lower);
-                    let firstIsUpper = chars.length > 0 && upper.includes(chars[0]) ? 1 : 0;
-                    let firstIsLower = chars.length > 0 && lower.includes(chars[0]) ? 1 : 0;
+                    if (settings.startwithletter) {
+                        let alphabet = "";
+                        if (settings.allowupper) alphabet += upper;
+                        if (settings.allowlower) alphabet += lower;
+                        pickChars(1, array, alphabet);
+                    }
+                    let firstIsUpper = settings.startwithletter && upper.includes(chars[0]) ? 1 : 0;
+                    let firstIsLower = settings.startwithletter && lower.includes(chars[0]) ? 1 : 0;
                     if (settings.allowupper) pickChars(settings.minupper - firstIsUpper, array.slice(chars.length), upper);
                     if (settings.allowlower) pickChars(settings.minlower - firstIsLower, array.slice(chars.length), lower);
                     if (settings.allownumber) pickChars(settings.minnumber, array.slice(chars.length), ints);
