@@ -323,7 +323,7 @@ let SitePasswordWeb = ((function (self) {
             get("bkmkcheck").style.display = "none";
             $domainname.value = domainname;
             SitePassword.domainname = domainname;
-            const sitename = SitePassword.siteForDomain(domainname);
+            const sitename = SitePassword.siteForDomain(domainname) || "";
             const settings = SitePassword.loadSettings(sitename);
             updateSettings(settings);
             generatePassword();
@@ -373,7 +373,9 @@ let SitePasswordWeb = ((function (self) {
             sectionClick("domainname");
         }
         function parseDomain(url) {
-            const protocol = url.split(":")[0].toLowerCase();
+            const protocol = url.split(":")[0].toLowerCase(); 
+            // Don't warn if protocol is not specified
+            if (!url.split(":")[1]) return protocol
             const split = url.split("/");
             let domain = (split.length > 1 ? split[2] : split[0]);
             if (domain && !isValidDomain(normalize(domain))) {
@@ -422,9 +424,7 @@ let SitePasswordWeb = ((function (self) {
                     updateSettings(settings);
                 } else {
                     $sitename.value = settings.sitename;
-                    //alert("Bookmark is not for this domain. Try another one.");
-                    phishingWarningMsg($domainname.value);
-                    phishingWarningOn(settings);
+                    phishingWarningOn(settings.domainname, $domainname.value);
                 }
             } else {
                 alert("Invalid bookmark. Copy it again?");
@@ -495,18 +495,17 @@ let SitePasswordWeb = ((function (self) {
             const domainname = $domainname.value;
             const settings = SitePassword.loadSettings($sitename.value);
             const sitename = settings.sitename;
-            let testDomain = SitePassword.validateDomain(domainname, sitename);
+            let existingDomain = SitePassword.validateDomain(domainname, sitename);
             if (!sitename) {
                 // retain sitename/username for unknown site
                 settings.sitename = $sitename.value;
                 settings.username = $username.value;
                 SitePassword.settings = settings;
                 phishingWarningOff();
-            } else if (!testDomain) {
+            } else if (!domainname) {
                 updateSettings(settings);
-            } else {
-                phishingWarningMsg(testDomain);
-                phishingWarningOn(settings);
+            } else if (existingDomain !== domainname) {
+                phishingWarningOn(existingDomain, domainname);
             }
             clearDatalist("sitenames");
         }
@@ -695,13 +694,11 @@ let SitePasswordWeb = ((function (self) {
         let $bkmkDomain = get("bkmkDomain");
         $bkmkDomain.onpaste = function () {
             setTimeout(() => {
-                let domainname = parseDomain(normalize($bkmkDomain.value));
-                if (domainname === $domainname.value) {
+                let testDomain = parseDomain(normalize($bkmkDomain.value));
+                if (testDomain === $domainname.value) {
                     phishingWarningOff();
                 } else {
-                    const settings = SitePassword.loadSettings($sitename.value);
-                    phishingWarningMsg(domainname);
-                    phishingWarningOn(settings);
+                   phishingWarningOn($domainname.value, testDomain);
                 }                    
                 get("bkmkcheck").style.display = "none";
             }, 0);
@@ -715,8 +712,13 @@ let SitePasswordWeb = ((function (self) {
             const settings = SitePassword.loadSettings();
             updateSettings(settings);
         }
-        function phishingWarningOn(settings) {
+        function phishingWarningOn(existingDommain, testDomain) {
             httpWarningOff();
+            let settings = SitePassword.settings;
+            let sitename = normalize($sitename.value);
+            get("phishingtext0").innerText = sitename;
+            get("phishingtext1").innerText = existingDommain;
+            get("phishingtext2").innerText = testDomain;
             $phishing.style.display = "block";
             $results.style.display = "none";  // hide sitepw/remember/settings...
             $domainname.classList.add("bad-input");
@@ -746,12 +748,6 @@ let SitePasswordWeb = ((function (self) {
                 console.log("WARNING! nicknamebutton clicked while phishing warning off.");
             };
         }
-        function phishingWarningMsg(testDomain) {
-            let sitename = normalize($sitename.value);
-            get("phishingtext0").innerText = sitename;
-            get("phishingtext1").innerText = $domainname.value;
-            get("phishingtext2").innerText = testDomain;
-        }
         get("forgetbutton").onclick = function () {
             let children = get("toforgetlist").children;
             for (let child of children) {
@@ -776,7 +772,7 @@ let SitePasswordWeb = ((function (self) {
 
         $remember.onclick = function () {
             SitePassword.storeSettings();
-            //phishingWarningOff();
+            phishingWarningOff();
             enableRemember();
         }
         function enableRemember() {
@@ -884,6 +880,9 @@ let SitePasswordWeb = ((function (self) {
             if (!(settings.allowupper || settings.allowlower)) {
                 settings.startwithletter = false;
                 $startwithletter.checked = false;
+                $startwithletter.disabled = true;
+            } else {
+                $startwithletter.disabled = false;
             }
         }
         function clearDatalist(listid) {
