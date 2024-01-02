@@ -860,6 +860,9 @@ let SitePasswordWeb = ((function (self) {
             if (!(settings.allowupper || settings.allowlower)) {
                 settings.startwithletter = false;
                 $startwithletter.checked = false;
+                $startwithletter.disabled = true;
+            } else {
+                $startwithletter.disabled = false;
             }
         }
         function clearDatalist(listid) {
