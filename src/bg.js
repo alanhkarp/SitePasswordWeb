@@ -166,8 +166,8 @@ let SitePassword = ((function (self) {
                 // Convert the Uint8array to a string using a custom algorithm               
                 let pw = uint2chars(uint8array.slice(0, settings.pwlength), cset);
                 return pw;
-                function uint2chars(array) {
-                    let ints = "0123456789";
+                function uint2chars(byteArray) {
+                    let digits = "0123456789";
                     let upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                     let lower = "abcdefghijklmnopqrstuvwxyz";
                     let specials = settings.specials;
@@ -176,16 +176,16 @@ let SitePassword = ((function (self) {
                         let alphabet = "";
                         if (settings.allowupper) alphabet += upper;
                         if (settings.allowlower) alphabet += lower;
-                        pickChars(1, array, alphabet);
+                        pickChars(1, byteArray, alphabet);
                     }
                     let firstIsUpper = settings.startwithletter && upper.includes(chars[0]) ? 1 : 0;
                     let firstIsLower = settings.startwithletter && lower.includes(chars[0]) ? 1 : 0;
-                    if (settings.allowupper) pickChars(settings.minupper - firstIsUpper, array.slice(chars.length), upper);
-                    if (settings.allowlower) pickChars(settings.minlower - firstIsLower, array.slice(chars.length), lower);
-                    if (settings.allownumber) pickChars(settings.minnumber, array.slice(chars.length), ints);
-                    if (settings.allowspecial) pickChars(settings.minspecial, array.slice(chars.length), specials);
-                    let len = array.length - chars.length;
-                    pickChars(len, array.slice(chars.length), cset);
+                    if (settings.allowupper) pickChars(settings.minupper - firstIsUpper, byteArray.slice(chars.length), upper);
+                    if (settings.allowlower) pickChars(settings.minlower - firstIsLower, byteArray.slice(chars.length), lower);
+                    if (settings.allownumber) pickChars(settings.minnumber, byteArray.slice(chars.length), digits);
+                    if (settings.allowspecial) pickChars(settings.minspecial, byteArray.slice(chars.length), specials);
+                    let len = byteArray.length - chars.length;
+                    pickChars(len, byteArray.slice(chars.length), cset);
                     // In case password must start with a letter
                     if (settings.startwithletter) {
                         chars = chars[0] + shuffle(chars.slice(1));
@@ -204,7 +204,7 @@ let SitePassword = ((function (self) {
                         // While there remain elements to shuffle...
                         while (0 !== currentIndex) {                      
                           // Pick a remaining element...
-                          randomIndex = array[currentIndex % array.length] % charsArray.length;
+                          randomIndex = byteArray[currentIndex] % charsArray.length;
                           currentIndex -= 1;                      
                           // And swap it with the current element.
                           temporaryValue = charsArray[currentIndex];
