@@ -128,7 +128,7 @@ let SitePassword = ((function (self) {
         if (!(settings.allowupper || settings.allowlower || settings.allownumber)) {
             return Promise.resolve("");
         }
-        let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": 250_000, "keysize": settings.pwlength * 8};
+        let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": 200_000, "keysize": settings.pwlength * 8};
         let pw = await candidatePassword(args);
         // Find a valid password
         let iter = 0;
