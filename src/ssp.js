@@ -206,9 +206,7 @@ let SitePasswordWeb = ((function (self) {
                 SitePassword.settings.xor = SitePassword.xorStrings($sitepw.value, $sitepw.value);
                 $sitepw.value = pw;
             }
-            const report = zxcvbn($sitepw.value);
-            $sitepw.style.color = strengthColor[report.score];
-            $sitepw.title = strengthText[report.score] + " site password";
+            setMeter("sitepw");
             enableRemember();
             if ($sitename.value && $username.value) {
                 get("providesitepw").disabled = false;
@@ -229,7 +227,6 @@ let SitePasswordWeb = ((function (self) {
             } else {
                 SitePassword.settings[id] = +value;
                 generatePassword();
-                setMeter("sitepw");
             }
         }
         function handleKeyup(id) {
@@ -261,9 +258,13 @@ let SitePasswordWeb = ((function (self) {
             const $meter = get(which + "-strength-meter");
             const $input = get(which);
             const report = zxcvbn($input.value);
-            $meter.value = report.score;
-            $meter.title = strengthText[report.score];
-            $input.style.color = strengthColor[report.score];
+            let score = Math.min(20, report.guesses_log10);
+            if (which === "sitepw") score += 4;
+            let index = Math.min(4, Math.floor(score / 5));
+            $meter.value = score;
+            $meter.style.setProperty("--meter-value-color", strengthColor[index]);
+            $meter.title = strengthText[index];
+            $input.style.color = strengthColor[index];
         }
         $superpw.onkeyup = function () {
             $superpw.onblur();
