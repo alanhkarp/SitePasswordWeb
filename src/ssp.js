@@ -233,7 +233,6 @@ let SitePasswordWeb = ((function (self) {
             } else {
                 SitePassword.settings[id] = value;
                 generatePassword();
-                setMeter("sitepw");
             }
         }
         function handleKeyup(id) {
@@ -268,10 +267,19 @@ let SitePasswordWeb = ((function (self) {
             const $meter = get(which + "-strength-meter");
             const $input = get(which);
             const report = zxcvbn($input.value);
-            $meter.value = report.score;
-            $meter.title = strengthText[report.score] + " (equivalent to " + 
-                Math.round(report.guesses_log10) + " random characters)";
-            $input.style.color = strengthColor[report.score];
+            let score = Math.min(20, report.guesses_log10);
+            // A strong super password needs a score of 20
+            // A strong site password needs a score of 16
+            if (which === "superpw") {
+                if (score > 0 ) score -= 0; // In case I want to penalize superpw
+            } else {
+                if (score > 0 ) score += 4;
+            }
+            let index = Math.min(4, Math.floor(score / 5));
+            $meter.value = score;
+            $meter.style.setProperty("--meter-value-color", strengthColor[index]);
+            $meter.title = strengthText[index];
+            $input.style.color = strengthColor[index];
         }
         $superpw.onkeyup = function () {
             $superpw.onblur();
