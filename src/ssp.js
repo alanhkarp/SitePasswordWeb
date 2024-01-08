@@ -259,7 +259,13 @@ let SitePasswordWeb = ((function (self) {
             const $input = get(which);
             const report = zxcvbn($input.value);
             let score = Math.min(20, report.guesses_log10);
-            if (which === "sitepw") score += 4;
+            // A strong super password needs a score of 20
+            // A strong site password needs a score of 16
+            if (which === "superpw") {
+                if (score > 0 ) score -= 0; // In case I want to penalize superpw
+            } else {
+                if (score > 0 ) score += 4;
+            }
             let index = Math.min(4, Math.floor(score / 5));
             $meter.value = score;
             $meter.style.setProperty("--meter-value-color", strengthColor[index]);
