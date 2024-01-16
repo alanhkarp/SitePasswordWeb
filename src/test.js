@@ -188,10 +188,10 @@ function runTests() {
         resetState();
         localStorage.restart = "testSaveAsDefault2";
         $pwlength.value = 15;
-        $pwlength.onkeyup();
+        $pwlength.blur();
         $allowspecialcheckbox.click();
         $specials.value = "%^&";
-        $specials.onkeyup();
+        $specials.onblur();
         $makedefaultbutton.click();
         location.reload();
         // Test is in testSaveAsDefault2
@@ -208,7 +208,7 @@ function runTests() {
         }
         $pwlength.value = 12;
         $specials.value = "/!=@?._-";
-        $specials.onkeyup();
+        $specials.onblur();
         $allowspecialcheckbox.click();
     }
     // Utility functions
