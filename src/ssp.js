@@ -175,7 +175,7 @@ let SitePasswordWeb = ((function (self) {
                 get("requirespecial").style.display = "none";
             }
         }
-        function saveSettingControls(settings) {
+        self.saveSettingControls = function(settings) {
             settings.providesitepw = $providesitepw.checked;
             settings.startwithletter = $startwithletter.checked;
             settings.allowlower = $allowlowercheckbox.checked;
@@ -191,7 +191,7 @@ let SitePasswordWeb = ((function (self) {
         const $pwok = get("pwok");
         const $pwfail = get("pwfail");
         async function generatePassword() {
-            saveSettingControls(SitePassword.settings);
+            self.saveSettingControls(SitePassword.settings);
             if (logging) console.log("ssp calling generatePassword");
             return SitePassword.generatePassword().then((pw) => {
                 if (logging) console.log("ssp got password", pw);

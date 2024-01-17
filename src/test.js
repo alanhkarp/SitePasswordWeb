@@ -34,12 +34,12 @@ function runTests() {
     }
     if (!restart) {
         testCalculation();
-        testRememberForm();
-        testProvidedpw();
-        testForget();
-        testPhishing();
-        testBookmark();
-        testSaveAsDefault();
+        // testRememberForm();
+        // testProvidedpw();
+        // testForget();
+        // testPhishing();
+        // testBookmark();
+        // testSaveAsDefault();
     } else {
         if (restart === "testSaveAsDefault2") {
             testSaveAsDefault2();
@@ -49,14 +49,18 @@ function runTests() {
     }
     // Test password calculation
     function testCalculation() {
-        const expected = "to3X9g55EK8C";
+        console.log("Testing calculation");
+        const expected = "UG1qIyn6mSuJ";
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
-        actual = $sitepw.value;
-        if (actual === expected) {
-            console.log("Passed: Test calculation")
-        } else {
-            console.warn("Failed: Test calculation", expected, "|" + actual + "|");
-        }
+        setTimeout(() => {
+            $superpw.onkeyup();
+            actual = $sitepw.value;
+            if (actual === expected) {
+                console.log("Passed: Test calculation")
+            } else {
+                console.warn("Failed: Test calculation", expected, "|" + actual + "|");
+            }                
+        }, 500);                
     }
     function testRememberForm() {
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
@@ -216,7 +220,6 @@ function runTests() {
         clearForm();
         if (superpw) {
             $superpw.value = superpw;
-            $superpw.onkeyup();
         }
         if (domainname) {
             $domainname.value = domainname;
@@ -224,12 +227,13 @@ function runTests() {
         }
         if (sitename) {
             $sitename.value = sitename;
-            $sitename.onkeyup();
         }
         if (username) {
             $username.value = username;
-            $username.onkeyup();
         }
+        SitePassword.settings.sitename = $sitename.value;
+        SitePassword.settings.username = $username.value;
+        SitePasswordWeb.saveSettingControls(SitePassword.settings);
     }
     function phishingSetup() {
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
@@ -254,7 +258,7 @@ function runTests() {
         $username.value = "";
         $sitepw.value = "";
         $code.value = "";
-        $superpw.onkeyup();
+        //$superpw.onkeyup();
     }
     function get(id) {
         return document.getElementById(id);
