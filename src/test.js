@@ -32,14 +32,16 @@ function runTests() {
     } else {
         alert("Starting tests");
     }
+    // setTimeout needed to allow previous test to complete
     if (!restart) {
         testCalculation();
-        // testRememberForm();
-        // testProvidedpw();
-        // testForget();
-        // testPhishing();
-        // testBookmark();
-        // testSaveAsDefault();
+        let delay = 1000;
+        setTimeout(testRememberForm, delay); delay += 1000;
+        setTimeout(testProvidedpw, delay); delay += 1000;
+        setTimeout(testForget, delay); delay += 1000;
+        setTimeout(testPhishing, delay); delay += 1000;
+        setTimeout(testBookmark, delay); delay += 1000;
+        setTimeout(testSaveAsDefault, delay); delay += 1000;
     } else {
         if (restart === "testSaveAsDefault2") {
             testSaveAsDefault2();
@@ -49,17 +51,16 @@ function runTests() {
     }
     // Test password calculation
     function testCalculation() {
-        console.log("Testing calculation");
         const expected = "UG1qIyn6mSuJ";
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
+        $superpw.onblur();
         setTimeout(() => {
-            $superpw.onkeyup();
             actual = $sitepw.value;
             if (actual === expected) {
                 console.log("Passed: Test calculation")
             } else {
                 console.warn("Failed: Test calculation", expected, "|" + actual + "|");
-            }                
+            }
         }, 500);                
     }
     function testRememberForm() {
@@ -83,19 +84,23 @@ function runTests() {
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
         $providesitepw.click();
         $sitepw.value = sitepw;
-        $sitepw.onblur();
-        $remember.onclick();
-        clearForm();
-        // See if it remembers
-        $superpw.value = "qwerty";
-        $superpw.onkeyup();
-        $domainname.value = "https://alantheguru.alanhkarp.com";
-        $domainname.onpaste();
-        if ($sitepw.value === sitepw) {
-            console.log("Passed: Test provided pw");
-        } else {
-            console.warn("Failed: Test provided pw", sitepw, "|" + $sitepw.value + "|");
-        }
+        setTimeout(() => {
+            $sitepw.onblur();
+            $remember.onclick();
+            clearForm();
+            // See if it remembers
+            $superpw.value = "qwerty";
+            $superpw.onkeyup();
+            setTimeout(() => {
+                $domainname.value = "https://alantheguru.alanhkarp.com";
+                $domainname.onpaste();
+                if ($sitepw.value === sitepw) {
+                    console.log("Passed: Test provided pw");
+                } else {
+                    console.warn("Failed: Test provided pw", sitepw, "|" + $sitepw.value + "|");    
+                }
+            }, 500);
+        }, 0);
     }
     // Test forget
     function testForget() {
@@ -176,17 +181,22 @@ function runTests() {
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "", "");
         let bookmark = "https://sitepassword.info/index.html?bkmk=ssp://{%22sitename%22:%22Guru%22,%22username%22:%22alan%22,%22providesitepw%22:false,%22xor%22:[0,0,0,0,0,0,0,0,0,0,0,0],%22pwlength%22:12,%22domainname%22:%22alantheguru.alanhkarp.com%22,%22pwdomainname%22:%22alantheguru.alanhkarp.com%22,%22startwithletter%22:true,%22allowlower%22:true,%22allowupper%22:true,%22allownumber%22:true,%22allowspecial%22:false,%22minlower%22:1,%22minupper%22:1,%22minnumber%22:1,%22minspecial%22:1,%22specials%22:[47,33,61,64,63,46,95,45],%22characters%22:%220123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz%22}";
         $bookmark.value = bookmark;
-        SitePasswordWeb.bookmarkPaste();
-        let tests = $sitename.value === "Guru";
-        tests = tests && $username.value === "alan";
-        tests = tests && $sitepw.value === "to3X9g55EK8C";
-        if (tests) {
-            console.log("Passed: Test bookmark");
-        } else {    
-            console.warn("Failed: Test bookmark: Guru, alan, to3X9g55EK8C", 
-            "|" + $sitename.value + "|", "|" + $username.value + "|", "|" + $sitepw.value + "|");
-        }
-    }
+        $bookmark.onpaste();
+        setTimeout(() => {
+            $superpw.onblur();
+            setTimeout(() => {
+                let tests = $sitename.value === "Guru";
+                tests = tests && $username.value === "alan";
+                tests = tests && $sitepw.value === "UG1qIyn6mSuJ";
+                if (tests) {
+                    console.log("Passed: Test bookmark");
+                } else {    
+                    console.warn("Failed: Test bookmark: Guru, alan, UG1qIyn6mSuJ", 
+                    "|" + $sitename.value + "|", "|" + $username.value + "|", "|" + $sitepw.value + "|");
+                }
+            }, 500);    
+        }, 0);
+     }
     // Test save as default
     function testSaveAsDefault() {
         resetState();
@@ -258,7 +268,6 @@ function runTests() {
         $username.value = "";
         $sitepw.value = "";
         $code.value = "";
-        //$superpw.onkeyup();
     }
     function get(id) {
         return document.getElementById(id);

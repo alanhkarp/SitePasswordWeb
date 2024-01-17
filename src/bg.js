@@ -135,14 +135,14 @@ let SitePassword = ((function (self) {
         let startIter = Date.now();
         while (iter < 200) {
             if (verifyPassword(pw, settings)) {
-                console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
+                // console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
                 return pw;
             }
             iter++;
             args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 8};
             pw = await candidatePassword(args);
         }
-        console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
+        // console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
         return "";
     }
     async function candidatePassword(args) {
@@ -169,7 +169,7 @@ let SitePassword = ((function (self) {
                 keysize 
             )  
             .then((bits) => {
-                if (Date.now() - start > 2) console.log("deriveBits did", iters, "iterations in", Date.now() - start, "ms");
+                // if (Date.now() - start > 2) console.log("deriveBits did", iters, "iterations in", Date.now() - start, "ms");
                 const cset = generateCharacterSet(settings);
                 let uint8array = new Uint8Array(bits);
                 // Convert the Uint8array to a string using a custom algorithm               
