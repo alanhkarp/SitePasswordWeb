@@ -185,9 +185,9 @@ let SitePassword = ((function (self) {
                 chars = shuffle(chars);
             }
             return chars;
-            function pickChars(nchars, array, cset) {
+            function pickChars(nchars, byteArray, cset) {
                 for (let i = 0; i < nchars; i++) {
-                    chars += cset[array[i] % cset.length];
+                    chars += cset[byteArray[i] % cset.length];
                 }
             }
             function shuffle(chars) {
