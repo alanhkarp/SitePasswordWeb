@@ -31,6 +31,16 @@ let SitePassword = ((function (self) {
         specials: (self.specials || "_"),
         xor: new Array(defaultpwlength).fill(0),
     }
+    // Make sure default settings and database are stored
+    if (!localStorage[self.defaultskey]) {
+        localStorage.setItem(self.defaultskey, JSON.stringify(self.defaultsettings));
+    }
+    if (!localStorage[self.storagekey]) {
+        localStorage.setItem(self.storagekey, JSON.stringify({
+            domains: {},
+            sites: {},
+        }));
+    }
     let superpassword = "";
 
     function normalize(name) {
