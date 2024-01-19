@@ -12,11 +12,12 @@ let SitePassword = ((function (self) {
             localStorage.removeItem(self.storagekey);
             localStorage.removeItem(self.defaultskey);
         }
-    } 
+    }
+    let defaultpwlength = 12;
     self.defaultsettings = {
         sitename: "",
         username: "",
-        pwlength: 12,
+        pwlength: defaultpwlength,
         providesitepw: false,
         startwithletter: true,
         allowlower: true,
@@ -28,7 +29,7 @@ let SitePassword = ((function (self) {
         allowspecial: false,
         minspecial: 1,
         specials: (self.specials || "_"),
-        xor: new Array(12).fill(0),
+        xor: new Array(defaultpwlength).fill(0),
     }
     let superpassword = "";
 
