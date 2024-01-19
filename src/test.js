@@ -11,6 +11,7 @@ function runTests() {
     const $code = get("code");
     const $pwlength = get("pwlength");
     const $allowspecialcheckbox = get("allowspecialcheckbox");
+    const $minspecial = get("minspecial");
     const $specials = get("specials");
     const $makedefaultbutton = get("makedefaultbutton");
     const $cancelbutton = get("cancelbutton");
@@ -36,6 +37,7 @@ function runTests() {
     if (!restart) {
         testCalculation();
         let delay = 1000;
+        setTimeout(testExtreme, delay); delay += 1000;
         setTimeout(testRememberForm, delay); delay += 1000;
         setTimeout(testProvidedpw, delay); delay += 1000;
         setTimeout(testForget, delay); delay += 1000;
@@ -62,6 +64,24 @@ function runTests() {
                 console.warn("Failed: Test calculation", expected, "|" + actual + "|");
             }
         }, 500);                
+    }
+    // Test extreme settings
+    function testExtreme() {
+        const expected = "z?!6GH-!C-_$";
+        fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");
+        $allowspecialcheckbox.checked = true;
+        $minspecial.value = 7;
+        SitePassword.settings.allowspecial = true;
+        SitePassword.settings.minspecial = 7;
+        $superpw.onblur();
+        setTimeout(() => {
+            actual = $sitepw.value;
+            if (actual === expected) {
+                console.log("Passed: Test extreme settings")
+            } else {
+                console.warn("Failed: Test calculation", expected, "|" + actual + "|");
+            }
+        }, 900);  
     }
     function testRememberForm() {
         fillForm("qwerty", "https://alantheguru.alanhkarp.com", "Guru", "alan");

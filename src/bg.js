@@ -142,8 +142,60 @@ let SitePassword = ((function (self) {
             args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 8};
             pw = await candidatePassword(args);
         }
-        // console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
-        return "";
+        pw = uint2chars();
+        console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms", pw);
+        return pw;
+        function uint2chars() {
+            let byteArray = new TextEncoder().encode(pw);
+            let digits = self.digits;
+            let upper = self.upper;
+            let lower = self.lower;
+            let specials = settings.specials;
+            let cset = digits + upper + lower + specials;
+            let chars = "";
+            if (settings.startwithletter) {
+                let alphabet = "";
+                if (settings.allowupper) alphabet += upper;
+                if (settings.allowlower) alphabet += lower;
+                pickChars(1, byteArray, alphabet);
+            }
+            let firstIsUpper = settings.startwithletter && upper.includes(chars[0]) ? 1 : 0;
+            let firstIsLower = settings.startwithletter && lower.includes(chars[0]) ? 1 : 0;
+            if (settings.allowupper) pickChars(settings.minupper - firstIsUpper, byteArray.slice(chars.length), upper);
+            if (settings.allowlower) pickChars(settings.minlower - firstIsLower, byteArray.slice(chars.length), lower);
+            if (settings.allownumber) pickChars(settings.minnumber, byteArray.slice(chars.length), digits);
+            if (settings.allowspecial) pickChars(settings.minspecial, byteArray.slice(chars.length), specials);
+            let len = byteArray.length - chars.length;
+            pickChars(len, byteArray.slice(chars.length), cset);
+            // In case password must start with a letter
+            if (settings.startwithletter) {
+                chars = chars[0] + shuffle(chars.slice(1));
+            } else {
+                chars = shuffle(chars);
+            }
+            return chars;
+            function pickChars(nchars, array, cset) {
+                for (let i = 0; i < nchars; i++) {
+                    chars += cset[array[i] % cset.length];
+                }
+            }
+            function shuffle(chars) {
+                let currentIndex = chars.length, temporaryValue, randomIndex;
+                let charsArray = chars.split("");
+                // While there remain elements to shuffle...
+                while (0 !== currentIndex) {                      
+                  // Pick a remaining element...
+                  randomIndex = byteArray[currentIndex] % charsArray.length;
+                  currentIndex -= 1;                      
+                  // And swap it with the current element.
+                  temporaryValue = charsArray[currentIndex];
+                  charsArray[currentIndex] = charsArray[randomIndex];
+                  charsArray[randomIndex] = temporaryValue;
+                }
+                chars = charsArray.join("");
+                return chars;
+              }                      
+        }            
     }
     async function candidatePassword(args) {
         let superpw = args.pw;
