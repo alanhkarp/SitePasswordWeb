@@ -2,6 +2,7 @@
 let SitePassword = ((function (self) {
     self.storagekey = "SitePasswordData";
     self.defaultskey = "SitePasswordDefaults";
+    // Use localStorage.test = "true" to run tests
     if (localStorage.test === "true") {
         let script = document.createElement("script");
         script.src = "src/test.js";
@@ -146,7 +147,7 @@ let SitePassword = ((function (self) {
         let startIter = Date.now();
         while (iter < 200) {
             if (verifyPassword(pw, settings)) {
-                // console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
+                if (logging) console.log("bg succeeded in", iter, "iterations and took", Date.now() - startIter, "ms");
                 return pw;
             }
             iter++;
@@ -154,7 +155,7 @@ let SitePassword = ((function (self) {
             pw = await candidatePassword(args);
         }
         pw = uint2chars();
-        console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms", pw);
+        if (logging) console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms", pw);
         return pw;
         function uint2chars() {
             let byteArray = new TextEncoder().encode(pw);

@@ -1,3 +1,5 @@
+// Set localStorage.test = true to run tests
+// Some tests may fail due to small timing changes. Run them again.
 function runTests() {
 // Fields needed for tests
     const $domainname = get("domainname");
