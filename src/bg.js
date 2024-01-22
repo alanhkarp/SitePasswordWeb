@@ -314,15 +314,6 @@ let SitePassword = ((function (self) {
         }
         return str;
     }
-    function binl2chars(uint32array, cset) {
-        let chars = "";
-        let binarray = new Uint8Array(uint32array.buffer);
-        let len = binarray.length;
-        for (let i = 0; i < len; i++) {
-            chars += cset[binarray[i]];
-        }
-        return chars;
-    }
 // From: 
 /**
 *
@@ -332,7 +323,6 @@ let SitePassword = ((function (self) {
 *  Original code by Angel Marin, Paul Johnston.
 *
 **/
-
 function Utf8Encode(string) {
     string = string.replace(/\r\n/g,"\n");
     var utftext = "";
