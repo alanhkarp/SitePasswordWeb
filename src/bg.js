@@ -154,8 +154,9 @@ let SitePassword = ((function (self) {
             args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 8};
             pw = await candidatePassword(args);
         }
+        // Construct a legal password since hashing failed to produce one
+        if (logging) console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms, founds", pw);
         pw = uint2chars();
-        if (logging) console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms", pw);
         return pw;
         function uint2chars() {
             let byteArray = new TextEncoder().encode(pw);
@@ -219,10 +220,10 @@ let SitePassword = ((function (self) {
         let passphrase = new TextEncoder().encode(payload);
         // Use Password Based Key Derivation Function because repeated iterations
         // don't weaken the result as much as repeated SHA-256 hashing.
-        return window.crypto.subtle.importKey("raw", passphrase, { name: "PBKDF2" }, false, ["deriveBits"])
+        return crypto.subtle.importKey("raw", passphrase, { name: "PBKDF2" }, false, ["deriveBits"])
         .then(async (passphraseImported) => {
             let start = Date.now();
-            return window.crypto.subtle.deriveBits(
+            return crypto.subtle.deriveBits(
                 {
                     name: "PBKDF2",
                     hash: 'SHA-256',
