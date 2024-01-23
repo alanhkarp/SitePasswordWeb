@@ -132,7 +132,7 @@ provide to generate a password the site will accept.
 
 SitePassword could generate a weak site password just by chance.
 To let you know that has happened, it uses the same kind of
-strength meter to tell you how strong your site password is.
+strength meter to tell you how strong your super password is.
 For example, if your site password is orange, then it is weak. In
 that case, just choose a different nickname for the account.  You'll 
 almost certainly get a strong site password.    
