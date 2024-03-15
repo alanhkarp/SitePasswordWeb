@@ -137,8 +137,8 @@ let SitePassword = ((function (self) {
         return valOK;
     }
     async function computePassword(superpw, salt, settings) {
-        if (!(settings.allowupper || settings.allowlower || settings.allownumber)) {
-            return Promise.resolve("");
+        if (!(settings.allowupper || settings.allowlower || settings.allownumber || settings.allowspecial)) {
+            return await Promise.resolve("");
         }
         let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": 200_000, "keysize": settings.pwlength * 8};
         let pw = await candidatePassword(args);

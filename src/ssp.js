@@ -203,7 +203,9 @@ let SitePasswordWeb = ((function (self) {
                     $pwfail.style.display = "block";
                 }
                 if ($providesitepw.checked) {
-                    $sitepw.value = SitePassword.stringXorArray(pw, SitePassword.settings.xor);
+                    if (document.activeElement !== $sitepw) {
+                        $sitepw.value = SitePassword.stringXorArray(pw, SitePassword.settings.xor);
+                    }
                 } else {
                     SitePassword.settings.xor = SitePassword.xorStrings($sitepw.value, $sitepw.value);
                     $sitepw.value = pw;
@@ -636,14 +638,12 @@ let SitePasswordWeb = ((function (self) {
             copyToClipboard($sitepw);
         }
 
-        $sitepw.onblur = function () {
+        $sitepw.onblur = async function () {
             if ($sitepw.readOnly) return;
             let provided = $sitepw.value;
-            generatePassword().then((computed) => {
-                SitePassword.settings.xor = SitePassword.xorStrings(provided, computed);
-                $sitepw.value = provided;
-                enableRemember();
-            });
+            let computed = await generatePassword();
+            SitePassword.settings.xor = SitePassword.xorStrings(provided, computed);
+            enableRemember();
          }
         $sitepw.onkeyup = function () {
             $code.disabled = true;
