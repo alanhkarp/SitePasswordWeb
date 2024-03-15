@@ -69,9 +69,9 @@ let SitePasswordWeb = ((function (self) {
         }
         return element;
     }
-    function copyToClipboard(element) {
+    async function copyToClipboard(element) {
         element.focus();
-        navigator.clipboard.writeText(element.value);
+        await navigator.clipboard.writeText(element.value);
     }
     function setupdatalist(element, list) {
         let datalist = get(element.id + "s");
@@ -193,7 +193,8 @@ let SitePasswordWeb = ((function (self) {
         async function generatePassword() {
             self.saveSettingControls(SitePassword.settings);
             if (logging) console.log("ssp calling generatePassword");
-            return SitePassword.generatePassword().then((pw) => {
+            try {
+                let pw = await SitePassword.generatePassword();
                 if (logging) console.log("ssp got password", pw);
                 if (pw || !$superpw.value) {
                     $pwok.style.display = "flex";
@@ -218,15 +219,15 @@ let SitePasswordWeb = ((function (self) {
                     get("providesitepw").disabled = true;
                 }
                 return pw;
-            }).catch((e) => {
+            } catch (e) {
                 console.log("generatePassword failed", e);
                 return "";
-            });
+            };
         }
-        function handleBlur(id) {
+        async function handleBlur(id) {
             const $element = get(id);
             SitePassword.settings[id] = $element.value;
-            generatePassword();
+            await generatePassword();
         }
         function handleKeyupNumber(id) {
             const value = get(id).value;
