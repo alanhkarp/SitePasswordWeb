@@ -1,52 +1,9 @@
 "use strict";
 let logging = false;
 let resolvers = {};
-/*
-    if domainname is empty
-        bookmark disabled
-        remember disabled
-    if domainname in database
-        bookmark enabled
-        sitename/username/settings loaded from database
-        remember enabled
-    if domainname unrecognized
-        bookmark enabled
 
-    if bookmark pasted
-        if pasted bookmark does not parse
-            bad bookmark alert!
-        if pasted bookmark does not match domainname
-            phishing warning!
-            if resetbutton
-                clear all fields except superpassword
-            if trustbutton
-                sitename/username/settings loaded from bookmark
-                remember enabled
-        if pasted bookmark matches domainname
-            sitename/username/settings loaded from bookmark
-            remember enabled
-        bookmark cleared
-
-    if sitename is empty
-        remember disabled
-    if sitename in database
-        if domainname does not designate sitename
-            phishing warning!
-            if resetbutton
-                clear all fields except superpassword
-            if trustbutton
-                username/settings loaded from database
-                remember enabled
-    if sitename unrecognized
-        if username is empty
-            remember disabled
-        if username is filled
-            remember enabled
-
-    if remember
-        domainname/sitename/username/settings saved to database
-*/
-
+// Used when user has clicked on a bookmark link
+// The settings are passed in the URL
 let query = window.location.search;
 let bkmkSettings;
 if (query) {
@@ -70,9 +27,20 @@ let SitePasswordWeb = ((function (self) {
         }
         return element;
     }
+    function copied(which) {
+        get(which + "copied").classList.remove("nodisplay");
+        setTimeout(() => {
+            get(which + "copied").classList.add("nodisplay");
+        }, 900);
+    }
     async function copyToClipboard(element) {
         element.focus();
-        await navigator.clipboard.writeText(element.value);
+        try {
+            await navigator.clipboard.writeText(element.value);
+            copied(element.id);
+        } catch (e) {
+            alert("Copy to clipboard failed", e);
+        }
     }
     function setupdatalist(element, list) {
         let datalist = get(element.id + "s");
@@ -632,12 +600,7 @@ let SitePasswordWeb = ((function (self) {
             if (!get("username").value) return;
             let username = get("username").value;
             if (!username) return;
-            navigator.clipboard.writeText(username).then(() => {
-                if (logging) console.log("wrote to clipboard", username);
-                copied("username");
-            }).catch((e) => {
-                if (logging) console.log("username clipboard write failed", e);
-            });
+            copyToClipboard(get($username));
             menuOff("username", e);
         }
         get("usernamemenuhelp").onclick = function (e) {
@@ -650,9 +613,6 @@ let SitePasswordWeb = ((function (self) {
             helpAllOff();
             sectionClick("username");
         }    
-        get("sitepwmenucopy").onclick = function () {
-            copyToClipboard($sitepw);
-        }
 
         $sitepw.onblur = async function () {
             if ($sitepw.readOnly) return;
@@ -685,12 +645,7 @@ let SitePasswordWeb = ((function (self) {
             if (!$sitepw.value) return;
             let sitepw = $sitepw.value;
             if (!sitepw) return;
-            navigator.clipboard.writeText(sitepw).then(() => {
-                if (logging) console.log("wrote to clipboard", sitepw);
-                copied("sitepw");
-            }).catch((e) => {
-                if (logging) console.log("sitepw clipboard write failed", e);
-            });
+            copyToClipboard($sitepw);
             menuOff("sitepw", e);
         }
         get("sitepwmenuhelp").onclick = function (e) {
@@ -1171,6 +1126,54 @@ window.onload = function () {
     SitePasswordWeb.instructionSetup();
     if (localStorage.test === "true" ) runTests();
 }
+/*
+    Rules for handling various fields
+
+    if domainname is empty
+        bookmark disabled
+        remember disabled
+    if domainname in database
+        bookmark enabled
+        sitename/username/settings loaded from database
+        remember enabled
+    if domainname unrecognized
+        bookmark enabled
+
+    if bookmark pasted
+        if pasted bookmark does not parse
+            bad bookmark alert!
+        if pasted bookmark does not match domainname
+            phishing warning!
+            if resetbutton
+                clear all fields except superpassword
+            if trustbutton
+                sitename/username/settings loaded from bookmark
+                remember enabled
+        if pasted bookmark matches domainname
+            sitename/username/settings loaded from bookmark
+            remember enabled
+        bookmark cleared
+
+    if sitename is empty
+        remember disabled
+    if sitename in database
+        if domainname does not designate sitename
+            phishing warning!
+            if resetbutton
+                clear all fields except superpassword
+            if trustbutton
+                username/settings loaded from database
+                remember enabled
+    if sitename unrecognized
+        if username is empty
+            remember disabled
+        if username is filled
+            remember enabled
+
+    if remember
+        domainname/sitename/username/settings saved to database
+*/
+
 /* 
 This code is a major modification of the code released with the
 following licence.  Neither Hewlett-Packard Company nor Hewlett-Packard
