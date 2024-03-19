@@ -115,33 +115,19 @@ let SitePasswordWeb = ((function (self) {
             $allowspecialcheckbox.checked = settings.allowspecial;
             $minspecial.value = settings.minspecial;
             $specials.value = settings.specials;
-            if (settings.allowlower) {
-                get("allowlower").style.display = "none";
-                get("requirelower").style.display = "inline";
-            } else {
-                get("allowlower").style.display = "inline";
-                get("requirelower").style.display = "none";
-            }
-            if (settings.allowupper) {
-                get("allowupper").style.display = "none";
-                get("requireupper").style.display = "inline";
-            } else {
-                get("allowupper").style.display = "inline";
-                get("requireupper").style.display = "none";
-            }
-            if (settings.allownumber) {
-                get("allownumber").style.display = "none";
-                get("requirenumber").style.display = "inline";
-            } else {
-                get("allownumber").style.display = "inline";
-                get("requirenumber").style.display = "none";
-            }
-            if (settings.allowspecial) {
-                get("allowspecial").style.display = "none";
-                get("requirespecial").style.display = "inline";
-            } else {
-                get("allowspecial").style.display = "inline";
-                get("requirespecial").style.display = "none";
+            let fields = ["lower", "upper", "number", "special"];
+            fields.forEach((field) => {
+                optionalFields(field);
+            });
+            function optionalFields(which) {
+                if (settings["allow" + which]) {
+                    get("allow" + which).style.display = "none";
+                    get("require" + which).style.display = "inline";
+                } else {
+                    get("allow" + which).style.display = "inline";
+                    get("require" + which).style.display = "none";
+                }
+            
             }
         }
         self.saveSettingControls = function(settings) {
