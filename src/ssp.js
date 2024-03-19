@@ -27,12 +27,6 @@ let SitePasswordWeb = ((function (self) {
         }
         return element;
     }
-    function copied(which) {
-        get(which + "copied").classList.remove("nodisplay");
-        setTimeout(() => {
-            get(which + "copied").classList.add("nodisplay");
-        }, 900);
-    }
     async function copyToClipboard(element) {
         element.focus();
         try {
@@ -294,7 +288,6 @@ let SitePasswordWeb = ((function (self) {
             const sitename = SitePassword.siteForDomain(domainname) || "";
             const settings = SitePassword.loadSettings(sitename);
             await updateSettings(settings);
-            await generatePassword();
             if (resolvers.domainnameblurResolver) resolvers.domainnameblurResolver();
         }
         $domainname.onpaste = function () {
@@ -388,6 +381,7 @@ let SitePasswordWeb = ((function (self) {
             }, 0);
         }
         self.bookmarkPaste = async function () {
+            await Promise.resolve(); // Because some branches have await and others don't
             const settings = parseBookmark($bookmark.value);
             $bookmark.value = "";  // clear bookmark field
             if (settings) {
@@ -464,7 +458,6 @@ let SitePasswordWeb = ((function (self) {
         }
 
         $sitename.onblur = async function () {
-            await Promise.resolve(); // Because some branches have await and others don't
             await handleBlur("sitename");
             const domainname = $domainname.value;
             const settings = SitePassword.loadSettings($sitename.value);
@@ -490,6 +483,7 @@ let SitePasswordWeb = ((function (self) {
         }
         $sitename.onfocus = function () {
             let set = new Set();
+            // Get sitenames for datalist
             Object.keys(SitePassword.database.sites).forEach((sitename) => {
                 set.add(SitePassword.database.sites[normalize(sitename)].sitename);
             })
@@ -534,8 +528,8 @@ let SitePasswordWeb = ((function (self) {
             sectionClick("sitename");
         }
     
-        $username.onkeyup = function () {
-            handleKeyup("username");
+        $username.onkeyup = async function () {
+            await handleKeyup("username");
             clearDatalist("usernames");
         }
         $username.onblur = async function() {
@@ -549,6 +543,7 @@ let SitePasswordWeb = ((function (self) {
         }
         $username.onfocus = function () {
             let set = new Set();
+            // Get usernames for datalist
             Object.keys(SitePassword.database.sites).forEach((sitename) => {
                 set.add(SitePassword.database.sites[normalize(sitename)].username);
             })
@@ -584,9 +579,7 @@ let SitePasswordWeb = ((function (self) {
         }
         get("usernamemenucopy").onclick = function(e) {
             if (!get("username").value) return;
-            let username = get("username").value;
-            if (!username) return;
-            copyToClipboard(get($username));
+            copyToClipboard($username);
             menuOff("username", e);
         }
         get("usernamemenuhelp").onclick = function (e) {
@@ -629,8 +622,6 @@ let SitePasswordWeb = ((function (self) {
         $sitepw3bluedots.onclick = $sitepw3bluedots.onmouseover;
         $sitepwmenucopy.onclick = function(e) {
             if (!$sitepw.value) return;
-            let sitepw = $sitepw.value;
-            if (!sitepw) return;
             copyToClipboard($sitepw);
             menuOff("sitepw", e);
         }
@@ -763,13 +754,14 @@ let SitePasswordWeb = ((function (self) {
             }
             if (resolvers.providesitepwclickResolver) resolvers.providesitepwclickResolver();
         }
-        $code.onblur = function() {
+        $code.onblur = async function() {
             let settings = SitePassword.settings;
             settings.xor = JSON.parse("[" + $code.value + "]");
-            generatePassword();
+            await generatePassword();
         }
     
         $pwlength.onblur = async function () {
+            await Promise.resolve(); // Because some branches have await and others don't
             if ($pwlength.value > 100) {
                 alert("Sitepasswords must be 100 or fewer characters");
                 $pwlength.value = SitePassword.settings.pwlength;
@@ -778,28 +770,28 @@ let SitePasswordWeb = ((function (self) {
             }
             if (resolvers.pwlengthblurResolver) resolvers.pwlengthblurResolver();
        }
-        $startwithletter.onclick = function () {
+        $startwithletter.onclick = async function () {
             SitePassword.settings.startwithletter = $startwithletter.checked;
             restrictStartsWithLetter();
-            generatePassword();
+            await generatePassword();
         }
-        $allowlowercheckbox.onclick = function () {
-            handleCheck("lower");
+        $allowlowercheckbox.onclick = async function () {
+            await handleCheck("lower");
         }
-        $minlower.onblur = function () {
-            handleKeyupNumber("minlower");
+        $minlower.onblur = async function () {
+            await handleKeyupNumber("minlower");
         }
-        $allowuppercheckbox.onclick = function () {
-            handleCheck("upper");
+        $allowuppercheckbox.onclick = async function () {
+            await handleCheck("upper");
         }
-        $minupper.onblur = function () {
-            handleKeyupNumber("minupper");
+        $minupper.onblur = async function () {
+            await handleKeyupNumber("minupper");
         }
-        $allownumbercheckbox.onclick = function () {
-            handleCheck("number");
+        $allownumbercheckbox.onclick = async function () {
+            await handleCheck("number");
         }
-        $minnumber.onblur = function () {
-            handleKeyupNumber("minnumber");
+        $minnumber.onblur = async function () {
+            await handleKeyupNumber("minnumber");
         }
         $allowspecialcheckbox.onclick = async function () {
             await handleCheck("special");
@@ -811,7 +803,7 @@ let SitePasswordWeb = ((function (self) {
             if (resolvers.minspecialblurResolver) resolvers.minspecialblurResolver();
         }
         const alphanumerics = /[0-9A-Za-z]/g;
-        $specials.onblur = function () {
+        $specials.onblur = async function () {
             if (!$specials.value) {
                 $specials.value = SitePassword.settings.specials;
                 alert("Specials cannot be empty");
@@ -820,7 +812,7 @@ let SitePasswordWeb = ((function (self) {
             $specials.value = $specials.value
                 .replace(alphanumerics, '')  // eliminate alphanumerics
                 .substring(0, 12);  // limit to 12 specials
-            handleKeyup("specials");
+            await handleKeyup("specials");
         }
         async function handleCheck(group) {
             await Promise.resolve(); // Because some branches have await and others don't
