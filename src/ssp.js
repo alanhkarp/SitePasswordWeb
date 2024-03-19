@@ -1,5 +1,6 @@
 "use strict";
 let logging = false;
+let resolvers = {};
 /*
     if domainname is empty
         bookmark disabled
@@ -229,19 +230,20 @@ let SitePasswordWeb = ((function (self) {
             SitePassword.settings[id] = $element.value;
             await generatePassword();
         }
-        function handleKeyupNumber(id) {
+        async function handleKeyupNumber(id) {
+            await Promise.resolve(); // Because some branches have await and others don't
             const value = get(id).value;
             if (value && isNaN(value)) {
                 alert("Must be a number");
             } else {
                 SitePassword.settings[id] = value;
-                generatePassword();
+                await generatePassword();
             }
         }
-        function handleKeyup(id) {
+        async function handleKeyup(id) {
             const $element = get(id);
             SitePassword.settings[id] = $element.value;
-            generatePassword();
+            await generatePassword();
             //$element.focus();
         }
 
@@ -257,14 +259,14 @@ let SitePasswordWeb = ((function (self) {
 
         const strengthText = ["Too Weak", "Very Weak", "Weak", "Good", "Strong"];
         const strengthColor = ["#bbb", "#f06", "#f90", "#093", "#036"]; // 0,3,6,9,C,F
-        $superpw.onblur = function () {
+        $superpw.onblur = async function () {
             SitePassword.setSuperPassword($superpw.value);
             if (logging) console.log("ssp onblur generate password");
-            generatePassword().then((calculated) => {
-                if (logging) console.log("ssp onblur got password", calculated);
-                setMeter("superpw");
-                setMeter("sitepw");
-            });
+            let calculated = await generatePassword();
+            if (logging) console.log("ssp onblur got password", calculated);
+            setMeter("superpw");
+            setMeter("sitepw");
+            if (resolvers.superpwblurResolver) resolvers.superpwblurResolver();
         }
         function setMeter(which) {
             const $meter = get(which + "-strength-meter");
@@ -284,8 +286,9 @@ let SitePasswordWeb = ((function (self) {
             $meter.title = strengthText[index];
             $input.style.color = strengthColor[index];
         }
-        $superpw.onkeyup = function () {
-            $superpw.onblur();
+        $superpw.onkeyup = async function () {
+            await $superpw.onblur();
+            if (resolvers.superpwkeyupResolver) resolvers.superpwkeyupResolver();
         }
         const $superpwmenuhide = get("superpwmenuhide");
         const $superpwmenushow = get("superpwmenushow");
@@ -305,18 +308,18 @@ let SitePasswordWeb = ((function (self) {
             menuOff("superpw", e);
         }
         get("superpw3bluedots").onmouseover = function (e) {
-            menuOn("superpw", e);      
+            menuOn("superpw", e);
         }
         get("superpw3bluedots").onclick = get("superpw3bluedots").onmouseover;
         $superpwmenushow.onclick = function(e) {
             get("superpw").type = "text";
             $superpwmenuhide.classList.toggle("nodisplay");
-            $superpwmenushow.classList.toggle("nodisplay")    ;
+            $superpwmenushow.classList.toggle("nodisplay");
         }
         get("superpwmenuhide").onclick = function(e) {
             get("superpw").type = "password";
             $superpwmenuhide.classList.toggle("nodisplay");
-            $superpwmenushow.classList.toggle("nodisplay")    ;
+            $superpwmenushow.classList.toggle("nodisplay");
         }
         get("superpwmenuhelp").onclick = function (e) {
             helpItemOn("superpw");
@@ -329,21 +332,24 @@ let SitePasswordWeb = ((function (self) {
             sectionClick("superpw");
         }
     
-        $domainname.onblur = function () {
+        $domainname.onblur = async function () {
             const domainname = parseDomain(normalize($domainname.value));
             get("bkmkcheck").style.display = "none";
             $domainname.value = domainname;
             SitePassword.domainname = domainname;
             const sitename = SitePassword.siteForDomain(domainname) || "";
             const settings = SitePassword.loadSettings(sitename);
-            updateSettings(settings);
-            generatePassword();
+            await updateSettings(settings);
+            await generatePassword();
+            if (resolvers.domainnameblurResolver) resolvers.domainnameblurResolver();
         }
         $domainname.onpaste = function () {
             $domainnamemenuforget.style.opacity = "1";
-            setTimeout(() => {
+            setTimeout(async () => {
+                await $domainname.onblur();
                 enableBookmark();
                 $bookmark.focus();  // NOTE: this causes `onblur` on $domainname
+                if (resolvers.domainnamepasteResolver) resolvers.domainnamepasteResolver();
             }, 0);
         }
         $domainname.onkeyup = function () {
@@ -405,13 +411,13 @@ let SitePasswordWeb = ((function (self) {
             var re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
             return re.test(v);
         }
-        function updateSettings(settings) {
+        async function updateSettings(settings) {
             $sitename.value = settings.sitename;
             $username.value = settings.username;
             loadSettingControls(settings);
             if ($username.value) httpWarningOff();
             phishingWarningOff();
-            generatePassword();
+            await generatePassword();
         }
 
         // loginurl = https://alantheguru.alanhkarp.com/
@@ -422,17 +428,19 @@ let SitePasswordWeb = ((function (self) {
         // sitepw --> G.iJQEp-qB65UF5
         $bookmark.onpaste = function () {
             // The paste result isn't available until the next turn
-            setTimeout(() => {
-                self.bookmarkPaste();
+            setTimeout(async () => {
+                await self.bookmarkPaste();
+                if (resolvers.bookmarkpasteResolver) resolvers.bookmarkpasteResolver();
             }, 0);
         }
-        self.bookmarkPaste = function () {
+        self.bookmarkPaste = async function () {
             const settings = parseBookmark($bookmark.value);
             $bookmark.value = "";  // clear bookmark field
             if (settings) {
                 if (settings.domainname === $domainname.value) {
                     SitePassword.settings = settings;  // update data-model
                     updateSettings(settings);
+                    await generatePassword();
                 } else {
                     $sitename.value = settings.sitename;
                     phishingWarningOn(settings.domainname, $domainname.value);
@@ -501,8 +509,9 @@ let SitePasswordWeb = ((function (self) {
             sectionClick("bookmark");
         }
 
-        $sitename.onblur = function () {
-            handleBlur("sitename");
+        $sitename.onblur = async function () {
+            await Promise.resolve(); // Because some branches have await and others don't
+            await handleBlur("sitename");
             const domainname = $domainname.value;
             const settings = SitePassword.loadSettings($sitename.value);
             const sitename = settings.sitename;
@@ -514,11 +523,12 @@ let SitePasswordWeb = ((function (self) {
                 SitePassword.settings = settings;
                 phishingWarningOff();
             } else if (!domainname) {
-                updateSettings(settings);
+                await updateSettings(settings);
             } else if (existingDomain !== domainname) {
                 phishingWarningOn(existingDomain, domainname);
             }
             clearDatalist("sitenames");
+            if (resolvers.sitenameblurResolver) resolvers.sitenameblurResolver();
         }
         $sitename.onkeyup = function () {
             handleKeyup("sitename");
@@ -574,9 +584,14 @@ let SitePasswordWeb = ((function (self) {
             handleKeyup("username");
             clearDatalist("usernames");
         }
-        $username.onblur = function() {
+        $username.onblur = async function() {
             clearDatalist("usernames");
-            generatePassword();
+            const settings = SitePassword.loadSettings($sitename.value);
+            settings.sitename = $sitename.value;
+            settings.username = $username.value;
+            SitePassword.settings = settings;
+            await generatePassword();
+            if (resolvers.usernameblurResolver) resolvers.usernameblurResolver();
         }
         $username.onfocus = function () {
             let set = new Set();
@@ -645,6 +660,7 @@ let SitePasswordWeb = ((function (self) {
             let computed = await generatePassword();
             SitePassword.settings.xor = SitePassword.xorStrings(provided, computed);
             enableRemember();
+            if (resolvers.sitepwblurResolver) resolvers.sitepwblurResolver();
          }
         $sitepw.onkeyup = function () {
             $code.disabled = true;
@@ -788,10 +804,11 @@ let SitePasswordWeb = ((function (self) {
             $remember.disabled =
                 !($domainname.value && $sitename.value && $username.value && SitePassword.settingsModified());
         }
-        $providesitepw.onclick = function () {
+        $providesitepw.onclick = async function () {
+            await Promise.resolve(); // Because some branches have await and others don't
             const settings = SitePassword.settings;
             settings.providesitepw = $providesitepw.checked;
-            if ($providesitepw.checked && $username.value && $sitename.value) {
+            if ($providesitepw.checked && $superpw.value && $sitename.value && $username.value) {
                 $sitepw.readOnly = false;
                 $sitepw.value = "";
                 $sitepw.placeholder = "Enter your site password";
@@ -801,8 +818,9 @@ let SitePasswordWeb = ((function (self) {
                 $sitepw.readOnly = true;
                 $sitepw.placeholder = "Generated site password";
                 $code.disabled = true;
-                generatePassword();
+                await generatePassword();
             }
+            if (resolvers.providesitepwclickResolver) resolvers.providesitepwclickResolver();
         }
         $code.onblur = function() {
             let settings = SitePassword.settings;
@@ -810,13 +828,14 @@ let SitePasswordWeb = ((function (self) {
             generatePassword();
         }
     
-        $pwlength.onblur = function () {
+        $pwlength.onblur = async function () {
             if ($pwlength.value > 100) {
                 alert("Sitepasswords must be 100 or fewer characters");
                 $pwlength.value = SitePassword.settings.pwlength;
             } else {
-                handleKeyupNumber("pwlength");
+                await handleKeyupNumber("pwlength");
             }
+            if (resolvers.pwlengthblurResolver) resolvers.pwlengthblurResolver();
        }
         $startwithletter.onclick = function () {
             SitePassword.settings.startwithletter = $startwithletter.checked;
@@ -841,12 +860,14 @@ let SitePasswordWeb = ((function (self) {
         $minnumber.onblur = function () {
             handleKeyupNumber("minnumber");
         }
-        $allowspecialcheckbox.onclick = function () {
-            handleCheck("special");
+        $allowspecialcheckbox.onclick = async function () {
+            await handleCheck("special");
             $specials.disabled = !($allowspecialcheckbox.checked);
+            if (resolvers.allowspecialcheckboxclickResolver) resolvers.allowspecialcheckboxclickResolver();
         }
-        $minspecial.onblur = function () {
-            handleKeyupNumber("minspecial");
+        $minspecial.onblur = async function () {
+            await handleKeyupNumber("minspecial");
+            if (resolvers.minspecialblurResolver) resolvers.minspecialblurResolver();
         }
         const alphanumerics = /[0-9A-Za-z]/g;
         $specials.onblur = function () {
@@ -860,7 +881,8 @@ let SitePasswordWeb = ((function (self) {
                 .substring(0, 12);  // limit to 12 specials
             handleKeyup("specials");
         }
-        function handleCheck(group) {
+        async function handleCheck(group) {
+            await Promise.resolve(); // Because some branches have await and others don't
             const $allow_group_checkbox = get("allow"+group+"checkbox");
             const $min_group = get("min"+group);
             const $allow_group = get("allow"+group);
@@ -879,7 +901,7 @@ let SitePasswordWeb = ((function (self) {
                     $min_group.value = SitePassword.settings["min"+group];
                 }
                 restrictStartsWithLetter();
-                generatePassword();
+                await generatePassword();
             } else {
                 console.log('handleCheck: missing control(s) for group:', group);
             }
