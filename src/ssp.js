@@ -910,12 +910,16 @@ let SitePasswordWeb = ((function (self) {
             sd += "<th>Specials</th>";
             sd += "<th>Code for User Provided Password</th>";
             sd += "</tr>";
+            let i = 0;
             for (const domainname of sorted) {
+                i++;
                 const sitename = domains[domainname];
                 let s = sites[sitename];
                 s.domainname = domainname;
                 let bkmk = JSON.stringify(s);
-                sd += "<tr>";
+                let background = ""
+                if (i % 2 === 0) background = "style='background-color: rgb(136, 204, 255, 30%)'";
+                sd += "<tr " + background + ">";
                 sd += "<td><a title='Right click to copy bookmark' href=https://sitepassword.info/index.html?bkmk=ssp://" + bkmk + ">" + domainname + "</a></td>";
                 sd += "<td><pre>" + s.sitename + "</pre></td>";
                 sd += "<td><pre>" + s.username + "</pre></td>";
