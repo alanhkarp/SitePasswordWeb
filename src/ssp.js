@@ -888,9 +888,12 @@ let SitePasswordWeb = ((function (self) {
                 if (x.toLowerCase() == y.toLowerCase()) return 0;
                 return 1;
             });
-            let sd = "<html><body><table>";
+            let sd = "<html><head><title>SitePassword Data</title>";
+            sd += "<style>th {text-align: left;}</style>";
+            sd += "</head><body><table>";
             sd += "<caption>You can use these settings at <a href='https://sitepassword.info'>https://sitepassword.info.</a>";
-            sd += "<br />Click on the domain name to open sitepassword.info or right click on the domain name and copy the link address to paste into the bookmark field.</caption>";
+            sd += "<p>Click on the domain name to open sitepassword.info or right click on the domain name and copy the link address to paste into the bookmark field.</p></caption>";
+            sd += "<tr>";
             sd += "<th>Domain Name</th>";
             sd += "<th>Site Name</th>";
             sd += "<th>User Name</th>";
@@ -926,8 +929,8 @@ let SitePasswordWeb = ((function (self) {
                 sd += "<td><pre>" + s.minnumber + "</pre></td>";
                 sd += "<td><pre>" + s.allowspecial + "</pre></td>";
                 sd += "<td><pre>" + s.minspecial + "</pre></td>";
-                sd += "<td><pre>" + s.specials + "</pre></td>";
-                sd += "<td><pre>" + (s.xor || "") + "<pre></td>";
+                sd += "<td><pre>" + SitePassword.array2string(s.specials) + "</pre></td>";
+                sd += "<td><pre>" + (s.xor || "") + "</pre></td>";
                 sd += "</tr>";
             }
             sd += "</table></body></html>";
