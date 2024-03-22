@@ -1,6 +1,7 @@
 "use strict";
 let logging = false;
 let resolvers = {};
+let webpage = "https://sitepassword.info";
 
 // Used when user has clicked on a bookmark link
 // The settings are passed in the URL
@@ -880,71 +881,89 @@ let SitePasswordWeb = ((function (self) {
             SitePassword.storeSettings();
         }
             
-        $downloadbutton.onclick = function siteDataHTML() {
-            const domains = SitePassword.database.domains;
-            const sites = SitePassword.database.sites;
-            const sorted = Object.keys(domains).sort(function (x, y) {
+        $downloadbutton.onclick = async function sitedataHTML() {
+            var domainnames = SitePassword.database.domains
+            var sorted = Object.keys(domainnames).sort(function (x, y) {
                 if (x.toLowerCase() < y.toLowerCase()) return -1;
                 if (x.toLowerCase() == y.toLowerCase()) return 0;
                 return 1;
             });
-            let sd = "<html><head><title>SitePassword Data</title>";
-            sd += "<style>th {text-align: left;}</style>";
-            sd += "</head><body><table>";
-            sd += "<caption>You can use these settings at <a href='https://sitepassword.info'>https://sitepassword.info.</a>";
-            sd += "<p>Click on the domain name to open sitepassword.info or right click on the domain name and copy the link address to paste into the bookmark field.</p></caption>";
-            sd += "<tr>";
-            sd += "<th>Domain Name</th>";
-            sd += "<th>Site Name</th>";
-            sd += "<th>User Name</th>";
-            sd += "<th>Password Length</th>";
-            sd += "<th>Start with Letter</th>";
-            sd += "<th>Allow Lower</th>";
-            sd += "<th>Min Lower</th>";
-            sd += "<th>Allow Upper</th>";
-            sd += "<th>Min Upper</th>";
-            sd += "<th>Allow Numbers</th>";
-            sd += "<th>Min Numbers</th>";
-            sd += "<th>Allow Specials</th>";
-            sd += "<th>Min Specials</th>";
-            sd += "<th>Specials</th>";
-            sd += "<th>Code for User Provided Password</th>";
-            sd += "</tr>";
-            let i = 0;
-            for (const domainname of sorted) {
-                i++;
-                const sitename = domains[domainname];
-                let s = sites[sitename];
-                s.domainname = domainname;
-                let bkmk = JSON.stringify(s);
-                let background = ""
-                if (i % 2 === 0) background = "style='background-color: rgb(136, 204, 255, 30%)'";
-                sd += "<tr " + background + ">";
-                sd += "<td><a title='Right click to copy bookmark' href=https://sitepassword.info/index.html?bkmk=ssp://" + bkmk + ">" + domainname + "</a></td>";
-                sd += "<td><pre>" + s.sitename + "</pre></td>";
-                sd += "<td><pre>" + s.username + "</pre></td>";
-                sd += "<td><pre>" + s.pwlength + "</pre></td>";
-                sd += "<td><pre>" + s.startwithletter + "</pre></td>";
-                sd += "<td><pre>" + s.allowlower + "</pre></td>";
-                sd += "<td><pre>" + s.minlower + "</pre></td>";
-                sd += "<td><pre>" + s.allowupper + "</pre></td>";
-                sd += "<td><pre>" + s.minupper + "</pre></td>";
-                sd += "<td><pre>" + s.allownumber + "</pre></td>";
-                sd += "<td><pre>" + s.minnumber + "</pre></td>";
-                sd += "<td><pre>" + s.allowspecial + "</pre></td>";
-                sd += "<td><pre>" + s.minspecial + "</pre></td>";
-                sd += "<td><pre>" + SitePassword.array2string(s.specials) + "</pre></td>";
-                sd += "<td><pre>" + (s.xor || "") + "</pre></td>";
-                sd += "</tr>";
-            }
-            sd += "</table></body></html>";
+            let workingdoc = document.implementation.createHTMLDocument("SitePassword Data");
+            let doc = sitedataHTMLDoc(workingdoc, sorted);
+            let html = new XMLSerializer().serializeToString(doc);
+            let blob = new Blob([html], {type: "text/html"});
+            let url = URL.createObjectURL(blob);
             const $data = get("data");
-            const mimetype = "data:application/octet-stream,";
-            $data.href = mimetype + encodeURIComponent(sd);
+            $data.href = url;
             $data.click();
-            return sd;
+            return;
         }
-        // I need to handle the case where the user clicks on the link in the instructions or help
+        function sitedataHTMLDoc(doc, sorted) {
+            let header = doc.getElementsByTagName("head")[0];
+            let title = doc.createElement("title");
+            title.innerText = "SitePassword Data";
+            header.appendChild(title);
+            let style = doc.createElement("style");
+            header.appendChild(style);
+            style.innerText = "th {text-align: left;}";
+            let body = doc.getElementsByTagName("body")[0];
+            let table = addElement(body, "table");
+            tableCaption(table);
+            let headings = ["Domain Name", "Site Name", "User Name", "Password Length", "Start with Letter",
+                "Allow Lower", "Min Lower", "Allow Upper", "Min Upper", "Allow Numbers", "Min Numbers",
+                "Allow Specials", "Min Specials", "Specials", "Code for User Provided Passwords"];
+            tableHeader(table, headings);
+            for (let i = 0; i < sorted.length; i++) {
+                let tr = addElement(table, "tr");
+                if (i % 2) tr.style.backgroundColor = "rgb(136, 204, 255, 30%)";
+                addRow(tr, sorted[i]);
+            }
+            return doc.documentElement;
+            // Helper functions
+            function addElement(parent, type) {
+                let e = doc.createElement(type);
+                parent.appendChild(e);
+                return e;
+            }
+            function tableCaption(table) {
+                let caption = addElement(table, "caption");
+                caption.innerText = "You can use these settings at ";
+                let a = addElement(caption, "a");
+                a.href = webpage;
+                a.innerText = webpage; 
+                let p = addElement(caption, "p");
+                p.innerText = "Click on the domain name to open", webpage, "or right click on the domain name and copy the link address to paste into the bookmark field."; 
+            }
+            function tableHeader(table, headings) {
+                let tr = addElement(table, "tr");
+                for (let i = 0; i < headings.length; i++) {
+                    let th = addElement(tr, "th");
+                    th.innerText = headings[i];
+                }
+            }
+            function addColumnEntries(tr, settings) {
+                for (let i = 0; i < settings.length; i++) {
+                    let td = addElement(tr, "td");
+                    let pre = addElement(td, "pre");
+                    pre.innerText = settings[i];    
+                }
+            }
+            function addRow(tr, domainname) {
+                let sitename = SitePassword.database.domains[domainname];
+                let s = SitePassword.database.sites[sitename];
+                let bkmk = JSON.stringify(s);
+                let td = addElement(tr, "td");
+                let a = addElement(td, "a");
+                a.title = "Right click to copy bookmark";
+                a.href = webpage + "?bkmk=ssp://" + bkmk;
+                a.innerText = domainname;
+                let entries = [s.sitename, s.username, s.pwlength, s.startwithletter, 
+                    s.allowlower, s.minlower, s.allowupper, s.minupper, s.allownumber, s.minnumber,
+                    s.allowspecial, s.minspecial, SitePassword.array2string(s.specials), s.xor || ""];
+                addColumnEntries(tr, entries);
+            }
+        }
+                // I need to handle the case where the user clicks on the link in the instructions or help
         get("sharedref").onclick = function (e) {
             e.stopPropagation();
             sectionClick("shared");
