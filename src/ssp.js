@@ -77,11 +77,13 @@ let SitePasswordWeb = ((function (self) {
         const $specials = get("specials");
         const $makedefaultbutton = get("makedefaultbutton")
         const $downloadbutton = get("downloadbutton");
+        const $exportbutton = get("exportbutton");
         const $phishing = get("phishing");
         const $instructionpanel = get("instructionpanel");
         // Fill in default values in case the user has changed them
         let defaultsettings = SitePassword.getDefaultSettings();
         loadSettingControls(defaultsettings);
+        updateExportButton();
         // Set size of window for separately scrolling sections
         $instructionpanel.style.height = window.innerHeight + "px";
         if (bkmkSettings) {
@@ -236,6 +238,7 @@ let SitePasswordWeb = ((function (self) {
             $input.style.color = strengthColor[index];
         }
         $superpw.onkeyup = async function () {
+            updateExportButton();
             await $superpw.onblur();
             if (resolvers.superpwkeyupResolver) resolvers.superpwkeyupResolver();
         }
@@ -897,6 +900,59 @@ let SitePasswordWeb = ((function (self) {
             $data.href = url;
             $data.click();
             return;
+        }
+        $exportbutton.onclick = exportPasswords;
+        function updateExportButton() {
+            if (get("superpw").value) {
+                get("exportbutton").disabled = false;
+                get("exportbutton").title = "Export site data";
+            } else {
+                get("exportbutton").disabled = true;
+                get("exportbutton").title = "Enter your super password to export site data";
+            }
+        }
+        async function exportPasswords() {
+            if (!get("superpw").value) return;
+            let exportbutton = get("exportbutton");
+            exportbutton.innerText = "Exporting...";
+            let domainnames = SitePassword.database.domains;
+            let sorted = Object.keys(domainnames).sort(function (x, y) {
+                if (x.toLowerCase() < y.toLowerCase()) return -1;
+                if (x.toLowerCase() == y.toLowerCase()) return 0;
+                return 1;
+            });
+            let oldsitename = get("sitename").value;
+            let oldusername = get("username").value;
+            let data = "Domain Name, Site Name, User Name, Site Password\n";
+            for (let i = 0; i < sorted.length; i++) {
+                let domainname = sorted[i];
+                let sitename = SitePassword.database.domains[domainname];
+                let settings = SitePassword.database.sites[sitename];
+                let username = settings.username;
+                SitePassword.settings.sitename = sitename;
+                SitePassword.settings.username = username;
+                get("sitename").value = sitename;
+                get("username").value = username;
+                try {
+                    let sitepw = await SitePassword.generatePassword();
+                    data += '"' + domainname + '"' + "," + '"' + sitename + '"' + "," + '"' + username + '"' + "," + '"' + sitepw + '"' + "\n";
+                } catch (e) {
+                    console.log("popup exportPasswords error", e);
+                }
+            }
+            SitePassword.settings.sitename = oldsitename;
+            SitePassword.settings.username = oldusername;
+            get("sitename").value = oldsitename;
+            get("username").value = oldusername;
+            let blob = new Blob([data], {type: "text/csv"});
+            let url = URL.createObjectURL(blob);
+            let link = document.createElement("a");
+            link.href = url;
+            link.download = "SitePasswordExport.csv";
+            document.body.appendChild(link);
+            link.click();    
+            document.body.removeChild(link);
+            exportbutton.innerText = "Export passwords";
         }
         function sitedataHTMLDoc(doc, sorted) {
             let header = doc.getElementsByTagName("head")[0];
