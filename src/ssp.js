@@ -927,7 +927,7 @@ let SitePasswordWeb = ((function (self) {
             });
             let oldsettings = SitePassword.settings;
             let data = "Domain Name, Site Name, User Name, Site Password\n";
-            for (let domainname in domainnames) {
+            for (let domainname of sorted) {
                 let sitename = SitePassword.database.domains[domainname];
                 let settings = SitePassword.database.sites[sitename];
                 let username = settings.username;
