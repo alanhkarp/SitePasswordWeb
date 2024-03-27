@@ -297,10 +297,13 @@ let SitePasswordWeb = ((function (self) {
         $domainname.onpaste = function () {
             $domainnamemenuforget.style.opacity = "1";
             setTimeout(async () => {
-                await $domainname.onblur();
-                enableBookmark();
-                $bookmark.focus();  // NOTE: this causes `onblur` on $domainname
-                if (resolvers.domainnamepasteResolver) resolvers.domainnamepasteResolver();
+                let domain = parseDomain(normalize($domainname.value));
+                if (domain) {
+                    await $domainname.onblur();
+                    enableBookmark();
+                    $bookmark.focus();  // NOTE: this causes `onblur` on $domainname
+                    if (resolvers.domainnamepasteResolver) resolvers.domainnamepasteResolver();
+                }
             }, 0);
         }
         $domainname.onkeyup = function () {
@@ -341,13 +344,14 @@ let SitePasswordWeb = ((function (self) {
             sectionClick("domainname");
         }
         function parseDomain(url) {
+            let pasted = $domainname.value;
             const protocol = url.split(":")[0].toLowerCase(); 
-            // Don't warn if protocol is not specified
-            if (!url.split(":")[1]) return protocol
             const split = url.split("/");
             let domain = (split.length > 1 ? split[2] : split[0]);
             if (domain && !isValidDomain(normalize(domain))) {
+                $domainname.value = pasted;
                 alert("Invalid domain.  Try again.");
+                $domainname.value = "";
                 domain = "";
             } else if (domain && protocol !== "https") {
                 httpWarningOn();
@@ -901,7 +905,6 @@ let SitePasswordWeb = ((function (self) {
             $data.click();
             return;
         }
-        $exportbutton.onclick = exportPasswords;
         function updateExportButton() {
             if (get("superpw").value) {
                 get("exportbutton").disabled = false;
@@ -911,28 +914,24 @@ let SitePasswordWeb = ((function (self) {
                 get("exportbutton").title = "Enter your super password to export site data";
             }
         }
-        async function exportPasswords() {
+        $exportbutton.onclick = async function exportPasswords() {
             if (!get("superpw").value) return;
             let exportbutton = get("exportbutton");
+            let oldExportText = exportbutton.innerText;
             exportbutton.innerText = "Exporting...";
             let domainnames = SitePassword.database.domains;
             let sorted = Object.keys(domainnames).sort(function (x, y) {
-                if (x.toLowerCase() < y.toLowerCase()) return -1;
-                if (x.toLowerCase() == y.toLowerCase()) return 0;
+                if (normalize(x) < normalize(y)) return -1;
+                if (normalize(x) == normalize(y)) return 0;
                 return 1;
             });
-            let oldsitename = get("sitename").value;
-            let oldusername = get("username").value;
+            let oldsettings = SitePassword.settings;
             let data = "Domain Name, Site Name, User Name, Site Password\n";
-            for (let i = 0; i < sorted.length; i++) {
-                let domainname = sorted[i];
+            for (let domainname in domainnames) {
                 let sitename = SitePassword.database.domains[domainname];
                 let settings = SitePassword.database.sites[sitename];
                 let username = settings.username;
-                SitePassword.settings.sitename = sitename;
-                SitePassword.settings.username = username;
-                get("sitename").value = sitename;
-                get("username").value = username;
+                SitePassword.settings = settings;
                 try {
                     let sitepw = await SitePassword.generatePassword();
                     data += '"' + domainname + '"' + "," + '"' + sitename + '"' + "," + '"' + username + '"' + "," + '"' + sitepw + '"' + "\n";
@@ -940,10 +939,8 @@ let SitePasswordWeb = ((function (self) {
                     console.log("popup exportPasswords error", e);
                 }
             }
-            SitePassword.settings.sitename = oldsitename;
-            SitePassword.settings.username = oldusername;
-            get("sitename").value = oldsitename;
-            get("username").value = oldusername;
+            SitePassword.settings = oldsettings;
+            // Prepare download
             let blob = new Blob([data], {type: "text/csv"});
             let url = URL.createObjectURL(blob);
             let link = document.createElement("a");
@@ -952,7 +949,7 @@ let SitePasswordWeb = ((function (self) {
             document.body.appendChild(link);
             link.click();    
             document.body.removeChild(link);
-            exportbutton.innerText = "Export passwords";
+            exportbutton.innerText = oldExportText;
         }
         function sitedataHTMLDoc(doc, sorted) {
             let header = doc.getElementsByTagName("head")[0];
