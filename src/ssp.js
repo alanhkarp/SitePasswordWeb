@@ -223,19 +223,30 @@ let SitePasswordWeb = ((function (self) {
             const $meter = get(which + "-strength-meter");
             const $input = get(which);
             const report = zxcvbn($input.value);
-            let score = Math.min(20, report.guesses_log10);
-            // A strong super password needs a score of 20
-            // A strong site password needs a score of 16
-            if (which === "superpw") {
-                if (score > 0 ) score -= 0; // In case I want to penalize superpw
-            } else {
-                if (score > 0 ) score += 4;
-            }
+            let score = getScore(which);
             let index = Math.min(4, Math.floor(score / 5));
             $meter.value = score;
             $meter.style.setProperty("--meter-value-color", strengthColor[index]);
             $meter.title = strengthText[index];
             $input.style.color = strengthColor[index];
+            function getScore(which) {
+                if (which === "superpw") return Math.min(20, report.guesses_log10);
+                let alphabetSize = 0;
+                if ($allowlowercheckbox.checked) alphabetSize += 26;
+                if ($allowuppercheckbox.checked) alphabetSize += 26;
+                if ($allownumbercheckbox.checked) alphabetSize += 10;
+                if ($allowspecialcheckbox.checked) alphabetSize += $specials.value.length;
+                let sequence = report.sequence;
+                let guesses = 1;
+                for (let i = 0; i < sequence.length; i++) {
+                    if (sequence[i].pattern === "bruteforce") {
+                        guesses *= alphabetSize**(sequence[i].token.length);
+                    } else {
+                        guesses *= sequence[i].guesses;
+                    }
+                }
+                return Math.min(20, Math.log10(guesses));
+            }
         }
         $superpw.onkeyup = async function () {
             updateExportButton();
