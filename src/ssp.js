@@ -344,12 +344,11 @@ let SitePasswordWeb = ((function (self) {
             sectionClick("domainname");
         }
         function parseDomain(url) {
-            let pasted = $domainname.value;
             const protocol = url.split(":")[0].toLowerCase(); 
             const split = url.split("/");
             let domain = (split.length > 1 ? split[2] : split[0]);
             if (domain && !isValidDomain(normalize(domain))) {
-                $domainname.value = pasted;
+                $domainname.value = url;
                 alert("Invalid domain.  Try again.");
                 $domainname.value = "";
                 domain = "";
@@ -925,7 +924,7 @@ let SitePasswordWeb = ((function (self) {
                 if (normalize(x) == normalize(y)) return 0;
                 return 1;
             });
-            let oldsettings = SitePassword.settings;
+            let oldsettings = SitePassword.cloneObject(SitePassword.settings);
             let data = "Domain Name, Site Name, User Name, Site Password\n";
             for (let domainname of sorted) {
                 let sitename = SitePassword.database.domains[domainname];

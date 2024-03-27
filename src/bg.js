@@ -54,7 +54,7 @@ let SitePassword = ((function (self) {
         }
         return "";
     }
-    function cloneObject(object) {
+    self.cloneObject = function (object) {
         return JSON.parse(JSON.stringify(object))
     }
 
@@ -351,11 +351,11 @@ function Utf8Encode(string) {
     self.xorStrings = xorStrings;
     self.stringXorArray = stringXorArray;
     self.getSuperPassword = function () {
-        return cloneObject(superpassword);
+        return self.cloneObject(superpassword);
     }
     self.setSuperPassword = function (pw) {
         if (typeof pw === 'string') {
-            superpassword = cloneObject(pw);
+            superpassword = self.cloneObject(pw);
             return pw;
         }
         return undefined;
@@ -363,7 +363,7 @@ function Utf8Encode(string) {
     self.getDefaultSettings = function () {
         let newdefaultsstr = localStorage[self.defaultskey];
         if (newdefaultsstr) self.defaultsettings = JSON.parse(newdefaultsstr);
-        return cloneObject(self.defaultsettings);
+        return self.cloneObject(self.defaultsettings);
     }
     self.settings = self.getDefaultSettings();
     if (typeof self.database !== 'object') {
@@ -407,7 +407,7 @@ function Utf8Encode(string) {
             let specials = array2string(settings.specials);
             settings.specials = specials;
         }
-        self.settings = cloneObject(settings);
+        self.settings = self.cloneObject(settings);
         cachedsettings = JSON.stringify(self.settings);
         return self.settings;
     }
@@ -435,13 +435,13 @@ function Utf8Encode(string) {
                 // then remove the old site name from database.sites
                 delete self.database.sites[oldsitename];
             }
-            self.database.sites[sitename] = cloneObject(settings);
+            self.database.sites[sitename] = self.cloneObject(settings);
             persistDatabase(self.database);
-            cachedsettings = JSON.stringify(cloneObject(settings));
+            cachedsettings = JSON.stringify(self.cloneObject(settings));
         }
     }
     self.settingsModified = function () {
-        return (cachedsettings !== JSON.stringify(cloneObject(self.settings)));
+        return (cachedsettings !== JSON.stringify(self.cloneObject(self.settings)));
     }
     self.forgetSettings = function (domainname) {
         const sitename = self.siteForDomain(domainname);
