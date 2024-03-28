@@ -223,14 +223,17 @@ let SitePasswordWeb = ((function (self) {
             const $meter = get(which + "-strength-meter");
             const $input = get(which);
             const report = zxcvbn($input.value);
-            let score = getScore(which);
+            let guesses = getScore(which);
+            let score = Math.min(20, Math.log10(guesses));
             let index = Math.min(4, Math.floor(score / 5));
+            // 10^9 guesses per second, 3*10^7 seconds per year, average success in 1/2 the tries
+            let years = guesses/(6e16);
             $meter.value = score;
             $meter.style.setProperty("--meter-value-color", strengthColor[index]);
-            $meter.title = strengthText[index];
+            $meter.title = strengthText[index] + guessLabel();
             $input.style.color = strengthColor[index];
             function getScore(which) {
-                if (which === "superpw") return Math.min(20, report.guesses_log10);
+                if (which === "superpw") return report.guesses;
                 let alphabetSize = 0;
                 if ($allowlowercheckbox.checked) alphabetSize += 26;
                 if ($allowuppercheckbox.checked) alphabetSize += 26;
@@ -245,7 +248,28 @@ let SitePasswordWeb = ((function (self) {
                         guesses *= sequence[i].guesses;
                     }
                 }
-                return Math.min(20, Math.log10(guesses));
+                return guesses;
+            }
+            function guessLabel() {
+                let labels = {
+                    "years": Math.floor(years),
+                    "months": Math.floor(years*12),
+                    "days": Math.floor(years*365),
+                    "hours": Math.floor(years*365*24),
+                    "minutes": Math.floor(years*365*24*60)
+                }
+                if (labels.years > 1000) return " (more than 1,000 years to guess)";
+                if (labels.years > 1) return " (" + labels.years + " years to guess)";
+                if (labels.years === 1) return " (1 year to guess)";
+                if (labels.months > 1) return " (" + labels.months + " months to guess)";
+                if (labels.months == 1) return " (" + labels.months + " month to guess)";
+                if (labels.days > 1) return " (" + labels.days + " days to guess)";
+                if (labels.days == 1) return " (" + labels.days + " day to guess)";
+                if (labels.hours > 1) return " (" + labels.hours + " hours to guess)";
+                if (labels.hours == 1) return " (" + labels.hours + " hour to guess)";
+                if (labels.minutes > 1) return " (" + labels.minutes + " minutes to guess)";
+                if (labels.minutes == 1) return " (" + labels.minutes + " minute to guess)";
+                if (labels.minutes < 1) return " (less than a minute to guess)";
             }
         }
         $superpw.onkeyup = async function () {
