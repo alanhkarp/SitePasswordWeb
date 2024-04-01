@@ -28,13 +28,19 @@ let SitePasswordWeb = ((function (self) {
         }
         return element;
     }
+    function copied(which) {
+        get(which + "copied").classList.remove("nodisplay");
+        setTimeout(() => {
+            get(which + "copied").classList.add("nodisplay");
+        }, 900);
+    }
     async function copyToClipboard(element) {
         element.focus();
         try {
             await navigator.clipboard.writeText(element.value);
             copied(element.id);
         } catch (e) {
-            alert("Copy to clipboard failed", e);
+            alert("Copy to clipboard failed |" + e + "|");
         }
     }
     function setupdatalist(element, list) {
@@ -223,22 +229,47 @@ let SitePasswordWeb = ((function (self) {
             const $meter = get(which + "-strength-meter");
             const $input = get(which);
             const report = zxcvbn($input.value);
-            let guesses = getScore(which);
-            let score = Math.min(20, Math.log10(guesses));
-            let index = Math.min(4, Math.floor(score / 5));
+            let guesses = getGuesses(which);
             // 10^9 guesses per second, 3*10^7 seconds per year, average success in 1/2 the tries
-            let years = guesses/(6e16);
+            let years = guesses/(1e9*3e7*2);
+            if (which === "superpw") years /= 16*1024; // So the superpw will have more entropy than the site password
+            let score = getScore(years);
+            let index = Math.floor(score/5);
             $meter.value = score;
             $meter.style.setProperty("--meter-value-color", strengthColor[index]);
-            $meter.title = strengthText[index] + guessLabel();
+            $meter.title = strengthText[index] + guessLabel(years);
             $input.style.color = strengthColor[index];
-            function getScore(which) {
-                if (which === "superpw") return report.guesses;
+            function getScore(years) {
+                let strong = 500;
+                let good = 5;
+                let weak = 0.1;
+                let veryweak = 0.01;
+                if (years > strong) {
+                    return 20;
+                } else if (years > good) {
+                    return 15 + (years - good) * (20 - 15) / (strong - good);
+                } else if (years > weak) {
+                    return 10 + (years - weak) * (15 - 10) / (good - weak);
+                } else if (years > veryweak) {
+                    return 5 + (years - veryweak) * (10 - 5) / (weak - veryweak);
+                } else {
+                    return years * 5 / veryweak;
+                }
+            }
+            function getGuesses(which) {
                 let alphabetSize = 0;
-                if ($allowlowercheckbox.checked) alphabetSize += 26;
-                if ($allowuppercheckbox.checked) alphabetSize += 26;
-                if ($allownumbercheckbox.checked) alphabetSize += 10;
-                if ($allowspecialcheckbox.checked) alphabetSize += $specials.value.length;
+                if (which === "superpw") {
+                    let chars = $superpw.value.split("");
+                    if (chars.some(char => SitePassword.lower.includes(char))) alphabetSize += 26;
+                    if (chars.some(char => SitePassword.upper.includes(char))) alphabetSize += 26;
+                    if (chars.some(char => SitePassword.digits.includes(char))) alphabetSize += 10;
+                    if (chars.some(char => "~!@#$%^&*()_+-=[]\\{}|;':\",./<>? ".includes(char))) alphabetSize += 32;
+                } else {
+                    if ($allowlowercheckbox.checked) alphabetSize += 26;
+                    if ($allowuppercheckbox.checked) alphabetSize += 26;
+                    if ($allownumbercheckbox.checked) alphabetSize += 10;
+                    if ($allowspecialcheckbox.checked) alphabetSize += $specials.value.length;
+                }
                 let sequence = report.sequence;
                 let guesses = 1;
                 for (let i = 0; i < sequence.length; i++) {
@@ -250,7 +281,7 @@ let SitePasswordWeb = ((function (self) {
                 }
                 return guesses;
             }
-            function guessLabel() {
+            function guessLabel(years) {
                 let labels = {
                     "years": Math.floor(years),
                     "months": Math.floor(years*12),
@@ -1060,12 +1091,6 @@ let SitePasswordWeb = ((function (self) {
             sectionClick("change");
         }
         // Generic code for menus
-        function copied(which) {
-            get(which + "copied").classList.remove("nodisplay");
-            setTimeout(() => {
-                get(which + "copied").classList.add("nodisplay");
-            }, 900);
-        }
         function menuOn(which, e) {
             allMenusOff();
             get(which + "3bluedots").style.display = "none";
