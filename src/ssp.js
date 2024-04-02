@@ -100,7 +100,7 @@ let SitePasswordWeb = ((function (self) {
             $superpw.focus();
         }
 
-        function loadSettingControls(settings) {
+       function loadSettingControls(settings) {
             $providesitepw.checked = settings.providesitepw;
             if ($providesitepw.checked && $sitename && $username) {
                 $sitepw.readOnly = false;
@@ -229,81 +229,106 @@ let SitePasswordWeb = ((function (self) {
             const $meter = get(which + "-strength-meter");
             const $input = get(which);
             const report = zxcvbn($input.value);
-            let guesses = getGuesses(which);
+            let guesses = getGuesses(which, report);
             // 10^9 guesses per second, 3*10^7 seconds per year, average success in 1/2 the tries
             let years = guesses/(1e9*3e7*2);
-            if (which === "superpw") years /= 256*1024; // So the superpw will have more entropy than the site password
+            if (which === "superpw") years /= 16*1024; // So the superpw will have more entropy than the site password
             let score = getScore(years);
             let index = Math.floor(score/5);
             $meter.value = score;
             $meter.style.setProperty("--meter-value-color", strengthColor[index]);
             $meter.title = strengthText[index] + guessLabel(years);
             $input.style.color = strengthColor[index];
-            function getScore(years) {
-                let strong = Math.log10(1000);
-                let good = Math.log10(1);
-                let weak = Math.log10(1/12);
-                let veryweak = Math.log10(1/365);
-                let logYears = Math.log10(years);
-                if (logYears > strong) {
-                    return 20;
-                } else if (logYears > good) {
-                    return 15 + (logYears - good) * (20 - 15) / (strong - good);
-                } else if (logYears > weak) {
-                    return 10 + (logYears - weak) * (15 - 10) / (good - weak);
-                } else if (logYears > veryweak) {
-                    return 5 + (logYears - veryweak) * (10 - 5) / (weak - veryweak);
-                } else {
-                    return 0;
-                }
-            }
-            function getGuesses(which) {
-                let alphabetSize = 0;
-                if (which === "superpw") {
-                    let chars = $superpw.value.split("");
-                    if (chars.some(char => SitePassword.lower.includes(char))) alphabetSize += 26;
-                    if (chars.some(char => SitePassword.upper.includes(char))) alphabetSize += 26;
-                    if (chars.some(char => SitePassword.digits.includes(char))) alphabetSize += 10;
-                    if (chars.some(char => "~!@#$%^&*()_+-=[]\\{}|;':\",./<>? ".includes(char))) alphabetSize += 32;
-                } else {
-                    if ($allowlowercheckbox.checked) alphabetSize += 26;
-                    if ($allowuppercheckbox.checked) alphabetSize += 26;
-                    if ($allownumbercheckbox.checked) alphabetSize += 10;
-                    if ($allowspecialcheckbox.checked) alphabetSize += $specials.value.length;
-                }
-                let sequence = report.sequence;
-                let guesses = 1;
-                for (let i = 0; i < sequence.length; i++) {
-                    if (sequence[i].pattern === "bruteforce") {
-                        guesses *= alphabetSize**(sequence[i].token.length);
-                    } else {
-                        guesses *= sequence[i].guesses;
-                    }
-                }
-                return guesses;
-            }
-            function guessLabel(years) {
-                let labels = {
-                    "years": Math.floor(years),
-                    "months": Math.floor(years*12),
-                    "days": Math.floor(years*365),
-                    "hours": Math.floor(years*365*24),
-                    "minutes": Math.floor(years*365*24*60)
-                }
-                if (labels.years > 1000) return " (more than 1,000 years to guess)";
-                if (labels.years > 1) return " (" + labels.years + " years to guess)";
-                if (labels.years === 1) return " (1 year to guess)";
-                if (labels.months > 1) return " (" + labels.months + " months to guess)";
-                if (labels.months == 1) return " (" + labels.months + " month to guess)";
-                if (labels.days > 1) return " (" + labels.days + " days to guess)";
-                if (labels.days == 1) return " (" + labels.days + " day to guess)";
-                if (labels.hours > 1) return " (" + labels.hours + " hours to guess)";
-                if (labels.hours == 1) return " (" + labels.hours + " hour to guess)";
-                if (labels.minutes > 1) return " (" + labels.minutes + " minutes to guess)";
-                if (labels.minutes == 1) return " (" + labels.minutes + " minute to guess)";
-                if (labels.minutes < 1) return " (less than a minute to guess)";
+        }
+        function getScore(years) {
+            let strong = Math.log10(1000);
+            let good = Math.log10(1);
+            let weak = Math.log10(1/12);
+            let veryweak = Math.log10(1/365);
+            let logYears = Math.log10(years);
+            if (logYears > strong) {
+                return 20;
+            } else if (logYears > good) {
+                return 15 + (logYears - good) * (20 - 15) / (strong - good);
+            } else if (logYears > weak) {
+                return 10 + (logYears - weak) * (15 - 10) / (good - weak);
+            } else if (logYears > veryweak) {
+                return 5 + (logYears - veryweak) * (10 - 5) / (weak - veryweak);
+            } else {
+                return 0;
             }
         }
+        function getGuesses(which, report) {
+            let alphabetSize = 0;
+            if (which === "superpw") {
+                let chars = $superpw.value.split("");
+                if (chars.some(char => SitePassword.lower.includes(char))) alphabetSize += 26;
+                if (chars.some(char => SitePassword.upper.includes(char))) alphabetSize += 26;
+                if (chars.some(char => SitePassword.digits.includes(char))) alphabetSize += 10;
+                if (chars.some(char => "~!@#$%^&*()_+-=[]\\{}|;':\",./<>? ".includes(char))) alphabetSize += 32;
+            } else {
+                if ($allowlowercheckbox.checked) alphabetSize += 26;
+                if ($allowuppercheckbox.checked) alphabetSize += 26;
+                if ($allownumbercheckbox.checked) alphabetSize += 10;
+                if ($allowspecialcheckbox.checked) alphabetSize += $specials.value.length;
+            }
+            let sequence = report.sequence;
+            let guesses = 1;
+            for (let i = 0; i < sequence.length; i++) {
+                if (sequence[i].pattern === "bruteforce") {
+                    guesses *= alphabetSize**(sequence[i].token.length);
+                } else {
+                    guesses *= sequence[i].guesses;
+                }
+            }
+            return guesses;
+        }
+        function guessLabel(years) {
+            let labels = {
+                "years": Math.floor(years),
+                "months": Math.floor(years*12),
+                "days": Math.floor(years*365),
+                "hours": Math.floor(years*365*24),
+                "minutes": Math.floor(years*365*24*60)
+            }
+            if (labels.years > 1000) return " (more than 1,000 years to guess)";
+            if (labels.years > 1) return " (" + labels.years + " years to guess)";
+            if (labels.years === 1) return " (1 year to guess)";
+            if (labels.months > 1) return " (" + labels.months + " months to guess)";
+            if (labels.months == 1) return " (" + labels.months + " month to guess)";
+            if (labels.days > 1) return " (" + labels.days + " days to guess)";
+            if (labels.days == 1) return " (" + labels.days + " day to guess)";
+            if (labels.hours > 1) return " (" + labels.hours + " hours to guess)";
+            if (labels.hours == 1) return " (" + labels.hours + " hour to guess)";
+            if (labels.minutes > 1) return " (" + labels.minutes + " minutes to guess)";
+            if (labels.minutes == 1) return " (" + labels.minutes + " minute to guess)";
+            if (labels.minutes < 1) return " (less than a minute to guess)";
+        }
+        // Compute statistics
+        async function triggerEvent(event, element) {
+            let promise = wrapHandler(event, element);
+            if (event === "click") element.checked = !element.checked;
+            element.dispatchEvent(new Event(event));
+            await promise
+        }
+        function wrapHandler(event, element) {
+            return new Promise((resolve, reject) => {
+                resolvers[element.id + event + "Resolver"] = resolve;
+            });
+        }
+            async function stats() {
+            let count = 10000;
+            let hasWord = 0;
+            SitePassword.settings = defaultsettings;
+           for (let i = 0; i < count; i++) {
+                $superpw.value = (i+10000).toString();
+                await triggerEvent("blur", $superpw);
+                let report = zxcvbn($sitepw.value);
+                if (report.sequence.length >1) hasWord++;
+            }
+            console.log("Stats: total", count, "hasWord", hasWord);
+        }
+        // stats();
         $superpw.onkeyup = async function () {
             updateExportButton();
             await $superpw.onblur();
