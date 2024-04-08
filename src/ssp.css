@@ -413,8 +413,17 @@ input::placeholder {
 meter {
   border: 0;
 }
+meter {
+  border: 0;
+}
+
+/* Firefox */
+meter::-moz-meter-bar {
+  background: var(--meter-value-color);
+}
+
+/* Chrome, Safari, and new versions of Opera */
 meter::-webkit-meter-optimum-value {
-  /* This will work in Chrome, Safari, and new versions of Opera */
   background: var(--meter-value-color);
 }
 #password-strength-text {
