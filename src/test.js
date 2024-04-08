@@ -31,6 +31,7 @@ async function runTests() {
     
     let restart = localStorage.restart;
     if (restart) {
+        alert("Restarting test " + restart);
         console.log("Restarting test " + restart);
     } else {
         alert("Starting tests");
@@ -46,8 +47,9 @@ async function runTests() {
         await testForget();
         await testPhishing();
         await testBookmark();
+        console.log("Tests complete: " + passed + " passed, " + failed + " failed, ");
+        alert("Tests restart complete: " + passed + " passed, " + failed + " failed, ");
         await testSaveAsDefault();
-        console.log("Tests completed: Passed", passed, "Failed", failed);
     } else {
         if (restart === "testSaveAsDefault2") {
             await testSaveAsDefault2();
