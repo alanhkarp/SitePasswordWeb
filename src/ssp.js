@@ -1188,6 +1188,7 @@ let SitePasswordWeb = ((function (self) {
                 element.style.display = "block";
                 get("open" + which).style.display = "none";
                 get("close" + which).style.display = "block";
+                get(which + "info").scrollIntoView();
             } else {
                 element.style.display = "none";
                 get("open" + which).style.display = "block";
