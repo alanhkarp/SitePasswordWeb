@@ -708,9 +708,12 @@
                 SitePassword doesn't prevent you from using a weak super password,
                 but it does warn you. There is a strength indicator directly above
                 the super password field. The color of your super password corresponds
-                to the level shown on the meter.  For example, if your super password is green,
+                to the level shown on the meter.
+                For example, if your super password is green,
                 it is strong.  If it's orange, your super password is
-                weak.  Mouse over the meter to see the strength of your super password.
+                weak.  
+                The tooltip tells how long it would take a determined adversary
+                to guess your password.
               </p>
               <p>
                 You'll notice that your super password is not usually marked Strong until it is 
@@ -757,10 +760,6 @@
                 Some web sites use multiple URLs for logging into the same account.  As a result,
                 you may have more than one domain name for a given account. You'll get the same password
                 for all of the domain names because they are all associated with the same nickname.
-              </p>
-              <p>
-                You can forget this domain name
-                and all settings associated with it by clicking the Forget menu icon or by deleting the bookmark.
               </p>
             </div>
           </section>
@@ -811,7 +810,7 @@
               <p>
                 The site name is the nickname you use refer to this account. It can be easy to remember,
                 such as <em>amazon</em> for amazon.com, but it doesn't have to be that simple.
-                It is one of the things use to compute your site password.
+                It is one of the things used to compute your site password.
               </p>
               <p>
                 Your settings,
@@ -846,25 +845,6 @@
                 user names for the same site, follow the instructions for 
                 <span id="sharedref"><a href="#sharedinfo">Shared Machines</a></span>.   
               </p>
-              <p>
-                SitePassword will attempt to fill in the userid field of a login form. If you
-                don't see it when you think you should, one of a few things happened.
-              </p>
-              <ol>
-                <li>You never provided your settings for this domain name.</li>
-                <ul>
-                  <li>This is the first time you've used SitePassword for this account.</li>
-                  <li>This is a different domain name for logging into the same account.</li>
-                  <li>You are at a fake site that is trying to steal your password.</li>
-                </ul>
-                <li>SitePassword incorrectly guessed the location of the userid field.</li>
-                <li>SitePassword couldn't find the userid field.</li>
-              </ol>
-              <p>
-                In the last two cases,
-                you'll have to fill in your userid manually, which you can do by copying 
-                it to the clipboard using the Copy menu icon in the userid field.
-              </p>
             </div>
           </section>
           <section id="sitepwinfo" name="instructions" class="instructionpaneltext">
@@ -893,6 +873,10 @@
                 SitePassword could generate a weak site password just by chance.
                 To let you know that has happened, it uses the same kind of
                 strength meter to tell you how strong your site password is.
+                The tooltip tells how long it would take a determined adversary
+                to guess your password.
+              </p>
+              <p>
                 For example, if your site password is orange, then it is weak. In
                 that case, just choose a different nickname for the account.  You'll 
                 almost certainly get a strong site password.
@@ -953,11 +937,13 @@
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="m9 13 3-3 3 3" />
             </svg>
-            <h3>Input Field Menus (3 Dots)</h3>
+            <h3>Input Field Menus</h3>
             <div id="menusdiv" style="display:none">
               <p>
                 Each of the input fields has a menu that shows up when you mouse over 
-                (or tap on a touchscreen) the 3 dots in the right side of the field.  Each field has a 
+                (or tap on a touchscreen) the 3 dots
+                (<img src="src/3bluedots.png" style="height: 16px; width: 6px; vertical-align: middle;">) 
+                in the right side of the field.  Each field has a 
                 particular set of menu items.  
                 If an icon is grayed out, it is not available for that field.  For example, you can't 
                 forget a domain name if that field is empty.
@@ -1022,7 +1008,7 @@
                 special characters, including restrictions on which special
                 characters are allowed. If you run into a site that doesn't
                 accept the calculated password, change the appropriate menu entries. SitePassword
-                was tested on hundreds of web sites to make sure it can always
+                was tested on hundreds of web sites to make sure it can almost always
                 compute a valid password.
               </p>
               <p>
@@ -1231,13 +1217,9 @@
               <p>
                 There may come a time when you want to use a different password manager.
                 In that case you can use the <em>Export passwords</em> button at the bottom of
-                the popup window after you click
-                <svg width="12px" height="12px" viewBox="2 1 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M14 21h-4l-.551-2.48a6.991 6.991 0 0 1-1.819-1.05l-2.424.763-2-3.464 1.872-1.718a7.055 7.055 0 0 1 0-2.1L3.206 9.232l2-3.464 2.424.763A6.992 6.992 0 0 1 9.45 5.48L10 3h4l.551 2.48a6.992 6.992 0 0 1 1.819 1.05l2.424-.763 2 3.464-1.872 1.718a7.05 7.05 0 0 1 0 2.1l1.872 1.718-2 3.464-2.424-.763a6.99 6.99 0 0 1-1.819 1.052L14 21z" />
-                  <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
-                </svg>. 
-                Clicking this button creates a file with your passwords.  You can see a readable form 
+                the popup window. 
+                Clicking this button creates a file with the passwords for sites you remembered
+                on this machine.  You can see a readable form 
                 of the data in the file by opening it in a spreadsheet.
               </p>
               <p>
