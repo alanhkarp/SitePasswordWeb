@@ -1116,10 +1116,6 @@ let SitePasswordWeb = ((function (self) {
             e.stopPropagation();
             sectionClick("shared");
         }
-        get("changeref").onclick = function (e) {
-            e.stopPropagation();
-            sectionClick("change");
-        }
         // Generic code for menus
         function menuOn(which, e) {
             allMenusOff();
