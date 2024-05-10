@@ -3,13 +3,13 @@ Instructions
 
 ### Who Should Use This Web Page
 
-This web page is a companion to the SitePassword browser extension. In addition to remembering your settings, the extension synchronizes them across your machines. You should use the extension if you are using a compatible browser on a computer. Unfortunately, browsers on mobile devices don't allow extensions.
+This web page is a companion to the SitePassword browser extension. In addition to remembering your settings, the extension synchronizes them across your machines. You should use the extension if you are using a compatible browser. Unfortunately, browsers on mobile devices don't allow extensions.
 
 The SitePassword web page is also available at [https://alanhkarp.github.io/SitePasswordWeb/](https://alanhkarp.github.io/SitePasswordWeb/) .
 
 ### How It Works
 
-SitePassword is different from most password managers. Instead of storing your passwords, it calculates them from a single super password and your nickname and user name for the account. That means you can usually get your site password if you remember those three things. (Some web pages require additional settings.) It also allows you to specify the password when it can't compute a password acceptable to the site.
+SitePassword is different from most password managers. Instead of storing your passwords, it calculates them from a single super password and your nickname and user name for the account. That means you can usually get your site password if you remember those three things. (Some web pages require additional settings.) It also allows you to specify the password when you can't use the computed password.
 
 ### Your Super Password
 
@@ -39,13 +39,11 @@ SitePassword stores your settings in a bookmark in the SitePasswordData bookmark
 
 The site name is the nickname you use refer to this account. It can be easy to remember, such as _amazon_ for amazon.com, but it doesn't have to be that simple. It is one of the things used to compute your site password.
 
-Your settings, such as your user name, the site password length, and whether your site password contains special characters are associated with this nickname. All domain names for this account are associated with this nickname.
-
-[Changing a Site Password](#changeinfo) tells you how to do that.
+Your settings, such as the domain name of the login page, your user name, the site password length, and whether your site password contains special characters are associated with this nickname.
 
 ### Your User Name
 
-Your user name is the name you use to log in to the site. It is associated with the nickname for the account and is used to calculate your site password. That means you can only have a single user name for a given nickname. If you want to use different user names for the same site, follow the instructions for [Shared Machines](#sharedinfo).
+Your user name is the name you use to log in to the site. It is associated with the nickname for the account and is used to calculate your site password. That means you can only have a single user name for a given nickname. If you want to use different user names for the same site, follow the instructions for [Shared Machines](#shared-machines).
 
 ### Your Site Password
 
@@ -59,30 +57,27 @@ For example, if your site password is orange, then it is weak. In that case, jus
 
 When the generated password can't be used, say if you've been given one that you're not allowed to change, SitePassword can remember a password you provide. It is stored in your settings encrypted with the computed password for the site as a key. That means you must fill in the form before entering your own password. After you fill in the form, click the _Provide your own site password_ check box. You can then enter your password into the site password field.
 
-The code in the bookmark is a list of integers represnting the encrypted value the password you provided. You must fill in the form with the same settings you used when you provided the password, including the code from the bookmark.
+The code in the bookmark is a list of integers represnting the encrypted value the password you provided. In order to compute your site password, you must fill in the form with the same settings you used when you provided the password, including the code from the bookmark.
 
-You won't have to type in the numbers in the code if you synchonize bookmarks to this machine. You can click on the bookmark for the domain name to open this page with the form
+You won't have to type in the numbers in the code if you synchonize bookmarks to this machine. You can click on the bookmark for the domain name to open this page with the form filled in for you.
 
 ### Input Field Menus
 
-Each of the input fields has a menu that shows up when you mouse over (or tap on a touchscreen) the 3 dots 
-(<img src="src/3bluedots.png" style="width: 6px; height: 16px; vertical-align: middle;">) in the right side of the field. Each field has a particular set of menu items. If an icon is grayed out, it is not available for that field. For example, you can't forget a domain name if that field is empty.
+Each of the input fields has a menu that shows up when you mouse over (or tap on a touchscreen) the 3 dots (<img src="src/3bluedots.png" style="width: 1=6px; height: 16px; vertical-align: middle;">) in the right side of the field. Each field has a particular set of menu items. If an icon is grayed out, it is not available for that field. For example, you can't forget a domain name if that field is empty.
 
 <img src="src/help.png" style="width: 16px; height: 16px; vertical-align: middle;">   Every field has a help option, which provides a brief summary of the information contained in these Instructions.
 
 <img src="src/forget.png" style="width: 16px; height: 16px; vertical-align: middle;">   The domain name, sitename and username fields have a Forget option. For example, if you click this icon in the site nickname field, you will be given the opportunity to permanently forget the settings for all domain names associated with that site nickname.
 
-<img src="src/clipboard.png" style="width: 16px; height: 16px; vertical-align:middle;"> The user name and site password fields have a Copy option, which copies the contents of the field to the clipboard.
+<img src="src/clipboard.png" style="width: 16px; height: 16px; vertical-align: middle;">   The user name and site password fields have a Copy option, which copies the contents of the field to the clipboard.
 
-<img src="src/show.png" style="width: 16px; height: 16px; vertical-align:middle;">
-<img src="src/hide.png" style="width: 16px; height: 16px; vertical-align:middle;">
-The super and site password fields give you the option of showing or hiding the contents of the field. By default, your super password is hidden, and your site password is not. You can change the default behavior of the site password field by clicking the <em>Hide site password by default</em> option in the settings panel.
+<img src="src/show.png" style="width: 16px; height: 16px; vertical-align: middle;">   <img src="src/hide.png" style="width: 16px; height: 16px; vertical-align: middle;">   The super and site password fields give you the option of showing or hiding the contents of the field. By default, your super password is hidden, and your site password is not. You can change the default behavior of the site password field by clicking the _Hide site password by default_ option in the settings panel.
 
 ### Finding an Acceptable Password
 
 Some web sites have strict password rules, how long it must be, if it must contain upper case or lower case letters, numbers, or special characters, including restrictions on which special characters are allowed. If you run into a site that doesn't accept the calculated password, change the appropriate menu entries. SitePassword was tested on hundreds of web sites to make sure it can almost always compute a valid password.
 
-You can also change the default values that SitePassword uses. For example, SitePassword defaults to a password length of 12 and no special characters. You can change these defaults by clicking the _Save as default_ option in the settings panel.
+You can also change the default values that SitePassword uses. For example, SitePassword defaults to a password with no special characters. You can change these defaults by clicking the _Save as default_ option in the settings panel.
 
 ### Changing a SitePassword
 
@@ -98,7 +93,7 @@ Unfortunately, you will also see this warning when you are not being tricked. Ma
 
 Many households have one machine shared by everybody. It's likely that everyone uses the same user name and password for certain accounts, such as streaming services. It's also likely that those people use their individual user names and passwords for other accounts, such as social media.
 
-SitePassword accomodates those uses with a feature provided by your browser called _profiles_. Each profile gets its own bookmarks. Simply create one profile for the shared account and one for each individual.
+SitePassword accomodates those uses with a feature provided by your browser called _profiles_. Simply create one profile for the shared account and one for each individual.
 
 ### The Extension and this Page
 
