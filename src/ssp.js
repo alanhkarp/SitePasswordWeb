@@ -1150,6 +1150,7 @@ let SitePasswordWeb = ((function (self) {
             let $element = get(which + "helptext");
             if (!$element.style.display || $element.style.display === "none") {
                 helpAllOff();
+                hideInstructions();
                 $element.style.display = "block";
                 $element.style.top = top - mainTop + "px";
                 let $buttons = get(which + "helptextclose");
