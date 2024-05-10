@@ -1112,6 +1112,10 @@ let SitePasswordWeb = ((function (self) {
             e.stopPropagation();
             sectionClick("shared");
         }
+        get("sharedref2").onclick = function (e) {
+            e.stopPropagation();
+            sectionClick("shared");
+        }
         get("changeref").onclick = function (e) {
             e.stopPropagation();
             sectionClick("change");
