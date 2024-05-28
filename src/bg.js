@@ -101,10 +101,7 @@ let SitePassword = ((function (self) {
     }
     function verifyPassword(pw, settings) {
         let report = zxcvbn(pw);
-        if ((pw.length >= 12 && report.score < 4) ||
-            (pw.length >= 10 && pw.length < 12 && report.score < 3) ||
-            (pw.length >= 8 && pw.length < 10 && report.score < 2) ||
-            (pw.length < 8 && report.score < 1)) return false;
+        if (!(report.sequence.length == 1 && report.sequence[0].pattern === "bruteforce")) return false;    
         var counts = { lower: 0, upper: 0, number: 0, special: 0 };
         for (var i = 0; i < pw.length; i++) {
             var c = pw.charAt(i);
