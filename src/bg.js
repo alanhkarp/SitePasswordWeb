@@ -134,8 +134,8 @@ let SitePassword = ((function (self) {
         return valOK;
     }
     async function computePassword(superpw, salt, settings) {
-        await Promise.resolve(); // Because some branches have await and others don't
         if (!(settings.allowupper || settings.allowlower || settings.allownumber || settings.allowspecial)) {
+            await Promise.resolve(); // To match the await on the other branch
             return "";
         }
         let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": 200_000, "keysize": settings.pwlength * 8};

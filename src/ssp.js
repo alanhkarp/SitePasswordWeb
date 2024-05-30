@@ -188,10 +188,10 @@ let SitePasswordWeb = ((function (self) {
             await generatePassword();
         }
         async function handleKeyupNumber(id) {
-            await Promise.resolve(); // Because some branches have await and others don't
             const value = get(id).value;
             if (value && isNaN(value)) {
                 alert("Must be a number");
+                await Promise.resolve(); // To match the await on the other branch
             } else {
                 SitePassword.settings[id] = value;
                 await generatePassword();
@@ -466,12 +466,6 @@ let SitePasswordWeb = ((function (self) {
             await generatePassword();
         }
 
-        // loginurl = https://alantheguru.alanhkarp.com/
-        // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22,%22characters%22:%22abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ab%22,%22displayname%22:%22alantheguru.alanhkarp.com%22}
-        // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"Guru","username":"alan","pwlength":10,"startwithletter":true,"allowlower":true,"allowupper":true,"allownumber":true,"allowspecial":false,"minlower":1,"minupper":1,"minnumber":1,"minspecial":0,"specials":"/!=@?._-%22}
-        // sitepw --> qPz43sW0Ws
-        // bookmark = ssp://{"domainname":"alantheguru.alanhkarp.com","sitename":"The Real Alan","username":"dalnefre","pwlength":"15","startwithletter":false,"allowlower":true,"minlower":"1","allowupper":true,"minupper":"1","allownumber":true,"minnumber":"1","allowspecial":true,"minspecial":"1","specials":"$/!=@?._-"}
-        // sitepw --> G.iJQEp-qB65UF5
         $bookmark.onpaste = function () {
             // The paste result isn't available until the next turn
             setTimeout(async () => {
@@ -480,7 +474,6 @@ let SitePasswordWeb = ((function (self) {
             }, 0);
         }
         self.bookmarkPaste = async function () {
-            await Promise.resolve(); // Because some branches have await and others don't
             const settings = parseBookmark($bookmark.value);
             $bookmark.value = "";  // clear bookmark field
             if (settings) {
@@ -491,6 +484,7 @@ let SitePasswordWeb = ((function (self) {
                 } else {
                     $sitename.value = settings.sitename;
                     phishingWarningOn(settings.domainname, $domainname.value);
+                    await Promise.resolve(); // To match the await on the other branch
                 }
             } else {
                 alert("Invalid bookmark. Copy it again?");
@@ -836,7 +830,6 @@ let SitePasswordWeb = ((function (self) {
                 !($domainname.value && $sitename.value && $username.value && SitePassword.settingsModified());
         }
         $providesitepw.onclick = async function () {
-            await Promise.resolve(); // Because some branches have await and others don't
             const settings = SitePassword.settings;
             settings.providesitepw = $providesitepw.checked;
             if ($providesitepw.checked && $superpw.value && $sitename.value && $username.value) {
@@ -845,6 +838,7 @@ let SitePasswordWeb = ((function (self) {
                 $sitepw.placeholder = "Enter your site password";
                 $sitepw.focus();   
                 $code.disabled = false; 
+                await Promise.resolve(); // To match the await on the other branch
             } else {
                 $sitepw.readOnly = true;
                 $sitepw.placeholder = "Generated site password";
@@ -860,10 +854,10 @@ let SitePasswordWeb = ((function (self) {
         }
     
         $pwlength.onblur = async function () {
-            await Promise.resolve(); // Because some branches have await and others don't
             if ($pwlength.value > 100) {
                 alert("Sitepasswords must be 100 or fewer characters");
                 $pwlength.value = SitePassword.settings.pwlength;
+                await Promise.resolve(); // To match the await on the other branch
             } else {
                 await handleKeyupNumber("pwlength");
             }
@@ -914,7 +908,6 @@ let SitePasswordWeb = ((function (self) {
             await handleKeyup("specials");
         }
         async function handleCheck(group) {
-            await Promise.resolve(); // Because some branches have await and others don't
             const $allow_group_checkbox = get("allow"+group+"checkbox");
             const $min_group = get("min"+group);
             const $allow_group = get("allow"+group);
@@ -936,6 +929,7 @@ let SitePasswordWeb = ((function (self) {
                 await generatePassword();
             } else {
                 console.log('handleCheck: missing control(s) for group:', group);
+                await Promise.resolve(); // To match the await on the other branch
             }
         }
         function restrictStartsWithLetter() {
