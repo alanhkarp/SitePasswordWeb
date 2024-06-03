@@ -41,6 +41,7 @@ let SitePasswordWeb = ((function (self) {
             copied(element.id);
         } catch (e) {
             alert("Copy to clipboard failed |" + e + "|");
+            await Promise.resolve(); // To match the await in the other branch
         }
     }
     function setupdatalist(element, list) {
@@ -179,6 +180,7 @@ let SitePasswordWeb = ((function (self) {
                 return pw;
             } catch (e) {
                 console.log("generatePassword failed", e);
+                await Promise.resolve(); // To match the await in the other branch
                 return "";
             };
         }
@@ -320,7 +322,7 @@ let SitePasswordWeb = ((function (self) {
             let count = 10000;
             let hasWord = 0;
             SitePassword.settings = defaultsettings;
-           for (let i = 0; i < count; i++) {
+            for (let i = 0; i < count; i++) {
                 $superpw.value = (i+10000).toString();
                 await triggerEvent("blur", $superpw);
                 let report = zxcvbn($sitepw.value);
@@ -395,6 +397,8 @@ let SitePasswordWeb = ((function (self) {
                     enableBookmark();
                     $bookmark.focus();  // NOTE: this causes `onblur` on $domainname
                     if (resolvers.domainnamepasteResolver) resolvers.domainnamepasteResolver();
+                } else {
+                    await Promise.resolve(); // To match the await in the other branch
                 }
             }, 0);
         }
@@ -562,10 +566,12 @@ let SitePasswordWeb = ((function (self) {
                 settings.username = $username.value;
                 SitePassword.settings = settings;
                 phishingWarningOff();
+                await Promise.resolve(); // To match the await in the other branch
             } else if (!domainname) {
                 await updateSettings(settings);
             } else if (existingDomain !== domainname) {
                 phishingWarningOn(existingDomain, domainname);
+                await Promise.resolve(); // To match the await in the other branch
             }
             clearDatalist("sitenames");
             if (resolvers.sitenameblurResolver) resolvers.sitenameblurResolver();
@@ -1022,6 +1028,7 @@ let SitePasswordWeb = ((function (self) {
                     data += '"' + domainname + '"' + "," + '"' + sitename + '"' + "," + '"' + username + '"' + "," + '"' + sitepw + '"' + "\n";
                 } catch (e) {
                     console.log("popup exportPasswords error", e);
+                    await Promise.resolve(); // To match the await in the other branch
                 }
             }
             SitePassword.settings = oldsettings;
