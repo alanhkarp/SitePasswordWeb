@@ -391,9 +391,7 @@ let SitePasswordWeb = ((function (self) {
         $domainname.onpaste = function () {
             $domainnamemenuforget.style.opacity = "1";
             setTimeout(async () => {
-                let domain = parseDomain(normalize($domainname.value));
-                if (domain) {
-                    await $domainname.onblur();
+                if ($domainname.value) {
                     enableBookmark();
                     $bookmark.focus();  // NOTE: this causes `onblur` on $domainname
                     if (resolvers.domainnamepasteResolver) resolvers.domainnamepasteResolver();
@@ -443,6 +441,7 @@ let SitePasswordWeb = ((function (self) {
             const protocol = url.split(":")[0].toLowerCase(); 
             const split = url.split("/");
             let domain = (split.length > 1 ? split[2] : split[0]);
+            console.log("domain", domain, "protocol", protocol);
             if (domain && !isValidDomain(normalize(domain))) {
                 $domainname.value = url;
                 alert("Invalid domain.  Try again.");
@@ -510,13 +509,8 @@ let SitePasswordWeb = ((function (self) {
             let settings = undefined;
             let bkmkstr = "";
             bkmkstr = bookmark.split("ssp://")[1];
+            let json = decodeURIComponent(bkmkstr);
             try {
-                let json = bkmkstr
-                    .replace(/%22/g, '"')
-                    .replace(/%7B/g, '{')
-                    .replace(/%7D/g, '}')
-                    .replace(/%5B/g, '[')
-                    .replace(/%5D/g, ']');
                 settings = JSON.parse(json);
             } catch (e) {
                 console.log(e);
