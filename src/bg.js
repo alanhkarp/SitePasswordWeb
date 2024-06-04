@@ -311,6 +311,7 @@ let SitePassword = ((function (self) {
         return array;
     }
     function array2string(array) {
+        if (typeof array === 'string') return array;
         let str = "";
         for (let i = 0; i < array.length; i++) {
             str += String.fromCharCode(array[i]);
