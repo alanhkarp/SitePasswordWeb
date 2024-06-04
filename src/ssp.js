@@ -441,7 +441,7 @@ let SitePasswordWeb = ((function (self) {
             const protocol = url.split(":")[0].toLowerCase(); 
             const split = url.split("/");
             let domain = (split.length > 1 ? split[2] : split[0]);
-            console.log("domain", domain, "protocol", protocol);
+            if (logging) console.log("domain", domain, "protocol", protocol);
             if (domain && !isValidDomain(normalize(domain))) {
                 $domainname.value = url;
                 alert("Invalid domain.  Try again.");
