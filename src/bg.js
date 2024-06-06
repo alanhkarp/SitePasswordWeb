@@ -162,12 +162,13 @@ let SitePassword = ((function (self) {
         return pw;
         function uint2chars() {
             let byteArray = new TextEncoder().encode(pw);
-            let digits = self.digits;
-            let upper = self.upper;
-            let lower = self.lower;
-            let specials = settings.specials;
-            let cset = digits + upper + lower + specials;
             let chars = "";
+            let upper = settings.allowupper ? self.upper: "";
+            let lower = settings.allowlower? self.lower: "";
+            let digits = settings.allownumber ? self.digits: "";
+            let specials = settings.allowspecial ? settings.specials: "";
+            let cset = upper + lower + digits + specials;
+            if (!cset) return "";
             if (settings.startwithletter) {
                 let alphabet = "";
                 if (settings.allowupper) alphabet += upper;
@@ -273,7 +274,7 @@ let SitePassword = ((function (self) {
             if (settings.allowlower) total += settings.minlower;
             if (settings.allownumber) total += settings.minnumber;
             if (settings.allowspecial) total += settings.minspecial;
-            return total <= settings.pwlength;
+            return total <= settings.pwlength && total > 0;
         }
     }
     function xorStrings(provided, sitepw) {
