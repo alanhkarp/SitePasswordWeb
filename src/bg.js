@@ -351,6 +351,7 @@ function Utf8Encode(string) {
     self.array2string = array2string;
     self.normalize = normalize;
     self.generatePassword = generatePassword;
+    self.generateCharacterSet = generateCharacterSet;
     self.xorStrings = xorStrings;
     self.stringXorArray = stringXorArray;
     self.getSuperPassword = function () {
