@@ -285,8 +285,7 @@ let SitePasswordWeb = ((function (self) {
             }
             if (which === "sitepw") {
                 // Adjust site password for modulus bias
-                let m = alphabetSize
-                let statisticalDistance = Math.abs((256 % m)**2 - (m - 256 % m)**2)/(2*256*m);
+                let statisticalDistance = (256%alphabetSize)/256; // Upper bound on statistical distance
                 guesses = Math.floor(guesses*(1 - statisticalDistance));
             }
             return guesses;
