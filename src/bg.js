@@ -196,17 +196,17 @@ let SitePassword = ((function (self) {
                 }
             }
             function shuffle(chars) {
-                let currentIndex = chars.length, temporaryValue, randomIndex;
+                let currentIndex = chars.length;
                 let charsArray = chars.split("");
                 // While there remain elements to shuffle...
                 while (0 !== currentIndex) {                      
                   // Pick a remaining element...
-                  randomIndex = byteArray[currentIndex] % charsArray.length;
+                  let index = byteArray[currentIndex] % charsArray.length;
                   currentIndex -= 1;                      
                   // And swap it with the current element.
-                  temporaryValue = charsArray[currentIndex];
-                  charsArray[currentIndex] = charsArray[randomIndex];
-                  charsArray[randomIndex] = temporaryValue;
+                  let temporaryValue = charsArray[currentIndex];
+                  charsArray[currentIndex] = charsArray[index];
+                  charsArray[index] = temporaryValue;
                 }
                 chars = charsArray.join("");
                 return chars;
@@ -459,7 +459,7 @@ function Utf8Encode(string) {
         self.domainname = "";
         return self.loadSettings();  // reset to default settings
     }
-    return self;
+        return self;
 })({
     version: "3.0",
     clearsuperpw: false,
@@ -468,7 +468,6 @@ function Utf8Encode(string) {
     upper: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     specials: "$/!=@?._-",
 }));
-
 /* 
 This code is a major modification of the code released with the
 following licence.  Neither Hewlett-Packard Company nor Hewlett-Packard
