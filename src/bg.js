@@ -160,6 +160,7 @@ let SitePassword = ((function (self) {
         if (logging) console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms, founds", pw);
         pw = uint2chars();
         return pw;
+        // Uses 1 byte per character in the password because the hash isn't available.
         function uint2chars() {
             let byteArray = new TextEncoder().encode(pw);
             let chars = "";
