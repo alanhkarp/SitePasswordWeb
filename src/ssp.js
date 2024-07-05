@@ -283,11 +283,6 @@ let SitePasswordWeb = ((function (self) {
                     guesses *= sequence[i].guesses;
                 }
             }
-            if (which === "sitepw") {
-                // Adjust site password for modulus bias
-                let statisticalDistance = (256%alphabetSize)/256; // Upper bound on statistical distance
-                guesses = Math.floor(guesses*(1 - statisticalDistance));
-            }
             return guesses;
         }
         function guessLabel(years) {

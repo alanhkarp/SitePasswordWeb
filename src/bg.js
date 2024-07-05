@@ -142,7 +142,7 @@ let SitePassword = ((function (self) {
             await Promise.resolve(); // To match the await on the other branch
             return "";
         }
-        let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": 200_000, "keysize": settings.pwlength * 8};
+        let args = {"pw": superpw, "salt": salt, "settings": settings, "iters": 200_000, "keysize": settings.pwlength * 16};
         let pw = await candidatePassword(args);
         // Find a valid password
         let iter = 0;
@@ -153,7 +153,7 @@ let SitePassword = ((function (self) {
                 return pw;
             }
             iter++;
-            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 8};
+            args = {"pw": pw, "salt": salt, "settings": settings, "iters": 1, "keysize": settings.pwlength * 16};
             pw = await candidatePassword(args);
         }
         // Construct a legal password since hashing failed to produce one
@@ -241,13 +241,14 @@ let SitePassword = ((function (self) {
                 const cset = generateCharacterSet(settings);
                 let uint8array = new Uint8Array(bits);
                 // Convert the Uint8array to a string using a custom algorithm               
-                let pw = uint2chars(uint8array.slice(0, settings.pwlength), cset);
+                let pw = uint2chars(uint8array.slice(0, 2*settings.pwlength), cset);
                 return pw;
                 function uint2chars(array) {
                     let chars = "";
                     let len = array.length;
-                    for (let i = 0; i < len; i++) {
-                        chars += cset[array[i] % cset.length];
+                    for (let i = 0; i < len; i += 2) {
+                        let index = array[i] << 8 | array[i + 1];
+                        chars += cset[index % cset.length];
                     }
                     return chars;
                 }            
