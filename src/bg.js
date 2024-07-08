@@ -93,13 +93,6 @@ let SitePassword = ((function (self) {
         }
         if (settings.allowspecial) {
             chars += settings.specials;
-            // I'll always return a password with enough special characters,
-            // but I might have to use the deterninistic password to do it.
-            // Making sure there are enough special characters in the set
-            // will make that less likely
-            while (chars.length < 5) {
-                chars += settings.specials;
-            }
         }
         return chars.substring(0, 256); // substring just in case...
     }
