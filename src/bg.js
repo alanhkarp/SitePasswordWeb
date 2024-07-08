@@ -82,6 +82,9 @@ let SitePassword = ((function (self) {
     function generateCharacterSet(settings) {
         // generate a set of no more than 256 characters for encoding
         let chars = "";
+        if (settings.allowspecial) {
+            chars += settings.specials;
+        }
         if (settings.allownumber) {
             chars += self.digits;
         }
@@ -90,9 +93,6 @@ let SitePassword = ((function (self) {
         }
         if (settings.allowlower) {
             chars += self.lower;
-        }
-        if (settings.allowspecial) {
-            chars += settings.specials;
         }
         return chars.substring(0, 256); // substring just in case...
     }
@@ -150,7 +150,7 @@ let SitePassword = ((function (self) {
             pw = await candidatePassword(args);
         }
         // Construct a legal password since hashing failed to produce one
-        console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
+        if (logging) console.log("bg failed after", iter, "extra iteration and took", Date.now() - startIter, "ms");
         while (iter < 210) {
             iter++;
             pw = uint2chars(); // Meets requirements but might be weak
@@ -171,7 +171,7 @@ let SitePassword = ((function (self) {
             let lower = settings.allowlower? self.lower: "";
             let digits = settings.allownumber ? self.digits: "";
             let specials = settings.allowspecial ? settings.specials: "";
-            let cset = upper + lower + digits + specials;
+            let cset = specials + digits + upper + lower;
             if (!cset) return "";
             if (settings.startwithletter) {
                 let alphabet = "";
