@@ -394,7 +394,7 @@ function Utf8Encode(string) {
         const ds = Object.keys(db.domains);
         for (const d of ds) {
             const s = db.domains[d];
-            if ((s === sitename) && !(d === domainname)) {
+            if ((s === sitename) && (d === domainname)) {
                 return d;  // found matching entry, domainname is valid.
             }
         }
