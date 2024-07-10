@@ -34,7 +34,7 @@ let SitePassword = ((function (self) {
     }
     // Make sure default settings and database are stored
     if (!localStorage[self.defaultskey]) {
-        localStorage.setItem(self.defaultskey, JSON.stringify(self.defaultsettings));
+        localStorage.setItem(self.defaultskey, stringifySettings(self.defaultsettings));
     }
     if (!localStorage[self.storagekey]) {
         localStorage.setItem(self.storagekey, JSON.stringify({
@@ -62,7 +62,7 @@ let SitePassword = ((function (self) {
         try {
             if (typeof database === 'object') {
                 localStorage[self.storagekey] = JSON.stringify(database);
-                localStorage[self.defaultskey] = JSON.stringify(self.defaultsettings);
+                localStorage[self.defaultskey] = stringifySettings(self.defaultsettings);
             } else {
                 console.log("can't persist database:", database);
             }
@@ -72,7 +72,7 @@ let SitePassword = ((function (self) {
     }
     function retrieveDatabase() {
         try {
-            return JSON.parse(localStorage[self.storagekey]);
+            return parseSettings(localStorage[self.storagekey]);
         } catch (e) {
             if (localStorage.test === "false") console.log(e);
         }
@@ -371,7 +371,7 @@ function Utf8Encode(string) {
     }
     self.getDefaultSettings = function () {
         let newdefaultsstr = localStorage[self.defaultskey];
-        if (newdefaultsstr) self.defaultsettings = JSON.parse(newdefaultsstr);
+        if (newdefaultsstr) self.defaultsettings = parseSettings(newdefaultsstr);
         return self.cloneObject(self.defaultsettings);
     }
     self.settings = self.getDefaultSettings();
@@ -417,18 +417,14 @@ function Utf8Encode(string) {
             settings.specials = specials;
         }
         self.settings = self.cloneObject(settings);
-        cachedsettings = JSON.stringify(self.settings);
+        cachedsettings = stringifySettings(self.settings);
         return self.settings;
     }
     self.storeSettings = function () {
         const domainname = self.domainname;
         const settings = self.settings;
-        if ("string" === typeof settings.specials) {
-            let array = string2array(settings.specials);
-            settings.specials = array;
-        }
         const sitename = normalize(settings.sitename);
-        localStorage.setItem(self.defaultskey, JSON.stringify(self.defaultsettings));
+        localStorage.setItem(self.defaultskey, stringifySettings(self.defaultsettings));
         if (domainname && sitename) {
             let oldsitename = self.database.domains[domainname];
             if ((!oldsitename) || sitename === oldsitename) {
@@ -446,11 +442,11 @@ function Utf8Encode(string) {
             }
             self.database.sites[sitename] = self.cloneObject(settings);
             persistDatabase(self.database);
-            cachedsettings = JSON.stringify(self.cloneObject(settings));
+            cachedsettings = stringifySettings(self.cloneObject(settings));
         }
     }
     self.settingsModified = function () {
-        return (cachedsettings !== JSON.stringify(self.cloneObject(self.settings)));
+        return (cachedsettings !== stringifySettings(self.cloneObject(self.settings)));
     }
     self.forgetSettings = function (domainname) {
         const sitename = self.siteForDomain(domainname);
@@ -464,7 +460,20 @@ function Utf8Encode(string) {
         self.domainname = "";
         return self.loadSettings();  // reset to default settings
     }
-        return self;
+    function parseSettings(str) {
+        try {
+            return JSON.parse(decodeURIComponent(str));
+        } catch (e) {
+            let settings = JSON.parse(str.replace(/%22/g, '"').replace(/%20/g, " "));
+            if (settings.specials) settings.specials = array2string(settings.specials);
+            return settings; // To handle legacy bookmarks
+        }
+    }
+    function stringifySettings(settings) {
+        let s = JSON.stringify(settings);
+        return encodeURIComponent(s);
+    }
+    return self;
 })({
     version: "3.0",
     clearsuperpw: false,
