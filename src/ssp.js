@@ -259,7 +259,7 @@ let SitePasswordWeb = ((function (self) {
                     let args = {"pw": $superpw.value, "salt": salt, "settings": settings, "iters": 3_000_000, "keysize": settings.pwlength * 16};
                     let start = Date.now();
                     let cachedValue = await SitePassword.candidatePassword(args);
-                    console.log("protect", Date.now() - start, "ms", cachedValue);
+                    if (logging) console.log("protect", Date.now() - start, "ms", cachedValue);
                     return cachedValue;
                 }
             }
