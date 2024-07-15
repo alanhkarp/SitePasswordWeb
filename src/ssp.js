@@ -236,15 +236,12 @@ let SitePasswordWeb = ((function (self) {
                 $meter.value = 0;
                 let $protect = get("superpwprotect");
                 let interval = setInterval(() => {
-                    $meter.value++;
-                    let index = Math.floor($meter.value/5);
-                    $meter.style.setProperty("--meter-value-color", strengthColor[index]);
-                    if ($meter.value >= 20) clearInterval(interval);
-                }, 100);
+                    $protect.classList.toggle("nodisplay");
+                }, 500);
                 $sitepw.value = "Computing...";
                 $protect.classList.remove("nodisplay");
                 cachedValue = await protect();
-                $protect.classList.add("nodisplay");
+                 $protect.classList.add("nodisplay");
                 sessionStorage.setItem("cachedValue", cachedValue);
                 clearInterval(interval);
                 $sitepwmenucopy.disabled = false;
@@ -256,10 +253,10 @@ let SitePasswordWeb = ((function (self) {
                     let settings = SitePassword.cloneObject(SitePassword.settings);
                     settings.pwlength = 12;
                     let salt = ""; // Can't use salt because I need the same value every time and everywhere
-                    let args = {"pw": $superpw.value, "salt": salt, "settings": settings, "iters": 3_000_000, "keysize": settings.pwlength * 16};
+                    let args = {"pw": $superpw.value, "salt": salt, "settings": settings, "iters": 4_000_000, "keysize": settings.pwlength * 16};
                     let start = Date.now();
                     let cachedValue = await SitePassword.candidatePassword(args);
-                    if (logging) console.log("protect", Date.now() - start, "ms", cachedValue);
+                    console.log("protect", Date.now() - start, "ms", cachedValue);
                     return cachedValue;
                 }
             }
@@ -365,7 +362,8 @@ let SitePasswordWeb = ((function (self) {
                 resolvers[element.id + event + "Resolver"] = resolve;
             });
         }
-            async function stats() {
+        // A function I can run from the console to get statistics
+        async function stats() {
             let count = 10000;
             let hasWord = 0;
             SitePassword.settings = defaultsettings;
