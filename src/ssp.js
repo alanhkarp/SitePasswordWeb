@@ -241,7 +241,7 @@ let SitePasswordWeb = ((function (self) {
                 $sitepw.value = "Computing...";
                 $protect.classList.remove("nodisplay");
                 cachedValue = await protect();
-                 $protect.classList.add("nodisplay");
+                $protect.classList.add("nodisplay");
                 sessionStorage.setItem("cachedValue", cachedValue);
                 clearInterval(interval);
                 $sitepwmenucopy.disabled = false;
