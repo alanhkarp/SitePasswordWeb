@@ -267,7 +267,7 @@ let SitePassword = ((function (self) {
         if (!m || !isConsistent(settings)) {
             return "";
         }
-        let cacheValue = sessionStorage.getItem("cacheValue");
+        let cacheValue = sessionStorage.getItem("cachedValue");
         const salt = n.toString() + '\t'+ u.toString() + '\t' + cacheValue;
         if (logging) console.log("bg calling computePassword");
         let start = Date.now();
