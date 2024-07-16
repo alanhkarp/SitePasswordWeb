@@ -232,19 +232,15 @@ let SitePasswordWeb = ((function (self) {
         $superpw.onblur = async function () {
             let cachedValue = sessionStorage.getItem("cachedValue");
             if (!cachedValue && $superpw.value) {
-                const $meter = get("superpw-strength-meter");
-                $meter.value = 0;
+                const $progress = get("sitepwprogress");
+                $sitepw.value = " ";
+                $progress.classList.remove("nodisplay");
                 let $protect = get("superpwprotect");
-                $sitepw.value = "Computing...";
-                let interval = setInterval(() => {
-                    $sitepw.value += ".";
-                }, 250);
-                $sitepw.value = "Computing...";
                 $protect.classList.remove("nodisplay");
                 cachedValue = await protect();
+                $progress.classList.add("nodisplay");
                 $protect.classList.add("nodisplay");
                 sessionStorage.setItem("cachedValue", cachedValue);
-                clearInterval(interval);
                 $sitepwmenucopy.disabled = false;
                 $sitepwmenushow.disabled = false;
                 updateSitePassword();
