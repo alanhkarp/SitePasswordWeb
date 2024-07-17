@@ -267,8 +267,7 @@ let SitePassword = ((function (self) {
         if (!m || !isConsistent(settings)) {
             return "";
         }
-        let cacheValue = sessionStorage.getItem("cacheValue");
-        const salt = n.toString() + '\t'+ u.toString() + '\t' + cacheValue;
+        const salt = n.toString() + '\t'+ u.toString();
         if (logging) console.log("bg calling computePassword");
         let start = Date.now();
         let pw = await computePassword(m, salt, settings);
@@ -360,7 +359,6 @@ function Utf8Encode(string) {
     self.generateCharacterSet = generateCharacterSet;
     self.xorStrings = xorStrings;
     self.stringXorArray = stringXorArray;
-    self.candidatePassword = candidatePassword;
     self.getSuperPassword = function () {
         return self.cloneObject(superpassword);
     }
@@ -413,6 +411,10 @@ function Utf8Encode(string) {
         let settings = (sitename ? self.database.sites[sitename] : undefined);
         if (!settings) {
             settings = self.defaultsettings;
+        }
+        if ('string' !== typeof settings.specials) {
+            let specials = array2string(settings.specials);
+            settings.specials = specials;
         }
         self.settings = self.cloneObject(settings);
         cachedsettings = stringifySettings(self.settings);

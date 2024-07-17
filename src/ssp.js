@@ -69,7 +69,6 @@ let SitePasswordWeb = ((function (self) {
         const $results = get("results");
         const $sitepw = get("sitepw");
         const $remember = get("remember");
-        const $protect = get("protect");
         const $providesitepw = get("providesitepw");
         const $code = get("code");
         const $pwlength = get("pwlength");
@@ -219,43 +218,8 @@ let SitePasswordWeb = ((function (self) {
 
         const strengthText = ["Too Weak", "Very Weak", "Weak", "Good", "Strong"];
         const strengthColor = ["#bbb", "#f06", "#f90", "#093", "#036"]; // 0,3,6,9,C,F
-        $superpw.onkeyup = async function () {
-            sessionStorage.removeItem("cacheValue");
-            updateExportButton();
-            await updateSitePassword();
-            $sitepw.value = "Click to see your site password";
-            $sitepwmenucopy.disabled = true;
-            $sitepwmenushow.disabled = true;
-            if (resolvers.superpwkeyupResolver) resolvers.superpwkeyupResolver();
-        }
         $superpw.onblur = async function () {
-            let cacheValue = sessionStorage.getItem("cacheValue");
-            if (!cacheValue && $superpw.value) {
-                {
-                    $protect.classList.toggle("nodisplay");
-                    $sitepw.value = "Waiting for your site password";
-                    cacheValue = await protect();
-                    sessionStorage.setItem("cacheValue", cacheValue);
-                    $protect.classList.toggle("nodisplay");
-                }    
-                async function protect() {
-                    // Computes for a long time and stores the result in the settings for this sitename
-                    // That value is used when computing the site password
-                    let settings = SitePassword.cloneObject(SitePassword.settings);
-                    settings.pwlength = 32;
-                    let salt = ""; // Can't use salt because I need the same value every time and everywhere
-                    let args = {"pw": $superpw.value, "salt": salt, "settings": settings, "iters": 6_000_000, "keysize": settings.pwlength * 16};
-                    let cacheValue = await SitePassword.candidatePassword(args);
-                    return cacheValue;
-                }
-            }
-            $sitepwmenucopy.disabled = false;
-            $sitepwmenushow.disabled = false;
-            updateSitePassword();
-        }
-        async function updateSitePassword() {
             SitePassword.setSuperPassword($superpw.value);
-            await handleBlur("sitename");
             if (logging) console.log("ssp onblur generate password");
             let calculated = await generatePassword();
             if (logging) console.log("ssp onblur got password", calculated);
@@ -367,6 +331,11 @@ let SitePasswordWeb = ((function (self) {
             console.log("Stats: total", count, "hasWord", hasWord);
         }
         // stats();
+        $superpw.onkeyup = async function () {
+            updateExportButton();
+            await $superpw.onblur();
+            if (resolvers.superpwkeyupResolver) resolvers.superpwkeyupResolver();
+        }
         const $superpwmenuhide = get("superpwmenuhide");
         const $superpwmenushow = get("superpwmenushow");
         $superpwmenuhide.onclick = function () {
@@ -578,6 +547,7 @@ let SitePasswordWeb = ((function (self) {
             helpAllOff();
             sectionClick("bookmark");
         }
+
         $sitename.onblur = async function () {
             await handleBlur("sitename");
             const domainname = $domainname.value;
@@ -735,18 +705,16 @@ let SitePasswordWeb = ((function (self) {
         const $sitepwmenucopy = get("sitepwmenucopy");
         $sitepw3bluedots.onmouseover = function (e) {
             let sitepw = $sitepw.value;
-            if (sitepw && sitepw !== "Click to see your site password") {
+            if (sitepw) {
                 $sitepwmenucopy.style.opacity = "1";
-                $sitepwmenuhide.style.opacity = "1";
             } else {
                 $sitepwmenucopy.style.opacity = "0.5";
-                $sitepwmenuhide.style.opacity = "0.5";
             }
             menuOn("sitepw", e);
         }
         $sitepw3bluedots.onclick = $sitepw3bluedots.onmouseover;
         $sitepwmenucopy.onclick = function(e) {
-            if (!$sitepw.value || $sitepw === "Click to see your site password") return;
+            if (!$sitepw.value) return;
             copyToClipboard($sitepw);
             menuOff("sitepw", e);
         }
@@ -768,7 +736,6 @@ let SitePasswordWeb = ((function (self) {
             $sitepwmenuhide.classList.toggle("nodisplay")    ;
         };
         $sitepwmenuhide.onclick = function () {
-            if (!$sitepw.value || $sitepw.value === "Click to see your site password") return;
             $sitepw.type = "password";
             $sitepwmenushow.classList.toggle("nodisplay");
             $sitepwmenuhide.classList.toggle("nodisplay");
