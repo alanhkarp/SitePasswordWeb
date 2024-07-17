@@ -254,12 +254,12 @@ let SitePasswordWeb = ((function (self) {
                     // Computes for a long time and caches the result in session storage
                     // That value is used when computing the site password
                     let settings = SitePassword.cloneObject(SitePassword.settings);
-                    settings.pwlength = 12;
+                    settings.pwlength = 32;
                     let salt = ""; // Can't use salt because I need the same value every time and everywhere
-                    let args = {"pw": $superpw.value, "salt": salt, "settings": settings, "iters": 3_000_000, "keysize": settings.pwlength * 16};
+                    let args = {"pw": $superpw.value, "salt": salt, "settings": settings, "iters": 2_000_000, "keysize": settings.pwlength * 16};
                     let start = Date.now();
                     let cachedValue = await SitePassword.candidatePassword(args);
-                    console.log("protect", Date.now() - start, "ms", cachedValue);
+                    if (logging) console.log("protect", Date.now() - start, "ms");
                     return cachedValue;
                 }
             }
