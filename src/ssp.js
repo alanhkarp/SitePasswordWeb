@@ -247,7 +247,7 @@ let SitePasswordWeb = ((function (self) {
                 async function protect() {
                     // Computes for a long time and caches the result in session storage
                     // That value is used when computing the site password
-                    let settings = SitePassword.cloneObject(SitePassword.defaultsettings);
+                    let settings = SitePassword.cloneObject(SitePassword.settings);
                     settings.pwlength = 12;
                     let salt = ""; // Can't use salt because I need the same value every time and everywhere
                     let args = {"pw": $superpw.value, "salt": salt, "settings": settings, "iters": 4_000_000, "keysize": settings.pwlength * 16};
