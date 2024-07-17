@@ -237,7 +237,7 @@ let SitePasswordWeb = ((function (self) {
                 let $protect = get("superpwprotect");
                 let interval = setInterval(() => {
                     $protect.classList.toggle("nodisplay");
-                }, 750);
+                }, 500);
                 $sitepw.value = "Computing...";
                 $protect.classList.remove("nodisplay");
                 cachedValue = await protect();
