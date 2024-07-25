@@ -113,6 +113,12 @@ There is a _Download local data_ button at the bottom of the page. That button l
 
 There may come a time when you want to use a different password manager. In that case you can use the _Export passwords_ button at the bottom of the popup window. Clicking this button creates a file with the passwords for sites you remembered on this machine. You can see a readable form of the data in the file by opening it in a spreadsheet.
 
+You'll have to export to a separate file for each super password you use.  Since SitePassword doesn't track 
+your super passwords, it doesn't know which one goes with which domain.  As a result each file 
+will have a site password for every domain name in your SitePasswordData bookmarks folder.
+Only the domains associated with that super password will have the correct site password.
+
+
 **Be very careful with this file.** Completely delete it from your machine, including emptying the trash, after you use it. If you don't, anyone who gets access to your machine can get your passwords.
 
 ### Source Code
