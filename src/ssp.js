@@ -85,6 +85,7 @@ let SitePasswordWeb = ((function (self) {
         const $makedefaultbutton = get("makedefaultbutton")
         const $downloadbutton = get("downloadbutton");
         const $exportbutton = get("exportbutton");
+        const $clearsuperpw = get("clearsuperpw");
         const $phishing = get("phishing");
         const $instructionpanel = get("instructionpanel");
         // Fill in default values in case the user has changed them
@@ -713,9 +714,18 @@ let SitePasswordWeb = ((function (self) {
             menuOn("sitepw", e);
         }
         $sitepw3bluedots.onclick = $sitepw3bluedots.onmouseover;
-        $sitepwmenucopy.onclick = function(e) {
+        document.addEventListener("copy", (event) => {
+            if (event.target === $sitepw) $sitepwmenucopy.onclick();
+        });
+        $sitepwmenucopy.onclick = async function(e) {
             if (!$sitepw.value) return;
             copyToClipboard($sitepw);
+            if ($clearsuperpw.checked) {
+                $superpw.value = "";
+                await generatePassword();
+                $sitepw.value = "";
+                $superpw.focus();                        
+            }
             menuOff("sitepw", e);
         }
         get("sitepwmenuhelp").onclick = function (e) {
@@ -1102,7 +1112,7 @@ let SitePasswordWeb = ((function (self) {
                 addColumnEntries(tr, entries);
             }
         }
-                // I need to handle the case where the user clicks on the link in the instructions or help
+        // I need to handle the case where the user clicks on the link in the instructions or help
         get("sharedref").onclick = function (e) {
             e.stopPropagation();
             sectionClick("shared");

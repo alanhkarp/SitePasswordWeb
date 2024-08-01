@@ -374,7 +374,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-row">
+            <div class="form-row">
                 <button id="remember" 
                   type="button" 
                   title="Remember on this machine the settings for this account."
@@ -505,96 +505,96 @@
       </div>
       <div id="settings">
           <h1 style="text-align: center;">Settings</h1>        
-            <div class="setting-row" 
-              id="providesitepwdiv"
-              style="margin-left: 10px"
-              title="You must fill in the SitePassword form before you can provide your own site password.">
-              <input id="providesitepw" 
-                type="checkbox"
-                disabled
-                aria-disabled="true"
-                title="Check to type your own site password.  You must fill in the SitePassword form first." 
-              />
-              <span>Provide your own site password</span>
+          <div class="setting-row" 
+            id="providesitepwdiv"
+            style="margin-left: 10px"
+            title="You must fill in the SitePassword form before you can provide your own site password.">
+            <input id="providesitepw" 
+              type="checkbox"
+              disabled
+              aria-disabled="true"
+              title="Check to type your own site password.  You must fill in the SitePassword form first." 
+            />
+            <span>Provide your own site password</span>
+          </div>
+          <div class="form-row">
+            <input 
+              id="code" 
+              class="sans" 
+              disabled
+              type="text" 
+              autocomplete="off"
+              value="" 
+              style="margin-top: 0"
+              placeholder="Code from your settings"
+              title="Paste or type the code from your settings here." />
+          </div>
+          <div id="defaultsettings" style="background-color: rgb(136, 204, 255, 20%);">
+            <div class="setting-row" style="top: 5px">
+              <span style="position: relative; left: 4px">Site password is</span>
+              <input id="pwlength" type="text" value="12" size="2" 
+                style="position: relative; left: 2px"/>
+              <span>characters long</span>
+            </div>
+            <div class="setting-row">
+              <input id="startwithletter" type="checkbox" checked="checked" />
+              <span>Starts with letter</span>
+            </div>
+            <div class="setting-row">
+              <input id="allowlowercheckbox" type="checkbox" checked="checked" />
+              <span id="allowlower" style="display: none;">Allows lowercase letters</span>
+              <span id="requirelower" style="display: inline;">
+                Requires at least
+                <input id="minlower" type="text" value="1" size="2" />
+                lowercase letter(s)
+              </span>
+            </div>
+            <div class="setting-row">
+              <input id="allowuppercheckbox" type="checkbox" checked="checked" />
+              <span id="allowupper" style="display: none;">Allows uppercase letters</span>
+              <span id="requireupper" style="display: inline;">
+                Requires at least
+                <input id="minupper" type="text" value="1" size="2" />
+                uppercase letter(s)
+              </span>
+            </div>
+            <div class="setting-row">
+              <input id="allownumbercheckbox" type="checkbox" checked="checked" />
+              <span id="allownumber" style="display: none;">Allows numbers</span>
+              <span id="requirenumber" style="display: inline;">
+                Requires at least
+                <input id="minnumber" type="text" value="1" size="2" />
+                number(s)
+              </span>
+            </div>
+            <div class="setting-row">
+              <input id="allowspecialcheckbox" type="checkbox" />
+              <span id="allowspecial" style="display: inline;">Allows special characters</span>
+              <span id="requirespecial" style="display: none;">
+                Requires at least
+                <input id="minspecial" type="text" value="1" size="2" />
+                of
+                <input 
+                  id="specials" 
+                  class="fixed" 
+                  title="Enter up to 12 special characters.  Alphanumerics are not allowed."
+                  type="text" 
+                  value="$/!=@?._-" 
+                  size="12" maxlength="12" />
+              </span>
             </div>
             <div class="form-row">
-              <input 
-                id="code" 
-                class="sans" 
-                disabled
-                type="text" 
-                autocomplete="off"
-                value="" 
-                style="margin-top: 0"
-                placeholder="Code from your settings"
-                title="Paste or type the code from your settings here." />
+              <button id="makedefaultbutton"
+                type="button"
+                style="display: inline; margin-left: 10px; margin-right: 40px;"
+                target="_blank"
+                title="Make the settings in the box your default"
+                >
+                Save as default 
+              </button>                  
             </div>
-            <div id="defaultsettings" style="background-color: rgb(136, 204, 255, 20%);">
-              <div class="setting-row" style="top: 5px">
-                <span style="position: relative; left: 4px">Site password is</span>
-                <input id="pwlength" type="text" value="12" size="2" 
-                  style="position: relative; left: 2px"/>
-                <span>characters long</span>
-              </div>
-              <div class="setting-row">
-                <input id="startwithletter" type="checkbox" checked="checked" />
-                <span>Starts with letter</span>
-              </div>
-              <div class="setting-row">
-                <input id="allowlowercheckbox" type="checkbox" checked="checked" />
-                <span id="allowlower" style="display: none;">Allows lowercase letters</span>
-                <span id="requirelower" style="display: inline;">
-                  Requires at least
-                  <input id="minlower" type="text" value="1" size="2" />
-                  lowercase letter(s)
-                </span>
-              </div>
-              <div class="setting-row">
-                <input id="allowuppercheckbox" type="checkbox" checked="checked" />
-                <span id="allowupper" style="display: none;">Allows uppercase letters</span>
-                <span id="requireupper" style="display: inline;">
-                  Requires at least
-                  <input id="minupper" type="text" value="1" size="2" />
-                  uppercase letter(s)
-                </span>
-              </div>
-              <div class="setting-row">
-                <input id="allownumbercheckbox" type="checkbox" checked="checked" />
-                <span id="allownumber" style="display: none;">Allows numbers</span>
-                <span id="requirenumber" style="display: inline;">
-                  Requires at least
-                  <input id="minnumber" type="text" value="1" size="2" />
-                  number(s)
-                </span>
-              </div>
-              <div class="setting-row">
-                <input id="allowspecialcheckbox" type="checkbox" />
-                <span id="allowspecial" style="display: inline;">Allows special characters</span>
-                <span id="requirespecial" style="display: none;">
-                  Requires at least
-                  <input id="minspecial" type="text" value="1" size="2" />
-                  of
-                  <input 
-                    id="specials" 
-                    class="fixed" 
-                    title="Enter up to 12 special characters.  Alphanumerics are not allowed."
-                    type="text" 
-                    value="$/!=@?._-" 
-                    size="12" maxlength="12" />
-                </span>
-              </div>
-              <div class="form-row">
-                <button id="makedefaultbutton"
-                  type="button"
-                  style="display: inline; margin-left: 10px; margin-right: 40px;"
-                  target="_blank"
-                  title="Make the settings in the box your default"
-                  >
-                  Save as default 
-                </button>                  
-              </div>
-            </div>
-            <div class="form-row">
+          </div>
+          <div class="form-row">
             <button id="downloadbutton" type="button" style="display: inline" target="_blank"
               title="Download the settings stored on this machine to a file that you can use to calculate your passwords when the SitePassword extension is not available.">
               Download local data
@@ -609,7 +609,13 @@
             <span style="flex:1"></span>
             <a id="pwdata" href="data:application/octet-stream," target="_blank" style="display: none;"
               download="passwords.csv">passwords.csv</a>
-              </div>
+          </div>
+          <div class="form-row" style="top: 10px"; width="200px">
+            <label for="clearsuperpw">
+              <input id="clearsuperpw" type="checkbox" checked="checked" />
+              <span class="settings">Clear super password on copy</span>
+            </label>
+          </div>
       </div>
 <!--
 Instructions for converting the contents of this panel to Markdown
@@ -899,6 +905,32 @@ to change all occurrences if ![](images...) to <img> tags.
                 that case, just choose a different nickname for the account.  You'll 
                 almost certainly get a strong site password.
               </p>
+            </div>
+          </section>
+          <section id="clearsuperpwinfo" name="instructions" class="instructionpaneltext">
+            <svg id="openclearsuperpw" class="accordian" style="display: block;" width="24px" height="24px"
+              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" />
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m9 11 3 3 3-3" />
+            </svg>
+            <svg id="closeclearsuperpw" class="accordian" style="display: none;" width="24px" height="24px"
+              viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" />
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m9 13 3-3 3 3" />
+            </svg>
+            <h3>Clear Super Password on Copy</h3>
+            <div id="clearsuperpwdiv" style="display: none;">
+              <p>
+                You are probably using this web page because you're on a device that doesn't have the 
+                extension installed.  If that's because you are at a friend's house, you probably don't 
+                want to leave your super password lying around.  You can check this box to clear your 
+                super password from the form when you copy your site password.  Uncheck the box if this 
+                is one of your own devices.
+             </p>
             </div>
           </section>
           <section id="codeinfo" name="instructions" class="instructionpaneltext">
