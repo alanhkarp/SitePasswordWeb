@@ -493,7 +493,7 @@ let SitePasswordWeb = ((function (self) {
                     await generatePassword();
                 } else {
                     $sitename.value = settings.sitename;
-                    phishingWarningOn(settings.domainname, $domainname.value);
+                    phishingWarningOn(settings, settings.domainname, $domainname.value);
                     await Promise.resolve(); // To match the await on the other branch
                 }
             } else {
@@ -571,7 +571,7 @@ let SitePasswordWeb = ((function (self) {
             } else if (!domainname) {
                 await updateSettings(settings);
             } else if (existingDomain !== domainname) {
-                phishingWarningOn(existingDomain, domainname);
+                phishingWarningOn(settings, existingDomain, domainname);
                 await Promise.resolve(); // To match the await in the other branch
             }
             clearDatalist("sitenames");
@@ -778,9 +778,8 @@ let SitePasswordWeb = ((function (self) {
             const settings = SitePassword.loadSettings();
             updateSettings(settings);
         }
-        function phishingWarningOn(existingDommain, testDomain) {
+        function phishingWarningOn(settings, existingDommain, testDomain) {
             httpWarningOff();
-            let settings = SitePassword.settings;
             let sitename = normalize($sitename.value);
             get("phishingtext0").innerText = sitename;
             get("phishingtext1").innerText = existingDommain;
@@ -793,7 +792,6 @@ let SitePasswordWeb = ((function (self) {
             $cancelwarning.focus();
             $warningbutton.onclick = function () {
                 SitePassword.settings = settings;
-                SitePassword.storeSettings();
                 updateSettings(settings);
            };
            $nicknamebutton.onclick = function () {
