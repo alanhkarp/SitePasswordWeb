@@ -104,7 +104,7 @@ let SitePasswordWeb = ((function (self) {
 
        function loadSettingControls(settings) {
             $providesitepw.checked = settings.providesitepw;
-            if ($providesitepw.checked && $sitename && $username) {
+            if ($providesitepw.checked && $sitename.value && $username.value) {
                 $sitepw.readOnly = false;
                 $sitepw.placeholder = "Enter your super password";
                 $superpw.focus();
@@ -120,6 +120,11 @@ let SitePasswordWeb = ((function (self) {
             $allowspecialcheckbox.checked = settings.allowspecial;
             $minspecial.value = settings.minspecial;
             $specials.value = settings.specials;
+            if ($providesitepw.checked) {
+                $code.value = settings.xor;
+            } else {
+                $code.value = "";
+            }
             let fields = ["lower", "upper", "number", "special"];
             fields.forEach((field) => {
                 optionalFields(field);
@@ -147,6 +152,7 @@ let SitePasswordWeb = ((function (self) {
             settings.allowspecial = $allowspecialcheckbox.checked;
             settings.minspecial = +$minspecial.value;
             settings.specials = $specials.value;
+            settings.xor = $code.value.split(",").map(Number);
         }
         const $pwok = get("pwok");
         const $pwfail = get("pwfail");
