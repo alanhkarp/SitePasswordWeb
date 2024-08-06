@@ -168,6 +168,7 @@ let SitePasswordWeb = ((function (self) {
                 } else {
                     $pwok.value = "";
                     $pwfail.style.display = "block";
+                    scrollTo($pwfail);
                 }
                 if ($providesitepw.checked) {
                     if (document.activeElement !== $sitepw) {
@@ -433,6 +434,7 @@ let SitePasswordWeb = ((function (self) {
             let toforget = normalize(get("domainname").value);
             addForgetItem(toforget);
             get("forget").classList.remove("nodisplay");
+            scrollTo(get("forget"));
         }
         $domainnamemenuhelp.onclick = function (e) {
             helpItemOn("domainname");
@@ -610,6 +612,7 @@ let SitePasswordWeb = ((function (self) {
         get("sitenamemenuforget").onclick = function (e) {
             if (!get("sitename").value) return;
             get("forget").classList.toggle("nodisplay");
+            scrollTo(get("forget"));
             let toforget = normalize(get("sitename").value);
             for (let domain in SitePassword.database.domains) {
                 if (normalize(SitePassword.database.domains[domain]) === toforget) {
@@ -669,6 +672,7 @@ let SitePasswordWeb = ((function (self) {
         get("usernamemenuforget").onclick = function (e) {
             if (!get("username").value) return;
             get("forget").classList.toggle("nodisplay");
+            scrollTo(get("forget"));
             let toforget = normalize(get("username").value);
              for (let domain in SitePassword.database.domains) {
                 let sitename = SitePassword.database.domains[domain];
@@ -785,6 +789,7 @@ let SitePasswordWeb = ((function (self) {
             get("phishingtext1").innerText = existingDommain;
             get("phishingtext2").innerText = testDomain;
             $phishing.style.display = "block";
+            scrollTo($phishing);
             $results.style.display = "none";  // hide sitepw/remember/settings...
             $domainname.classList.add("bad-input");
             $domainname.disabled = true;
@@ -829,6 +834,7 @@ let SitePasswordWeb = ((function (self) {
         const $http = get("http");
         function httpWarningOn() {
             $http.style.display = "block";
+            scrollTo($http);
         }
         function httpWarningOff() {
             $http.style.display = "none";
@@ -1220,15 +1226,22 @@ let SitePasswordWeb = ((function (self) {
         }
         function showInstructions() {
             helpAllOff();
-            get("instructionpanel").style.display = "block";
-            get("maininfo").title = "Close Instructions";
+            $instructionpanel.style.display = "block";
+            scrollTo($instructionpanel);
+            $maininfo.title = "Close instructions";
             get("instructionopen").classList.add("nodisplay");
             get("instructionclose").classList.remove("nodisplay");
         }
+        function scrollTo(element) {
+            // Scroll needs to be delayed to allow for display to be set
+            setTimeout(() => {
+                element.scrollIntoView({behavior: "smooth", block: "nearest", inline: "start"});
+            }, 0);
+        }
         function hideInstructions() {
             closeAllInstructions();
-            get("instructionpanel").style.display = "none";
-            get("maininfo").title = "Open Instructions";
+            $instructionpanel.style.display = "none";
+            $maininfo.title = "Open Instructions";
             get("instructionopen").classList.remove("nodisplay");
             get("instructionclose").classList.add("nodisplay");
         }
@@ -1250,6 +1263,7 @@ let SitePasswordWeb = ((function (self) {
         if (bkmkSettings) {
             SitePassword.loadSettings(bkmkSettings.sitename);
             get("bkmkcheck").style.display = "block";
+            scrollTo(get("bkmkcheck"));
             SitePassword.settings = bkmkSettings;
             SitePassword.domainname = bkmkSettings.domainname;
             $domainname.value = bkmkSettings.domainname;

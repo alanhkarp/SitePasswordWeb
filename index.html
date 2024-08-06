@@ -381,127 +381,6 @@
             </div>
           </div>
         </div>
-        <div id="warnings"class="form-row">
-          <div id="phishing" class="warning nodisplay">
-            <img src="src/warning.png" class="icon warning-icon">
-            <span class="warningtext">Warning: Possible Phishing</span>
-            <p>
-              <!-- https://www.ipqualityscore.com/threat-feeds/malicious-url-scanner 
-                    https://www.abuseipdb.com/
-                    https://www.malwareurl.com/listing-urls.php
-                    https://www.scamadviser.com/
-              -->
-              You may be at a fake site that is trying to steal your password.
-              You previously used the nickname
-              <span id="phishingtext0" class="phishing" style="padding-left: 5px"></span>
-              for
-            </p>
-            <span id="phishingtext1" class="phishing"></span>
-            <br /><br />
-            <p>The domain asking for your password is</p>
-            <span id="phishingtext2" class="phishing"></span>
-            <br /><br />
-            <p>
-              Check the domain name carefully; it may not be for your account.
-              You can check for known bad web pages at 
-              <a id="phishingcheck" href="https://www.scamadviser.com/" target="_blank">ScamAdvisor</a>
-              or other sites that check for phishing.
-            </p>
-            <button id="cancelwarning" type="button"
-              style="background-color: #21973f; margin: auto; color: white; width:100%"
-              title="I don't recognize this domain name. Take me away from this web page.">
-              <span class="btn-text" style="color: white">Ths domain name looks suspicious</span>
-            </button>
-            <br /><br />
-            <p>
-              It is common to see different domain names for the same account login. 
-              You may see <span class="example">login.example.com</span> and 
-              <span class="example">www.example.com</span> for the same account at example.com.
-              Just make sure you recognize the domain name.
-            </p>
-            <button id="warningbutton" type="button"
-              style="background-color: #D51c24; margin: auto; color:white; width:100%"
-              title="This page is for the same account. Use the same settings for it.">
-              <span class="btn-text" style="color: white">This page is for the same account</span>
-            </button>
-            <br /><br />
-            <p>
-              You may have accidentally reused a nickname. In that case, you can just pick a different one.
-            </p>
-            <button id="nicknamebutton" type="button"
-              style="background-color: #1964dc; margin: auto; color:white; width:100%"
-              title="This page is for a different account.  I'll select a new nickname.">
-              <span class="btn-text" style="color: white">Pick a new nickname</span>
-            </button>
-            <br /><br />
-          </div>
-          <div id="http" class="warning nodisplay">
-            <img src="src/warning.png" class="icon warning-icon">
-            <span class="warningtext">Warning: Page Not Secure</span>
-            <p>
-              The URL you pasted points to a page that is not secure. Are you sure you want
-              to enter your password?
-            </p>
-            <button id="httpclose" type="button" style="width:40%"
-              title="Close">
-              <span class="btn-text" style="color: black">Close</span>
-          </div>
-          <div id="forget" class="warning nodisplay"
-            title="You can change your mind or permanently forget the settings for the listed domain names.">
-            <div id="forgettext">
-              <img src="src/warning.png" class="icon warning-icon">
-              <span class="warningtext">Forget Enabled</span>
-              <p>
-                Are you sure you want to delete the settings for these domain names?
-              </p>
-              <ul id="toforgetlist"></ul>
-              <div>
-                <p>You can change your mind,</p>
-                <button id="cancelbutton" type="button" style="background-color: #21973f; color: white; width:100%"
-                  title="Click to cancel forgetting the settings for the listed domain names.">
-                  <span class="btn-text" style="color: white">Cancel</span>
-                </button>
-                <p>
-                  or permanently forget the settings for the listed domain names.
-                  <b>This action cannot be undone.</b>
-                </p>
-                <button id="forgetbutton" type="button" style="background-color: #D51c24; color:white; width:100%"
-                  title="Click to delete the settings for the listed domain names.">
-                  <span class="btn-text" style="color: white">Permanently forget</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <div id="pwfail" class="warning nodisplay">
-            <img src="src/warning.png" class="icon warning-icon">
-            <span class="warningtext">Warning: No Password</span>
-            <p>
-              Can't compute a password with these settings!  You may need to enable some characters, increase the 
-              pasword length, or reduce the number of special characters you're asking for.  If 
-              that doesn't work, try another nickname for the site.
-            </p>
-            <button id="pwfailclose" type="button" style="width:40%"
-              title="Close">
-              <span class="btn-text" style="color: black">Close</span>
-          </div>
-          <div id="bkmkcheck" class="warning nodisplay">
-            You can paste the URL for the login page to see if you might be at a fake site that is trying 
-            to steal your password.
-            <br />
-            <input 
-              id="bkmkDomain" 
-              type="input"
-              class="sans"
-              style="width: 90%"
-              autocomplete="off"
-              title="URL of the page you're logging into"
-              placeholder="Paste the login page URL"
-            />
-            <button id="bkmkcheckclose" type="button" style="width:40%"
-              title="Close">
-              <span class="btn-text" style="color: black">Close</span>
-          </div>
-        </div>
         <div id="settings">
             <h1 style="text-align: center;">Settings</h1>        
             <div class="setting-row" 
@@ -639,6 +518,812 @@
             to change all occurrences if ![](images...) to <img> tags.
 
           -->            
+          <h1> Instructions</h1>
+          <div id="sections">
+            <section id="useinfo" name="instructions">
+              <svg id="openuse" class="accordian" style="display: block;" width="24px" height="24px" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closeuse" class="accordian" style="display: none;" width="24px" height="24px" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Who Should Use This Web Page</h3>
+              <div id="usediv" style="display: none;">
+                <p>
+                  This web page is a companion to the SitePassword browser extension.
+                  In addition to remembering your settings, the extension synchronizes them
+                  across your machines. You should use the extension if you are using a
+                  compatible browser.
+                  Unfortunately, browsers on mobile devices don't allow extensions.
+                </p>
+                <p>
+                  The SitePassword web page is also available at
+                  <a href="https://alanhkarp.github.io/SitePasswordWeb/" target="_blank">
+                    https://alanhkarp.github.io/SitePasswordWeb/
+                  </a>.
+                </p>
+              </div>
+            </section>
+            <section id="overviewinfo" name="instructions">
+              <svg id="openoverview" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closeoverview" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>How It Works</h3>
+              <div id="overviewdiv" style="display: none;">
+                <p>
+                  SitePassword is different from most password managers. Instead of
+                  storing your passwords, it calculates them from a single super password
+                  and your nickname and user name
+                  for the account. That means you can usually get your site password if
+                  you remember those three things. (Some web pages require additional
+                  settings.)  It also allows you to specify the password
+                  when you can't use the computed password.
+                </p>
+              </div>
+            </section>
+            <section id="superpwinfo" name="instructions">
+              <svg id="opensuperpw" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closesuperpw" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Your Super Password</h3>
+              <div id="superpwdiv" style="display: none;">
+                <p>
+                  You should choose a strong super password, one with upper and
+                  lower case letters, numbers, and special characters. The stronger
+                  the better. The reason is simple. A bad guy who knows one site
+                  password and can figure out your nickname and user name for that site
+                  can start guessing super passwords. You want to make that job
+                  has hard as you can.
+                </p>
+                <p>
+                  You can protect yourself further by using different super passwords
+                  for different kinds of accounts. You could have one that you use for
+                  banking, another for subscriptions, and a third for sites you find
+                  sketchy.
+                </p>
+                <p>
+                  SitePassword doesn't prevent you from using a weak super password,
+                  but it does warn you. There is a strength indicator directly above
+                  the super password field. The color of your super password corresponds
+                  to the level shown on the meter.
+                  For example, if your super password is green,
+                  it is strong.  If it's orange, your super password is
+                  weak.  
+                  The tooltip tells how long it would take a determined adversary
+                  to guess your password.
+                </p>
+                <p>
+                  You'll notice that your super password is not usually marked Strong until it is 
+                  longer than a site password marked Strong.  That's because the super password
+                  is something you can remember, while the site password is effectively a
+                  random string of characters, which is less guessable.
+                </p>
+                <p>
+                  SitePassword cannot retrieve your super password.
+                  You should make sure it's something you won't easily forget. You
+                  might even want to write it down and keep the copy in a secure place.
+                </p>
+              </div>
+            </section>
+            <section id="domainnameinfo" name="instructions" class="instructionpaneltext">
+              <svg id="opendomainname" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closedomainname" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>The Domain Name</h3>
+              <div id="domainnamediv" style="display:none">
+                <p>
+                  The domain name is associated with the settings for this account.
+                  It is also the name of a bookmark in the SitePasswordData bookmark folder.
+                  That's the bookmark you can use to get your settings when you're on a machine
+                  that doesn't have the SitePassword extension installed.
+                </p>
+                <p>
+                  You can type the login page URL into this field, but you are strongly encouraged
+                  to paste it from the address bar of the login page so SitePassword can warn you about
+                  potential phishing.  
+                </p>
+                <p>
+                  Some web sites use multiple URLs for logging into the same account.  As a result,
+                  you may have more than one domain name for a given account. You'll get the same password
+                  for all of the domain names because they are all associated with the same nickname.
+                </p>
+              </div>
+            </section>
+            <section id="bookmarkinfo" name="instructions" class="instructionpaneltext">
+              <svg id="openbookmark" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closebookmark" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Bookmark</h3>
+              <div id="bookmarkdiv" style="display:none">
+                <p>
+                  SitePassword stores your settings in a bookmark in the SitePasswordData 
+                  bookmark folder.  
+                  You don't have to remember your settings if you synchonize your
+                  bookmarks to this machine.  You can click on the bookmark
+                  for the domain name to open this page with the form filled in, 
+                  or you can paste the bookmark into the form.
+                </p>
+              </div>
+            </section>
+            <section id="sitenameinfo" name="instructions">
+              <svg id="opensitename" class="accordian" style="display: block;" width="24px" height="24px" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closesitename" class="accordian" style="display: none;" width="24px" height="24px" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Your Site Name</h3>
+              <div id="sitenamediv" style="display: none;">
+                <p>
+                  The site name is the nickname you use refer to this account. It can be easy to remember,
+                  such as <em>amazon</em> for amazon.com, but it doesn't have to be that simple.
+                  It is one of the things used to compute your site password.
+                </p>
+                <p>
+                  Your settings, such as the domain name of the login page, 
+                  your user name, the site password length, and whether your
+                  site password contains special characters are associated with this nickname.
+                </p>
+              </div>
+            </section>
+            <section id="usernameinfo" name="instructions" class="instructionpaneltext">
+              <svg id="openusername" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closeusername" class="accordian" style="display: none;" width="24px" height="24px" 
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Your User Name</h3>
+              <div id="usernamediv" style="display: none;">
+                <p>
+                  Your user name is the name you use to log in to the site. It is
+                  associated with the nickname for the account and is used to 
+                  calculate your site password.  That means you can only have a 
+                  single user name for a given nickname.  If you want to use different 
+                  user names for the same site, follow the instructions for 
+                  <span id="sharedref2"><a href="#shared-machines">Shared Machines</a></span>.   
+                </p>
+              </div>
+            </section>
+            <section id="sitepwinfo" name="instructions" class="instructionpaneltext">
+              <svg id="opensitepw" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closesitepw" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Your Site Password</h3>
+              <div id="sitepwdiv" style="display: none;">
+                <p>
+                  SitePassword combines your super password, site name, and user name to 
+                  compute your password for the site.  It also uses the additional settings you
+                  provide to generate a password the site will accept.
+                </p>
+                <p>
+                  SitePassword could generate a weak site password just by chance.
+                  To let you know that has happened, it uses the same kind of
+                  strength meter to tell you how strong your site password is.
+                  The tooltip tells how long it would take a determined adversary
+                  to guess your password.
+                </p>
+                <p>
+                  For example, if your site password is orange, then it is weak. In
+                  that case, just choose a different nickname for the account.  You'll 
+                  almost certainly get a strong site password.
+                </p>
+              </div>
+            </section>
+            <section id="clearsuperpwinfo" name="instructions" class="instructionpaneltext">
+              <svg id="openclearsuperpw" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closeclearsuperpw" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Clear Super Password on Copy</h3>
+              <div id="clearsuperpwdiv" style="display: none;">
+                <p>
+                  You are probably using this web page because you're on a device that doesn't have the 
+                  extension installed.  If that's because you are at a friend's house, you probably don't 
+                  want to leave your super password lying around.  You can check this box to clear your 
+                  super password from the form when you copy your site password.  Uncheck the box if this 
+                  is one of your own devices.
+              </p>
+              </div>
+            </section>
+            <section id="codeinfo" name="instructions" class="instructionpaneltext">
+              <svg id="opencode" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closecode" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Provided Password Code</h3>
+              <div id="codediv" style="display: none;">
+                <p>
+                  When the generated password can't be used, say if you've been given one that
+                  you're not allowed to change, SitePassword can remember a password
+                  you provide. It is stored in your settings encrypted with the computed
+                  password for the site as a key. That means you must fill in the form before entering
+                  your own password. After you fill in the form, click the <em>Provide your own site password</em>
+                  check box. You can then enter your password into the site password field.
+                </p>
+                <p>
+                  The code in the bookmark is a list of integers represnting
+                  the encrypted value the password you provided.  In order to
+                  compute your site password, you must
+                  fill in the form with the same settings you used when you
+                  provided the password, including the code from the bookmark.
+                </p>
+                <p>
+                  You won't have to type in the numbers in the code if you
+                  synchonize bookmarks to this machine.  You can click on the
+                  bookmark for the domain name to open this page with the form
+                  filled in for you.
+                </p>
+              </div>
+            </section>
+            <section id="menusinfo" name="instructions" class="instructionpaneltext">
+              <svg id="openmenus" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closemenus" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Input Field Menus</h3>
+              <div id="menusdiv" style="display:none">
+                <p>
+                  Each of the input fields has a menu that shows up when you mouse over 
+                  (or tap on a touchscreen) the 3 dots
+                  (<img src="src/3bluedots.png" style="height: 16px; width: 6px; vertical-align: middle;">) 
+                  in the right side of the field.  Each field has a 
+                  particular set of menu items.  
+                  If an icon is grayed out, it is not available for that field.  For example, you can't 
+                  forget a domain name if that field is empty.
+                </p>
+                <p>
+                  <img src="src/help.png" alt="help" style="width: 16px; height: 16px; vertical-align: middle;"/> &nbsp; 
+                  Every field has a help option, 
+                  which provides a brief summary of the information contained in these Instructions.
+                </p>
+                <p>
+                  <img src="src/forget.png" alt="forget" style="width: 16px; height: 16px; vertical-align: middle;"/> &nbsp;
+                  The domain name, sitename and username fields have a Forget option.  For example, if you click this icon in the site nickname 
+                  field, you will be given the opportunity to permanently forget the settings for all domain names associated 
+                  with that site nickname.
+                </p>
+                <p>
+                  <img src="src/clipboard.png" alt="forget" style="width: 16px; height: 16px; vertical-align: middle;"/> &nbsp;
+                  The user name and site password fields have a Copy option, which copies the contents of the field to the clipboard.
+                </p>
+                <p>
+                  <img src="src/show.png" alt="forget" style="width: 16px; height: 16px; vertical-align: middle;"/> &nbsp;
+                  <img src="src/hide.png" alt="forget" style="width: 16px; height: 16px; vertical-align: middle;"/> &nbsp;
+                  The super and site password fields give you the option of showing or hiding the contents of the field.
+                  By default, your super password is hidden, and your site password is not.  You can change the default behavior of 
+                  the site password field by clicking the <em>Hide site password by default</em> option in the settings panel.
+                </p>
+              </div>
+            </section>
+            <section id="acceptableinfo" name="instructions">
+              <svg id="openacceptable" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closeacceptable" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Finding an Acceptable Password</h3>
+              <div id="acceptablediv" style="display: none;">
+                <p>
+                  Some web sites have strict password rules, how long it must be,
+                  if it must contain upper case or lower case letters, numbers, or
+                  special characters, including restrictions on which special
+                  characters are allowed. If you run into a site that doesn't
+                  accept the calculated password, change the appropriate menu entries. SitePassword
+                  was tested on hundreds of web sites to make sure it can almost always
+                  compute a valid password.
+                </p>
+                <p>
+                  You can also change the default values that SitePassword uses.
+                  For example, SitePassword defaults to a password with no special characters.  You can change these defaults by clicking the
+                  <em>Save as default</em> option in the settings panel.
+                </p>
+              </div>
+            </section>
+            <section id="changeinfo" name="instructions">
+              <svg id="openchange" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closechange" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3 id="changing-a-site-password">Changing a SitePassword</h3>
+              <div id="changediv" style="display: none;">
+                <p>
+                  Some sites make you change your password periodically. SitePassword
+                  makes that easy. Just change your nickname for the account. For example,
+                  if your current nickname is <em>MyBank1</em>, and they make you change
+                  your password, you could change the nickname to
+                  <em>MyBank2</em>. Your new site password will be completely different
+                  from the old one.
+                </p>
+              </div>
+            </section>
+            <section id="phishinginfo" name="instructions">
+              <svg id="openphishing" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closephishing" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Phishing</h3>
+              <div id="phishingdiv" style="display: none;">
+                <p>
+                  SitePassword includes an antiphishing feature. If you try to use
+                  the nickname of an account that you previously had clicked
+                  <em>Remember</em> for another domain name, you will get a big,
+                  scary warning. It's telling you that you may be at a site
+                  spoofing the one you think you are at.
+                </p>
+                <p>
+                  Unfortunately, you will
+                  also see this warning when you are not being tricked. Many
+                  websites have several different login pages with different domain
+                  names. So, when you see the warning, check the URL of the page
+                  to make sure it's a login page for the account you think it is.
+                </p>
+              </div>
+            </section>
+            <section id="sharedinfo" name="instructions" class="instructionpaneltext">
+              <svg id="openshared" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closeshared" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3 id="sharedref">Shared Machines</h3>
+              <div id="shareddiv" style="display: none">
+                <p>
+                  Many households have one machine shared by everybody. It's likely
+                  that everyone uses the same user name and password for certain
+                  accounts, such as streaming services. It's also likely that those
+                  people use their individual user names and passwords for other
+                  accounts, such as social media.
+                </p>
+                <p>
+                  SitePassword accomodates those uses with a feature provided by
+                  your browser called <em>profiles</em>.  Simply create one profile for the
+                  shared account and one for each individual.
+                </p>
+              </div>
+            </section>
+            <section id="extensioninfo" name="instructions">
+              <svg id="openextension" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closeextension" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+                  <h3>The Extension and this Page</h3>
+              <div id="extensiondiv" style="display: none;">
+                <p>
+                  The SitePassword extension plays well with this page.
+                  In particular, the extension uses bookmarks to synchronize your
+                  settings across machines. Pasting the appropriate bookmark into
+                  the bookmark field on this page fills in the form for you.  You 
+                  can also click on the bookmark to open this page with the form 
+                  filled in for you.
+                </p>
+                <p>
+                  If the domain name of the URL you pasted does not match that of the
+                  bookmark you selected, you'll get a phishing warning. It's telling you
+                  that you may be at a site spoofing the one you think you are at.
+                </p>
+              </div>
+            </section>
+            <section id="appsinfo" name="instructions">
+              <svg id="openapps" class="accordian" style="display: block;" width="24px" height="24px" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closeapps" class="accordian" style="display: none;" width="24px" height="24px" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Use with Apps</h3>
+              <div id="appsdiv" style="display: none;">
+                <p>
+                  You can calculate your password without
+                  providing a domain name, say to get the password for an app on your mobile
+                  device, but you won't be able to remember the settings until you
+                  provide a domain name. You can just make one up,
+                  <em>e.g., https://MyApp.com</em>, which you'll use the next time you need
+                  the password for that app.
+                </p>
+              </div>
+            </section>
+            <section id="downloadinfo" name="instructions">
+              <svg id="opendownload" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closedownload" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Downloading Your Settings</h3>
+              <div id="downloaddiv" style="display: none;">
+                <p>
+                  There is a <em>Download local data</em> button at the bottom of
+                  the page.
+                  That button lets you save your settings in a file you
+                  can reference if you're at a machine that doesn't have your
+                  SitePassword settings. <b>Only settings for accounts you've chosen
+                    to remember on this machine will be included.</b>
+                </p>
+              </div>
+            </section>
+            <section id="exportinfo" name="instructions" class="instructionpaneltext">
+              <svg id="openexport" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closeexport" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Exporting Your Passwords</h3>
+              <div id="exportdiv" style="display: none;">
+                <p>
+                  There may come a time when you want to use a different password manager.
+                  In that case you can use the <em>Export passwords</em> button at the bottom of
+                  the popup window. 
+                  Clicking this button creates a file with the passwords for sites you remembered
+                  on this machine.  You can see a readable form 
+                  of the data in the file by opening it in a spreadsheet.
+                </p>
+                <p>
+                  You'll have to export to a separate file for each super password you use.  Since SitePassword doesn't track 
+                  your super passwords, it doesn't know which one goes with which domain.  As a result each file 
+                  will have a site password for every domain name in your SitePasswordData bookmarks folder.  
+                  Only the domains associated with that super password will have the correct site password.
+                </p>
+                <p>
+                  <b>Be very careful with this file.</b>  Completely delete it from your machine, including
+                  emptying the trash, after you use it.  If you don't, anyone who gets access to your machine
+                  can get your passwords.
+                </p>
+              </div>
+            </section>
+            <section id="sourceinfo" name="instructions">
+              <svg id="opensource" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closesource" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Source Code</h3>
+              <div id="sourcediv" style="display: none;">
+                <p>
+                  If you are worried that SitePassword might go away, you can download the source code for the extension
+                  from
+                  the <a href="https://github.com/alanhkarp/SitePassword" target="_blank">SitePassword</a> project and that of this page
+                  from
+                  the <a href="https://github.com/alanhkarp/SitePasswordWeb" target="_blank">SitePasswordWeb</a> project.
+                  (For historical reasons, these are separate projects with a lot of duplicated code.)
+                </p>
+              </div>
+            </section>
+            <section id="paymentinfo" name="instructions">
+              <svg id="openpayment" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closepayment" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Voluntary Payment</h3>
+              <div id="paymentdiv" style="display: none;">
+                <p>
+                  If you like SitePassword, please make a contribution to the
+                  <a href="https://giving.umd.edu/giving/fund.php?name=nancy-lee-hurtt-70-maryland-promise-scholarship" target="_blank">
+                    Nancy Lee Hurtt '70 Maryland Promise Scholarship
+                  </a>
+                  or your favorite charity.
+                </p>
+              </div>
+            </section>
+          </div>
+        </div>
+        <div id="warnings"class="form-row">
+          <div id="phishing" class="warning nodisplay">
+            <img src="src/warning.png" class="icon warning-icon">
+            <span class="warningtext">Warning: Possible Phishing</span>
+            <p>
+              <!-- https://www.ipqualityscore.com/threat-feeds/malicious-url-scanner 
+                    https://www.abuseipdb.com/
+                    https://www.malwareurl.com/listing-urls.php
+                    https://www.scamadviser.com/
+              -->
+              You may be at a fake site that is trying to steal your password.
+              You previously used the nickname
+              <span id="phishingtext0" class="phishing" style="padding-left: 5px"></span>
+              for
+            </p>
+            <span id="phishingtext1" class="phishing"></span>
+            <br /><br />
+            <p>The domain asking for your password is</p>
+            <span id="phishingtext2" class="phishing"></span>
+            <br /><br />
+            <p>
+              Check the domain name carefully; it may not be for your account.
+              You can check for known bad web pages at 
+              <a id="phishingcheck" href="https://www.scamadviser.com/" target="_blank">ScamAdvisor</a>
+              or other sites that check for phishing.
+            </p>
+            <button id="cancelwarning" type="button"
+              style="background-color: #21973f; margin: auto; color: white; width:100%"
+              title="I don't recognize this domain name. Take me away from this web page.">
+              <span class="btn-text" style="color: white">Ths domain name looks suspicious</span>
+            </button>
+            <br /><br />
+            <p>
+              It is common to see different domain names for the same account login. 
+              You may see <span class="example">login.example.com</span> and 
+              <span class="example">www.example.com</span> for the same account at example.com.
+              Just make sure you recognize the domain name.
+            </p>
+            <button id="warningbutton" type="button"
+              style="background-color: #D51c24; margin: auto; color:white; width:100%"
+              title="This page is for the same account. Use the same settings for it.">
+              <span class="btn-text" style="color: white">This page is for the same account</span>
+            </button>
+            <br /><br />
+            <p>
+              You may have accidentally reused a nickname. In that case, you can just pick a different one.
+            </p>
+            <button id="nicknamebutton" type="button"
+              style="background-color: #1964dc; margin: auto; color:white; width:100%"
+              title="This page is for a different account.  I'll select a new nickname.">
+              <span class="btn-text" style="color: white">Pick a new nickname</span>
+            </button>
+            <br /><br />
+          </div>
+          <div id="http" class="warning nodisplay">
+            <img src="src/warning.png" class="icon warning-icon">
+            <span class="warningtext">Warning: Page Not Secure</span>
+            <p>
+              The URL you provided points to a page that is not secure. Are you sure you want
+              to enter your password?
+            </p>
+            <button id="httpclose" type="button" style="width:40%"
+              title="Close">
+              <span class="btn-text" style="color: black">Close</span>
+          </div>
+          <div id="forget" class="warning nodisplay"
+            title="You can change your mind or permanently forget the settings for the listed domain names.">
+            <div id="forgettext">
+              <img src="src/warning.png" class="icon warning-icon">
+              <span class="warningtext">Forget Enabled</span>
+              <p>
+                Are you sure you want to delete the settings for these domain names?
+              </p>
+              <ul id="toforgetlist"></ul>
+              <div>
+                <p>You can change your mind,</p>
+                <button id="cancelbutton" type="button" style="background-color: #21973f; color: white; width:100%"
+                  title="Click to cancel forgetting the settings for the listed domain names.">
+                  <span class="btn-text" style="color: white">Cancel</span>
+                </button>
+                <p>
+                  or permanently forget the settings for the listed domain names.
+                  <b>This action cannot be undone.</b>
+                </p>
+                <button id="forgetbutton" type="button" style="background-color: #D51c24; color:white; width:100%"
+                  title="Click to delete the settings for the listed domain names.">
+                  <span class="btn-text" style="color: white">Permanently forget</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div id="pwfail" class="warning nodisplay">
+            <img src="src/warning.png" class="icon warning-icon">
+            <span class="warningtext">Warning: No Password</span>
+            <p>
+              Can't compute a password with these settings!  You may need to enable some characters, increase the 
+              pasword length, or reduce the number of special characters you're asking for.  If 
+              that doesn't work, try another nickname for the site.
+            </p>
+            <button id="pwfailclose" type="button" style="width:40%"
+              title="Close">
+              <span class="btn-text" style="color: black">Close</span>
+          </div>
+          <div id="bkmkcheck" class="warning nodisplay">
+            You can paste the URL for the login page to see if you might be at a fake site that is trying 
+            to steal your password.
+            <br />
+            <input 
+              id="bkmkDomain" 
+              type="input"
+              class="sans"
+              style="width: 90%"
+              autocomplete="off"
+              title="URL of the page you're logging into"
+              placeholder="Paste the login page URL"
+            />
+            <button id="bkmkcheckclose" type="button" style="width:40%"
+              title="Close">
+              <span class="btn-text" style="color: black">Close</span>
+          </div>
         </div>
       </div>
     </div>
