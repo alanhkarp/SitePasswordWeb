@@ -452,9 +452,7 @@ let SitePasswordWeb = ((function (self) {
             let domain = (split.length > 1 ? split[2] : split[0]);
             if (logging) console.log("domain", domain, "protocol", protocol);
             if (domain && !isValidDomain(normalize(domain))) {
-                $domainname.value = url;
                 alert("Invalid domain.  Try again.");
-                $domainname.value = "";
                 domain = "";
             } else if (domain && protocol !== "https") {
                 httpWarningOn();
@@ -762,9 +760,20 @@ let SitePasswordWeb = ((function (self) {
         }
         
         let $bkmkDomain = get("bkmkDomain");
+        $bkmkDomain.onkeyup = function (e) {
+            if (e.crtlKey || e.metaKey && e.key === "v") {
+                return
+            }
+            alert("You can only paste the URL here.");
+            e.preventDefault();
+        }
         $bkmkDomain.onpaste = function () {
             setTimeout(() => {
                 let testDomain = parseDomain(normalize($bkmkDomain.value));
+                if (!testDomain) {
+                    $bkmkDomain.value = "";
+                    return;
+                }
                 if (testDomain === $domainname.value) {
                     phishingWarningOff();
                 } else {
