@@ -487,7 +487,7 @@ let SitePasswordWeb = ((function (self) {
             const settings = parseBookmark($bookmark.value);
             $bookmark.value = "";  // clear bookmark field
             if (settings) {
-                if (settings.domainname === $domainname.value) {
+                if (!$domainname.value || settings.domainname === $domainname.value) {
                     SitePassword.settings = settings;  // update data-model
                     updateSettings(settings);
                     await generatePassword();
@@ -528,7 +528,7 @@ let SitePasswordWeb = ((function (self) {
             return settings;
         }
         function enableBookmark() {
-            $bookmark.disabled = !($domainname.value);
+            // $bookmark.disabled = !($domainname.value);
         }
         get("bookmarkmenu").onmouseleave = function (e) {
             menuOff("bookmark", e);
