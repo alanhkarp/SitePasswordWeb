@@ -144,7 +144,7 @@
             </div>
             <p>...or fill in the form below.</p>
             <div class="form-row">
-              <label for="sitename" class="label">Site name</label>
+              <label for="sitename" class="label">Account nickname</label>
               <input 
                 id="sitename" 
                 class="sans" 
@@ -166,7 +166,7 @@
                   <img src="src/forget.png" class="icon menu-icon">
                 </div>
                 <div id="sitenamemenuhelp"
-                  title="Find out more about how your nickname for a site is used to compute your site password.">
+                  title="Find out more about how your nickname for a site is used to compute your account password.">
                   <img src="src/help.png" class="icon menu-icon">
                 </div>
               </div>
@@ -213,10 +213,10 @@
             <div id="results">
               <div id="pwok" class="form-row">
                 <input id="sitepw" class="fixed" readonly type="text" value=""
-                  placeholder="Generated site password" title="Site Password" />
+                  placeholder="Generated account password" title="Account Password" />
                   <label for="sitepw" class="label">
-                    Site password
-                    <meter max="20" id="sitepw-strength-meter" title="Site password strength"></meter>
+                    Account password
+                    <meter max="20" id="sitepw-strength-meter" title="Account password strength"></meter>
                     Strength
                   </label>
                   <div id="sitepwcopied" class="inner-icon-2 copied nodisplay">copied!</div>
@@ -231,7 +231,7 @@
                         d="M7 6.362A9.707 9.707 0 0 1 12 5c6.307 0 9.367 5.683 9.91 6.808.06.123.06.261 0 .385-.352.728-1.756 3.362-4.41 5.131M14 18.8a9.93 9.93 0 0 1-2 .2c-6.307 0-9.367-5.683-9.91-6.808a.44.44 0 0 1 0-.386c.219-.452.84-1.632 1.91-2.885m6 .843A3 3 0 0 1 14.236 14M3 3l18 18" />
                     </svg>
                   </div>
-                  <div id="sitepwmenuhide" title="Hide your site password">
+                  <div id="sitepwmenuhide" title="Hide your account password">
                     <svg class="icon menu-icon menu-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M12 5c-6.307 0-9.367 5.683-9.91 6.808a.435.435 0 0 0 0 .384C2.632 13.317 5.692 19 12 19s9.367-5.683 9.91-6.808a.435.435 0 0 0 0-.384C21.368 10.683 18.308 5 12 5z" />
@@ -240,14 +240,14 @@
                     </svg>
                   </div>
                   <div id="sitepwmenucopy" 
-                    title="Copy your site password to the clipboard"
+                    title="Copy your account password to the clipboard"
                     style="opacity: 0.5">
                     <svg class="icon menu-icon menu-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
                       <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M8 5v0a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v0M8 5v0a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v0" />
                     </svg>
                   </div>
-                  <div id="sitepwmenuhelp" title="Find out more about how SitePassword calculates your site password.">
+                  <div id="sitepwmenuhelp" title="Find out more about how SitePassword calculates your account password.">
                     <img src="src/help.png" class="icon menu-icon menu-icon">
                   </div>
                 </div>
@@ -265,7 +265,7 @@
         </div>
         <div id="help">
           <div id="superpwhelptext" name="help" class="helptext nodisplay">
-            <h3>Super Password Help</h3>
+            <h3>Super password help</h3>
             <p style="width: 270px">
               You should choose a strong super password, one with lots of characters that contain
               upper and lower case letters, numbers, and special characters. Just make sure
@@ -283,7 +283,7 @@
             </div>
           </div>
           <div id="domainnamehelptext" name="help" class="helptext nodisplay">
-            <h3>Domain Name Help</h3>
+            <h3>Domain name help</h3>
             <p style="width: 270px">
               The domain name is associated with your settings for this account.
               It is also the name of a bookmark in the SitePasswordData bookmark folder.
@@ -301,13 +301,13 @@
             </div>
           </div>
           <div id="bookmarkhelptext" name="help" class="helptext nodisplay">
-            <h3>Bookmark Help</h3>
+            <h3>Bookmark help</h3>
             <p style="width: 270px">
               Each domain name has a bookmark in the SitePasswordData bookmark folder.
               That's where you can get your settings when you're on a machine
               that doesn't have the SitePassword extension installed. You can click on the
               bookmark to open this page with the form filled in 
-              or you can paste the bookmark into the form.
+              or you can paste the bookmark into the form after providing a domain name.
             </p>
             <div class="form-row">
               <button id="bookmarkhelptextclose" class="button" title="Close this help text">
@@ -320,9 +320,12 @@
             </div>
           </div>
           <div id="sitenamehelptext" name="help" class="helptext nodisplay">
-          <h3>Site Name Help</h3>
+            <h3>Account nickname help</h3>
             <p style="width: 270px">
-              Your site name is the nickname use to you refer to this account. It can be easy to remember,
+              The account nickname is how you refer to this account.  It is often associated 
+              with more than one domain name.
+              For example, you might use the same nickname for www.example.com and login.example.com.
+              Your account nickname can be easy to remember,
               such as <em>amazon</em> for amazon.com, but it doesn't have to be that simple.  You can 
               change the password for an account by changing the nickname.  
             </p>
@@ -337,11 +340,11 @@
             </div>
           </div>
           <div id="usernamehelptext" name="help" class="helptext nodisplay">
-            <h3>User Name Help</h3>
+            <h3>User name help</h3>
             <p style="width: 270px">
               Your user name is the name you use to log in to the site. It is
               associated with the nickname for the account and is used to 
-              calculate your site password.  That means you can only have a 
+              calculate your account password.  That means you can only have a 
               single user name for a given nickname.  
               <span name="hideifnobookmarks">If you want to use different 
               user names for the same site, follow the instructions for 
@@ -358,7 +361,7 @@
             </div>
           </div>
           <div id="sitepwhelptext" name="help" class="helptext nodisplay">
-            <h3>Site Password Help</h3>
+            <h3>Site password help</h3>
             <p style="width: 270px">
               SitePassword uses your super password, nickname for the site, and
               your user name for the site along with the additional settings to
@@ -374,7 +377,7 @@
                 <span class="btn-text">Close</span>
               </button>
               &nbsp;&nbsp;
-              <button id="sitepwhelptextmore" title="Learn more about your site password">
+              <button id="sitepwhelptextmore" title="Learn more about your account password">
                 <span class="btn-text">Learn more</span>
               </button>
             </div>
@@ -382,19 +385,16 @@
         </div>
         <div id="settings">
             <h1 style="text-align: center;">Settings</h1>        
-            <div class="setting-row" 
-              id="providesitepwdiv"
-              style="margin-left: 10px"
-              title="You must fill in the SitePassword form before you can provide your own site password.">
-              <input id="providesitepw" 
-                type="checkbox"
-                disabled
-                aria-disabled="true"
-                title="Check to type your own site password.  You must fill in the SitePassword form first." 
-              />
-              <span>Provide your own site password</span>
-            </div>
-            <div class="form-row">
+            <div class="setting-row" id="providesitepwdiv"
+            title="You must fill in the SitePassword form before you can provide your own account password.">
+            <label for="providesitepw" class="checkbox-label">
+              <input id="providesitepw" class="checkbox-input" type="checkbox" disabled aria-disabled="true"
+                title="Check to type your own account password.  You must fill in the SitePassword form first." />
+              <span class="checkbox-custom"></span>
+              <span id="providesitepwlabel" class="settings">Provide your own account password.</span>
+            </label>
+          </div>
+              <div class="form-row">
               <input 
                 id="code" 
                 class="sans" 
@@ -408,59 +408,71 @@
             </div>
             <div id="defaultsettings" style="background-color: rgb(136, 204, 255, 20%);">
               <div class="setting-row" style="top: 5px">
-                <span style="position: relative; left: 4px">Site password is</span>
+                <span style="position: relative; left: 4px">Account password is</span>
                 <input id="pwlength" type="text" value="12" size="2" 
                   style="position: relative; left: 2px"/>
                 <span>characters long</span>
               </div>
               <div class="setting-row">
-                <input id="startwithletter" type="checkbox" checked="checked" />
-                <span>Starts with letter</span>
+                <label for="startwithletter" class="checkbox-label">
+                  <input id="startwithletter" type="checkbox" class="checkbox-input" checked="checked" />
+                  <span class="checkbox-custom"></span>
+                  <span class="settings">Starts with letter</span>
+                </label>
               </div>
               <div class="setting-row">
-                <input id="allowlowercheckbox" type="checkbox" checked="checked" />
-                <span id="allowlower" style="display: none;">Allows lowercase letters</span>
-                <span id="requirelower" style="display: inline;">
-                  Requires at least
-                  <input id="minlower" type="text" value="1" size="2" />
-                  lowercase letter(s)
-                </span>
+                <label for="allowlowercheckbox" class="checkbox-label">
+                  <input id="allowlowercheckbox" type="checkbox" class="checkbox-input" checked="checked" />
+                  <span class="checkbox-custom"></span>
+                  <span id="allowlower" class="settings" style="display: none;">Allows lowercase letters</span>
+                  <span id="requirelower" class="settings" style="display: inline;">
+                    Requires at least
+                    <input id="minlower" type="text" value="1" size="2" class="settings-input" />
+                    lowercase letter(s)
+                  </span>
+                </label>
               </div>
               <div class="setting-row">
-                <input id="allowuppercheckbox" type="checkbox" checked="checked" />
-                <span id="allowupper" style="display: none;">Allows uppercase letters</span>
-                <span id="requireupper" style="display: inline;">
-                  Requires at least
-                  <input id="minupper" type="text" value="1" size="2" />
-                  uppercase letter(s)
-                </span>
+                <label for="allowuppercheckbox" class="checkbox-label">
+                  <input id="allowuppercheckbox" type="checkbox" class="checkbox-input" checked="checked" />
+                  <span class="checkbox-custom"></span>
+                  <span id="allowupper" class="settings" style="display: none;">Allows uppercase letters</span>
+                  <span id="requireupper" class="settings" style="display: inline;">
+                    Requires at least
+                    <input id="minupper"" type=" text" value="1" size="2" class="settings-input"" />
+                    uppercase letter(s)
+                  </span>
+                </label>
+              </div>
+              <div class=" setting-row">
+                    <label for="allownumbercheckbox" class="checkbox-label" />
+                    <input id="allownumbercheckbox" type="checkbox" class="checkbox-input" checked="checked" />
+                    <span class="checkbox-custom"></span>
+                    <span id="allownumber" class="settings" style="display: none;">Allows numbers</span>
+                    <span id="requirenumber" class="settings" style="display: inline;">
+                      Requires at least
+                      <input id="minnumber"" type=" text" value="1" size="2" class="settings-input" />
+                      number(s)
+                    </span>
+                </label>
               </div>
               <div class="setting-row">
-                <input id="allownumbercheckbox" type="checkbox" checked="checked" />
-                <span id="allownumber" style="display: none;">Allows numbers</span>
-                <span id="requirenumber" style="display: inline;">
-                  Requires at least
-                  <input id="minnumber" type="text" value="1" size="2" />
-                  number(s)
-                </span>
+                <label for="allowspecialcheckbox" class="checkbox-label">
+                  <input id="allowspecialcheckbox" type="checkbox" class="checkbox-input" />
+                  <span class="checkbox-custom"></span>
+                  <span id="allowspecial" class="settings" style="display: inline;">
+                    Allows special characters
+                  </span>
+                  <span id="requirespecial" class="settings" style="display: none;">
+                    Requires at least
+                    <input id="minspecial" type="text" value="1" size="2" class="settings-input" />
+                    of
+                    <input id="specials" title="Enter up to 12 special characters" class="fixed" type="text"
+                      class="settings-input" value="$/!=@?._-" size="12" />
+                  </span>
+                </label>
               </div>
-              <div class="setting-row">
-                <input id="allowspecialcheckbox" type="checkbox" />
-                <span id="allowspecial" style="display: inline;">Allows special characters</span>
-                <span id="requirespecial" style="display: none;">
-                  Requires at least
-                  <input id="minspecial" type="text" value="1" size="2" />
-                  of
-                  <input 
-                    id="specials" 
-                    class="fixed" 
-                    title="Enter up to 12 special characters.  Alphanumerics are not allowed."
-                    type="text" 
-                    value="$/!=@?._-" 
-                    size="12" maxlength="12" />
-                </span>
-              </div>
-              <div class="form-row">
+                  <div class="form-row">
                 <button id="makedefaultbutton"
                   type="button"
                   style="display: inline; margin-left: 10px; margin-right: 40px;"
@@ -517,8 +529,32 @@
             to change all occurrences if ![](images...) to <img> tags.
 
           -->            
-          <h1> Instructions</h1>
+          <h1>Instructions</h1>
           <div id="sections">
+            <section id="whoinfo" name="instructions">
+              <svg id="openwho" class="accordian" style="display: block;" width="24px" height="24px" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closewho" class="accordian" style="display: none;" width="24px" height="24px" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>What is SitePassword?</h3>
+              <div id="whodiv" style="display: none;">
+                <p>
+                  SitePassword is a password manager that calculates your passwords
+                  instead of storing them.
+                  It also allows you to specify a password when you don't want to use the computed one.
+                </p>
+              </div>
+            </section>
             <section id="useinfo" name="instructions">
               <svg id="openuse" class="accordian" style="display: block;" width="24px" height="24px" viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg" fill="none">
@@ -534,12 +570,12 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Who Should Use This Web Page</h3>
+                <h3>When to use this web page</h3>
               <div id="usediv" style="display: none;">
                 <p>
                   This web page is a companion to the SitePassword browser extension.
                   In addition to remembering your settings, the extension synchronizes them
-                  across your machines. You should use the extension if you are using a
+                  across your machines. You should use the extension if you are have a
                   compatible browser.
                   Unfortunately, browsers on mobile devices don't allow extensions.
                 </p>
@@ -566,16 +602,15 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>How It Works</h3>
+                <h3>How it works</h3>
               <div id="overviewdiv" style="display: none;">
                 <p>
                   SitePassword is different from most password managers. Instead of
-                  storing your passwords, it calculates them from a single super password
-                  and your nickname and user name
-                  for the account. That means you can usually get your site password if
+                  storing your passwords, it calculates them from a super password
+                  and a per account nickname and user name. That means you can usually get your account password if
                   you remember those three things. (Some web pages require additional
-                  settings.)  It also allows you to specify the password
-                  when you can't use the computed password.
+                  settings.)  It also allows you to specify a password
+                  when you can't use the computed one.
                 </p>
               </div>
             </section>
@@ -594,7 +629,7 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Your Super Password</h3>
+                <h3>Your super password</h3>
               <div id="superpwdiv" style="display: none;">
                 <p>
                   You should choose a strong super password, one with upper and
@@ -623,8 +658,8 @@
                 </p>
                 <p>
                   You'll notice that your super password is not usually marked Strong until it is 
-                  longer than a site password marked Strong.  That's because the super password
-                  is something you can remember, while the site password is effectively a
+                  longer than a account password marked Strong.  That's because the super password
+                  is something you can remember, while the account password is effectively a
                   random string of characters, which is less guessable.
                 </p>
                 <p>
@@ -649,7 +684,7 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>The Domain Name</h3>
+                <h3>The domain name</h3>
               <div id="domainnamediv" style="display:none">
                 <p>
                   The domain name is associated with the settings for this account.
@@ -692,7 +727,7 @@
                   You don't have to remember your settings if you synchonize your
                   bookmarks to this machine.  You can click on the bookmark
                   for the domain name to open this page with the form filled in, 
-                  or you can paste the bookmark into the form.
+                  or you can paste the bookmark into the form after providing a domain name.
                 </p>
               </div>
             </section>
@@ -711,17 +746,16 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Your Site Name</h3>
+              <h3>Your account nickname</h3>
               <div id="sitenamediv" style="display: none;">
                 <p>
-                  The site name is the nickname you use refer to this account. It can be easy to remember,
+                  You refer to an account by its nickname. It can be easy to remember,
                   such as <em>amazon</em> for amazon.com, but it doesn't have to be that simple.
-                  It is one of the things used to compute your site password.
+                  It is one of the things used to compute your account password.
                 </p>
                 <p>
-                  Your settings, such as the domain name of the login page, 
-                  your user name, the site password length, and whether your
-                  site password contains special characters are associated with this nickname.
+                  Your settings, such as your user name, the account password length, and whether your
+                  account password contains special characters are associated with this nickname.
                 </p>
               </div>
             </section>
@@ -736,12 +770,12 @@
                 <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Your User Name</h3>
+                <h3>Your user name</h3>
               <div id="usernamediv" style="display: none;">
                 <p>
                   Your user name is the name you use to log in to the site. It is
                   associated with the nickname for the account and is used to 
-                  calculate your site password.  That means you can only have a 
+                  calculate your account password.  That means you can only have a 
                   single user name for a given nickname.  If you want to use different 
                   user names for the same site, follow the instructions for 
                   <span id="sharedref2"><a href="#shared-machines">Shared Machines</a></span>.   
@@ -763,7 +797,7 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Your Site Password</h3>
+                <h3>Your account password</h3>
               <div id="sitepwdiv" style="display: none;">
                 <p>
                   SitePassword combines your super password, site name, and user name to 
@@ -771,16 +805,16 @@
                   provide to generate a password the site will accept.
                 </p>
                 <p>
-                  SitePassword could generate a weak site password just by chance.
+                  SitePassword could generate a weak account password just by chance.
                   To let you know that has happened, it uses the same kind of
-                  strength meter to tell you how strong your site password is.
+                  strength meter as the one that tells you how strong your super password is.
                   The tooltip tells how long it would take a determined adversary
                   to guess your password.
                 </p>
                 <p>
-                  For example, if your site password is orange, then it is weak. In
+                  For example, if your account password is orange, then it is weak. In
                   that case, just choose a different nickname for the account.  You'll 
-                  almost certainly get a strong site password.
+                  almost certainly get a strong account password.
                 </p>
               </div>
             </section>
@@ -799,14 +833,13 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Clear Super Password on Copy</h3>
+                <h3>Clear super password on copy</h3>
               <div id="clearsuperpwdiv" style="display: none;">
                 <p>
                   You are probably using this web page because you're on a device that doesn't have the 
                   extension installed.  If that's because you are at a friend's house, you probably don't 
-                  want to leave your super password lying around.  You can check this box to clear your 
-                  super password from the form when you copy your site password.  Uncheck the box if this 
-                  is one of your own devices.
+                  want to leave your super password lying around.  You can clear this box if you want 
+                  to leave your super password, such as when using one of your own devices.
               </p>
               </div>
             </section>
@@ -825,20 +858,19 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Provided Password Code</h3>
+                <h3>Provided password code</h3>
               <div id="codediv" style="display: none;">
                 <p>
-                  When the generated password can't be used, say if you've been given one that
-                  you're not allowed to change, SitePassword can remember a password
-                  you provide. It is stored in your settings encrypted with the computed
+                  SitePassword stores a password
+                  you provide in your settings encrypted with the computed
                   password for the site as a key. That means you must fill in the form before entering
-                  your own password. After you fill in the form, click the <em>Provide your own site password</em>
-                  check box. You can then enter your password into the site password field.
+                  your own password. After you fill in the form, click the <em>Provide your own account password</em>
+                  check box. You can then enter your password into the account password field.
                 </p>
                 <p>
-                  The code in the bookmark is a list of integers represnting
+                  The code in the bookmark is a list of integers representing
                   the encrypted value the password you provided.  In order to
-                  compute your site password, you must
+                  compute your account password, you must
                   fill in the form with the same settings you used when you
                   provided the password, including the code from the bookmark.
                 </p>
@@ -865,7 +897,7 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Input Field Menus</h3>
+                <h3>Input field menus</h3>
               <div id="menusdiv" style="display:none">
                 <p>
                   Each of the input fields has a menu that shows up when you mouse over 
@@ -889,14 +921,14 @@
                 </p>
                 <p>
                   <img src="src/clipboard.png" alt="forget" style="width: 16px; height: 16px; vertical-align: middle;"/> &nbsp;
-                  The user name and site password fields have a Copy option, which copies the contents of the field to the clipboard.
+                  The user name and account password fields have a Copy option, which copies the contents of the field to the clipboard.
                 </p>
                 <p>
                   <img src="src/show.png" alt="forget" style="width: 16px; height: 16px; vertical-align: middle;"/> &nbsp;
                   <img src="src/hide.png" alt="forget" style="width: 16px; height: 16px; vertical-align: middle;"/> &nbsp;
-                  The super and site password fields give you the option of showing or hiding the contents of the field.
-                  By default, your super password is hidden, and your site password is not.  You can change the default behavior of 
-                  the site password field by clicking the <em>Hide site password by default</em> option in the settings panel.
+                  The super and account password fields give you the option of showing or hiding the contents of the field.
+                  By default, your super password is hidden, and your account password is not.  You can change the default behavior of 
+                  the account password field by clicking the <em>Hide account password by default</em> option in the settings panel.
                 </p>
               </div>
             </section>
@@ -915,7 +947,7 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Finding an Acceptable Password</h3>
+                <h3>Finding an acceptable password</h3>
               <div id="acceptablediv" style="display: none;">
                 <p>
                   Some web sites have strict password rules, how long it must be,
@@ -948,14 +980,14 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3 id="changing-a-site-password">Changing a SitePassword</h3>
+                <h3 id="changing-a-site-password">Changing an account password</h3>
               <div id="changediv" style="display: none;">
                 <p>
                   Some sites make you change your password periodically. SitePassword
                   makes that easy. Just change your nickname for the account. For example,
                   if your current nickname is <em>MyBank1</em>, and they make you change
                   your password, you could change the nickname to
-                  <em>MyBank2</em>. Your new site password will be completely different
+                  <em>MyBank2</em>. Your new account password will be completely different
                   from the old one.
                 </p>
               </div>
@@ -1008,7 +1040,7 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3 id="sharedref">Shared Machines</h3>
+                <h3 id="sharedref">Shared machines</h3>
               <div id="shareddiv" style="display: none">
                 <p>
                   Many households have one machine shared by everybody. It's likely
@@ -1038,8 +1070,8 @@
                   stroke-width="2" />
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
-              </svg>
-                  <h3>The Extension and this Page</h3>
+                </svg>
+                  <h3>The extension and this page</h3>
               <div id="extensiondiv" style="display: none;">
                 <p>
                   The SitePassword extension plays well with this page.
@@ -1071,7 +1103,7 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Use with Apps</h3>
+              <h3>Use with apps</h3>
               <div id="appsdiv" style="display: none;">
                 <p>
                   You can calculate your password without
@@ -1098,12 +1130,12 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Downloading Your Settings</h3>
+                <h3>Downloading your settings</h3>
               <div id="downloaddiv" style="display: none;">
                 <p>
-                  There is a <em>Download local data</em> button at the bottom of
-                  the page.
-                  That button lets you save your settings in a file you
+                  There is a <em>Download local data</em> button near the bottom of
+                  the Settings panel.
+                  That button lets you save your settings to a file you
                   can reference if you're at a machine that doesn't have your
                   SitePassword settings. <b>Only settings for accounts you've chosen
                     to remember on this machine will be included.</b>
@@ -1125,12 +1157,12 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Exporting Your Passwords</h3>
+                <h3>Exporting your passwords</h3>
               <div id="exportdiv" style="display: none;">
                 <p>
                   There may come a time when you want to use a different password manager.
-                  In that case you can use the <em>Export passwords</em> button at the bottom of
-                  the popup window. 
+                  In that case you can use the <em>Export passwords</em> button near the bottom of
+                  the settings panel. 
                   Clicking this button creates a file with the passwords for sites you remembered
                   on this machine.  You can see a readable form 
                   of the data in the file by opening it in a spreadsheet.
@@ -1138,13 +1170,36 @@
                 <p>
                   You'll have to export to a separate file for each super password you use.  Since SitePassword doesn't track 
                   your super passwords, it doesn't know which one goes with which domain.  As a result each file 
-                  will have a site password for every domain name in your SitePasswordData bookmarks folder.  
-                  Only the domains associated with that super password will have the correct site password.
+                  will have an account password for every domain name in your SitePasswordData bookmarks folder.  
+                  Only the domains associated with that super password will have the correct account password.
                 </p>
                 <p>
                   <b>Be very careful with this file.</b>  Completely delete it from your machine, including
                   emptying the trash, after you use it.  If you don't, anyone who gets access to your machine
                   can get your passwords.
+                </p>
+              </div>
+            </section>
+            <section id="reportinfo" name="instructions">
+              <svg id="openreport" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closereport" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+                </svg>
+                <h3>Reporting problems</h3>
+               <div id="reportdiv" style="display: none;">
+                <p>
+                  Reports of bugs, problems, and suggetions for improvements are welcome.  You can use 
+                  the project  page, <a href="https://github.com/alanhkarp/SitePasswordWeb/issues">Issues</a>.
                 </p>
               </div>
             </section>
@@ -1163,7 +1218,7 @@
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="m9 13 3-3 3 3" />
               </svg>
-              <h3>Source Code</h3>
+                <h3>Source code</h3>
               <div id="sourcediv" style="display: none;">
                 <p>
                   If you are worried that SitePassword might go away, you can download the source code for the extension
@@ -1200,6 +1255,56 @@
                   or your favorite charity.
                 </p>
               </div>
+            </section>
+            <section id="creditsinfo" name="instructions">
+              <svg id="opencredits" class="accordian" style="display: block;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 11 3 3 3-3" />
+              </svg>
+              <svg id="closecredits" class="accordian" style="display: none;" width="24px" height="24px"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                  stroke-width="2" />
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m9 13 3-3 3 3" />
+              </svg>
+              <h3>Credits</h3>
+              <div id="creditsdiv" style="display: none;">
+                <ul>
+                  <li>
+                    Alan Karp is the princple culprit.  He stared with a very simple password calculator 
+                    in 2002 that he turned into a Chrome extension in 2012. What you see today is the result
+                    of many improvements over the years, a lot of them suggested by the other contributors.  
+                    Don't blame anyone else for bugs or usablity problems, but do credit them with the 
+                    improvements they suggested.  Please send any feedback to  
+                    <a class="udrline" href="mailto:alanhkarp&#064gmail&#046com">alanhkarp&#064gmail&#046com</a>.
+                  </li>
+                  <li>
+                    Doug Crockford provided useful suggestions for improvements, many of which were resisted but 
+                    make SitePassword much better, both in terms of functionality and usability.  Two features 
+                    stand out: the ability to provide your own account password and the Forget menu option.  The 
+                    look and feel is much improved due to Doug's constant nitpicking of seeminly minor details.  
+                    That kind of feedback is almost impossible to get even if you offer to pay.  Getting that kind of 
+                    feedback for free is rare. 
+                  </li>
+                  <li>
+                    Dale Schumacker wrote most of the code for this web page and made many useful suggestions. 
+                    His code has been changed enough that he is not responsible for any issues, but he deserves 
+                    kudos for its overall design.  As an early user of SitePassword, Dale provide critical 
+                    feedback.
+                  </li>
+                  <li>
+                    Michael Josefik provided the professional design for this web page.  He showed remarkable 
+                    patience as his ideas were resisted but then implemented when he was proven right.
+                  </li>
+                  <li>
+                    Important security improvements came from the people at the Stanford Security Lunch.
+                    They did not do anything approaching a security review and are not responsible for any vulnerabilities.  
+                  </li>
+                </ul>
             </section>
           </div>
         </div>
