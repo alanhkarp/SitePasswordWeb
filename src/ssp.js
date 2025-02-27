@@ -874,6 +874,7 @@ let SitePasswordWeb = ((function (self) {
                 $sitepw.placeholder = "Your account password";
                 $pwlength.value = SitePassword.defaultsettings.pwlength;
                 SitePassword.settings.pwlength = $pwlength.value;
+                $code.value = "";
                 $code.disabled = true;
                 await generatePassword();
             }
