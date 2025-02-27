@@ -698,6 +698,7 @@ let SitePasswordWeb = ((function (self) {
         $sitepw.onblur = async function () {
             if ($sitepw.readOnly) return;
             let provided = $sitepw.value;
+            if (provided.length > SitePassword.settings.pwlength) SitePassword.settings.pwlength = provided.length;
             let computed = await generatePassword();
             SitePassword.settings.xor = SitePassword.xorStrings(provided, computed);
             enableRemember();
@@ -870,7 +871,9 @@ let SitePasswordWeb = ((function (self) {
                 await Promise.resolve(); // To match the await on the other branch
             } else {
                 $sitepw.readOnly = true;
-                $sitepw.placeholder = "Generated site password";
+                $sitepw.placeholder = "Your account password";
+                $pwlength.value = SitePassword.defaultsettings.pwlength;
+                SitePassword.settings.pwlength = $pwlength.value;
                 $code.disabled = true;
                 await generatePassword();
             }
