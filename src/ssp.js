@@ -152,7 +152,9 @@ let SitePasswordWeb = ((function (self) {
             settings.allowspecial = $allowspecialcheckbox.checked;
             settings.minspecial = +$minspecial.value;
             settings.specials = $specials.value;
-            settings.xor = $code.value.split(",").map(Number);
+            if ($code.value) {
+                settings.xor = $code.value.split(",").map(Number);
+            }
         }
         const $pwok = get("pwok");
         const $pwfail = get("pwfail");
@@ -700,14 +702,12 @@ let SitePasswordWeb = ((function (self) {
             let provided = $sitepw.value;
             if (provided.length > SitePassword.settings.pwlength) SitePassword.settings.pwlength = provided.length;
             let computed = await generatePassword();
+            $sitepw.value = provided;
             SitePassword.settings.xor = SitePassword.xorStrings(provided, computed);
+            $code.value = SitePassword.settings.xor.join(",");
             enableRemember();
             if (resolvers.sitepwblurResolver) resolvers.sitepwblurResolver();
          }
-        $sitepw.onkeyup = function () {
-            $code.disabled = true;
-            $sitepw.onblur();
-        }
         get("sitepwmenu").onmouseleave = function (e) {
             menuOff("sitepw", e);
         }
