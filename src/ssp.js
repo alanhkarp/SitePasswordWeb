@@ -71,6 +71,7 @@ let SitePasswordWeb = ((function (self) {
         const $remember = get("remember");
         const $providesitepw = get("providesitepw");
         const $code = get("code");
+        const $defaultsettings = get("defaultsettings");
         const $pwlength = get("pwlength");
         const $startwithletter = get("startwithletter");
         const $allowlowercheckbox = get("allowlowercheckbox");
@@ -108,6 +109,9 @@ let SitePasswordWeb = ((function (self) {
                 $sitepw.readOnly = false;
                 $sitepw.placeholder = "Enter your super password";
                 $superpw.focus();
+                $defaultsettings.style.visibility = "hidden";
+            } else {
+                $defaultsettings.style.visibility = "visible";
             }
             $pwlength.value = settings.pwlength;
             $startwithletter.checked = settings.startwithletter;
@@ -868,6 +872,7 @@ let SitePasswordWeb = ((function (self) {
                 $sitepw.placeholder = "Enter your site password";
                 $sitepw.focus();   
                 $code.disabled = false; 
+                $defaultsettings.style.visibility = "hidden";
                 await Promise.resolve(); // To match the await on the other branch
             } else {
                 $sitepw.readOnly = true;
@@ -876,6 +881,7 @@ let SitePasswordWeb = ((function (self) {
                 SitePassword.settings.pwlength = $pwlength.value;
                 $code.value = "";
                 $code.disabled = true;
+                $defaultsettings.style.visibility = "visible";
                 await generatePassword();
             }
             if (resolvers.providesitepwclickResolver) resolvers.providesitepwclickResolver();
